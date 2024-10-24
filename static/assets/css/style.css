@@ -167,119 +167,72 @@ span.material-symbols-outlined {
     margin: 0;
 }
 
-#weather {
-    display: flex;
-    flex-direction: column;
-    background-image: 
-        radial-gradient(circle at top right, rgba(255, 216, 101, 0.6), transparent 60%),
-        radial-gradient(circle at bottom center, rgba(255, 186, 101, 0.6), transparent 60%);
+.expand {
+    position: absolute;
+    background-color: var(--theme-bg-2);
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+    z-index: 400;
 }
 
-#weather h2 {
-    font-weight: 300;
-    margin-bottom: 0.25rem;
+.expand.show {
+    opacity: 1;
 }
 
-#weather h1 {
-    font-weight: 600;
+.expand.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    border-radius: 0;
 }
 
-#weather .forecast {
+.apps {
+    position: absolute;
     width: 100%;
-    border-top: solid 2px var(--theme-alt-1);
-    margin-top: auto;
-    padding-top: 1rem;
-    display: flex;
-    height: 5rem;
-    /* background-color: red; */
-    gap: 0.5rem;
-    justify-content: space-between;
-}
-
-#weather .forecast div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-}
-
-#spotify {
-    display: flex;
-    gap: 0.5rem;
-}
-
-#spotify img {
     height: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 0.75rem;
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 400;
+    background-color: var(--theme-bg-2);
 }
 
-#spotify .meta {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    min-width: 0;
+.apps .app {
+    display: none;
+
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 
-#spotify .meta span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+@keyframes activateAnim {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-#spotify .meta .title {
-    font-size: 1.4rem;
-    font-weight: 600;
+.apps .app.active {
+    display: block;
 }
 
-#spotify .meta .author {
-    font-size: 1.3rem;
-    font-weight: 300;
-    opacity: 0.6;
-}
+#closeAppButton {
+    position: fixed;
+    top: 0;
+    left: 0;
 
-#spotify .controls {
-    flex: 1;
-    display: flex;
-    align-items: center;
-}
-
-#spotify .controls button {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 33.333%;
-    border: none;
-    color: var(--theme-fg-1);
-    background-color: transparent;
-    aspect-ratio: 1;
-
-    transition: scale 0.3s;
-}
-
-#spotify .controls button span {
-    font-size: 2rem;
-}
-
-#spotify .controls button:active {
-    scale: 0.7;
-}
-
-#time {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-#time span:first-child {
     font-size: 2.5rem;
-    font-weight: 600;
-}
 
-#time span:last-child {
-    font-size: 1.6rem;
-    font-weight: 300;
+    width: 3.5rem;
+    height: 3.5rem;
+    opacity: 0.4;
+    border-bottom-right-radius: 0.75rem;
+    backdrop-filter: blur(10px);
+    /* background-color: red; */
 }

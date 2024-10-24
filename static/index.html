@@ -16,17 +16,54 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/widgets.css">
+    <link rel="stylesheet" href="./assets/css/apps.css">
 </head>
 <body>
     <div id="welcome">
         <span id="welcomeText">Witaj, Maciej</span>
     </div>
 
+    <div class="apps">
+        <span class="material-symbols-outlined" id="closeAppButton">close</span>
+        <div class="app" id="timeApp">
+            <h1>10:39:52 CET</h1>
+            <h3>Czwartek 24 października 2024</h3>
+        </div>
+    </div>
+
     <div class="container">
         <div class="col">
-            <div class="widget sm" id="time">
+            <div class="widget sm" id="time" onclick="openApp('timeApp', this)">
                 <span>09:40</span>
                 <span>Czwartek 24 paź.</span>
+            </div>
+            <div class="widget control">
+                <button onclick="toggleDarkMode(this)">
+                    <span class="material-symbols-outlined">
+                        dark_mode
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
             </div>
             <div class="widget lg" id="weather">
                 <h2>Kamionki</h2>
@@ -74,33 +111,6 @@
                     </div>
                 </div>
             </div>
-            <div class="widget control">
-                <button onclick="toggleDarkMode(this)">
-                    <span class="material-symbols-outlined">
-                        dark_mode
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        brightness_high
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        brightness_high
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        brightness_high
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        brightness_high
-                    </span>
-                </button>
-            </div>
             <div class="widget sm" id="spotify">
                 <img src="https://placehold.co/512x512" alt="">
                 <div class="meta">
@@ -113,12 +123,6 @@
                     <button><span class="material-symbols-outlined fill">skip_next</span></button>
                 </div>
             </div>
-            <div class="widget">
-
-            </div>
-            <div class="widget">
-            
-            </div>
         </div>
         <div class="col">
 
@@ -127,5 +131,6 @@
 
     <script src="./assets/js/welcome.js"></script>
     <script src="./assets/js/control.js"></script>
+    <script src="./assets/js/apps.js"></script>
 </body>
 </html>

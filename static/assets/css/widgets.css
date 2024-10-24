@@ -1,0 +1,129 @@
+#time {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-image:
+            radial-gradient(ellipse at top left, rgba(29, 130, 255, 0.6), transparent 70%),
+            radial-gradient(ellipse at bottom right, rgba(112, 29, 255, 0.6), transparent 70%);
+}
+
+#time span:first-child {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+#time span:last-child {
+    font-size: 1.6rem;
+    font-weight: 300;
+}
+
+#weather {
+    display: flex;
+    flex-direction: column;
+    background-image:
+        radial-gradient(circle at top right, rgba(255, 216, 101, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(255, 186, 101, 0.6), transparent 60%);
+}
+
+#weather h2 {
+    font-weight: 300;
+    margin-bottom: 0.25rem;
+}
+
+#weather h1 {
+    font-weight: 600;
+}
+
+#weather .forecast {
+    width: 100%;
+    border-top: solid 2px var(--theme-alt-1);
+    margin-top: auto;
+    padding-top: 1rem;
+    display: flex;
+    height: 5rem;
+    /* background-color: red; */
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+#weather .forecast div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+#weather .forecast div span:first-child {
+    font-weight: 600;
+}
+
+#weather .forecast div span:last-child {
+    font-weight: 300;
+}
+
+#spotify {
+    display: flex;
+    gap: 0.5rem;
+
+    background-image: radial-gradient(ellipse at bottom right, rgba(28, 215, 96, 0.6), transparent 70%);
+}
+
+#spotify img {
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.75rem;
+}
+
+#spotify .meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-width: 0;
+}
+
+#spotify .meta span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#spotify .meta .title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+#spotify .meta .author {
+    font-size: 1.3rem;
+    font-weight: 300;
+    opacity: 0.6;
+}
+
+#spotify .controls {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+#spotify .controls button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33.333%;
+    border: none;
+    color: var(--theme-fg-1);
+    background-color: transparent;
+    aspect-ratio: 1;
+
+    transition: scale 0.3s;
+}
+
+#spotify .controls button span {
+    font-size: 2rem;
+}
+
+#spotify .controls button:active {
+    scale: 0.7;
+}

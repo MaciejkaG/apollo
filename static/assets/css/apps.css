@@ -1,0 +1,25 @@
+#timeApp {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+#timeApp * {
+    margin: 0;
+}
+
+#timeApp.active {
+    display: flex;
+}
+
+#timeApp h1 {
+    font-weight: 600;
+    font-size: 3rem;
+}
+
+#timeApp h3 {
+    font-weight: 300;
+    font-size: 1.25rem;
+}
