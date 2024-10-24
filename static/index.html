@@ -38,8 +38,8 @@
     <div class="container">
         <div class="col">
             <div class="widget sm" id="time" onclick="openApp('timeApp', this)">
-                <span>09:40</span>
-                <span>Czwartek 24 paź.</span>
+                <span class="hour">09:40</span>
+                <span class="date">Czwartek 24 paź.</span>
             </div>
             <div class="widget control">
                 <button onclick="toggleDarkMode(this)">
@@ -135,6 +135,8 @@
     <script src="./assets/js/welcome.js"></script>
     <script src="./assets/js/control.js"></script>
     <script src="./assets/js/apps.js"></script>
+
+    <script src="./assets/js/services/time.js"></script>
     <script>
         window.backend.assistant.initialize('')
         .then(() => {

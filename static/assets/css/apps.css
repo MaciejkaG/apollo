@@ -4,6 +4,9 @@
     align-items: center;
     text-align: center;
     gap: 1rem;
+    background-image:
+            radial-gradient(ellipse at top left, rgba(29, 130, 255, 0.6), transparent 70%),
+            radial-gradient(ellipse at bottom right, rgba(112, 29, 255, 0.6), transparent 70%);
 }
 
 #timeApp * {

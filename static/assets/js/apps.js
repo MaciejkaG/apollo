@@ -1,4 +1,8 @@
+let openAnimationRunning = false;
 function openApp(appId, widget) {
+    if (openAnimationRunning) return;
+
+    openAnimationRunning = true;
     const widgetRect = widget.getBoundingClientRect();
     const widgetStyle = getComputedStyle(widget);
     console.log(widgetStyle);
@@ -36,6 +40,7 @@ function openApp(appId, widget) {
 
                 setTimeout(() => {
                     expandDiv.remove();
+                    openAnimationRunning = false;
                 }, 300);
             }, 250);
         }, 100); // delay for fade-in
