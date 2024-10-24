@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {
-
     initialize: (apiKey) =>
         ipcRenderer.invoke('initialize-assistant', apiKey),
 
@@ -46,7 +45,6 @@ const AssistantService = {
         });
     }
 };
-
 
 contextBridge.exposeInMainWorld('backend', {
     assistant: AssistantService

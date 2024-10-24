@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initialize } from './backend/handlers.js';
+import { setup } from './backend/handlers.js';
 import { app, BrowserWindow } from 'electron';
 import 'dotenv/config';
 
@@ -19,7 +19,7 @@ app.whenReady().then(() => {
         },
     });
 
-    initialize();
+    setup();
 
     win.setAspectRatio(5/3);
 
