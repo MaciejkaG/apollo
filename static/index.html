@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <div id="welcome">
+        <span id="welcomeText">Witaj, Maciej</span>
+    </div>
+
+    <div class="container">
+        <div class="col">
+            <div class="widget sm" id="time">
+                <span>09:40</span>
+                <span>Czwartek 24 paź.</span>
+            </div>
+            <div class="widget lg" id="weather">
+                <h2>Kamionki</h2>
+                <h1>23°C, słonecznie</h1>
+                <div class="forecast">
+                    <div>
+                        <span>10</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>11</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>12</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>13</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>14</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>15</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>16</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                    <div>
+                        <span>17</span>
+                        <span class="material-symbols-outlined fill">partly_cloudy_day</span>
+                        <span>4°C</span>
+                    </div>
+                </div>
+            </div>
+            <div class="widget control">
+                <button onclick="toggleDarkMode(this)">
+                    <span class="material-symbols-outlined">
+                        dark_mode
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+                <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        brightness_high
+                    </span>
+                </button>
+            </div>
+            <div class="widget sm" id="spotify">
+                <img src="https://placehold.co/512x512" alt="">
+                <div class="meta">
+                    <span class="title">KEEP IT BURNIN (feat. Kanye West)</span>
+                    <span class="author">Future</spanb>
+                </div>
+                <div class="controls">
+                    <button><span class="material-symbols-outlined fill">skip_previous</span></button>
+                    <button><span class="material-symbols-outlined fill">play_arrow</span></button>
+                    <button><span class="material-symbols-outlined fill">skip_next</span></button>
+                </div>
+            </div>
+            <div class="widget">
+
+            </div>
+            <div class="widget">
+            
+            </div>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+
+    <script src="./assets/js/welcome.js"></script>
+    <script src="./assets/js/control.js"></script>
+</body>
+</html>

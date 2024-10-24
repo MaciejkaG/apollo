@@ -1,0 +1,16 @@
+{
+  "name": "apollo",
+  "version": "0.1.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "mcjk & pingwinek",
+  "license": "ISC",
+  "description": "Apollo is an advanced AI voice assistant with a beautiful UI and various integrations.",
+  "dependencies": {
+    "electron": "^33.0.2"
+  }
+}

@@ -1,0 +1,285 @@
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+.material-symbols-outlined.fill {
+    font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+}
+
+:root {
+    font-size: 2vw;
+
+    --theme-bg-1: rgb(255, 255, 255);
+    --theme-bg-2: rgb(233, 233, 233);
+    --theme-bg-3: rgb(206, 206, 206);
+
+    --theme-alt-1: rgba(0, 0, 0, 0.1);
+
+    --active-bg-1: rgb(29, 130, 255);
+    --active-fg-1: rgb(255, 255, 255);
+
+    --theme-fg-1: rgb(0, 0, 0);
+}
+
+body.dark-mode {
+    --theme-bg-1: rgb(19, 19, 19);
+    --theme-bg-2: rgb(25, 25, 25);
+    --theme-bg-3: rgb(40, 40, 40);
+
+    --theme-alt-1: rgba(255, 255, 255, 0.1);
+
+    --theme-fg-1: white;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-color: var(--theme-bg-1);
+    color: var(--theme-fg-1);
+
+    font-family: "Figtree", sans-serif;
+    font-optical-sizing: auto;
+    user-select: none;
+}
+
+span.material-symbols-outlined {
+    font-size: 1.6rem
+}
+
+#welcome {
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    background-color: var(--theme-bg-1);
+
+    transition: opacity 0.5s;
+}
+
+#welcome.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#welcome .letter {
+    opacity: 0;
+}
+
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    box-sizing: border-box;
+    gap: 0.5rem;
+}
+
+.container .col {
+    flex: 1;
+    overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.container .col:first-child {
+    flex: 1.5
+}
+
+.container .col .widget {
+    margin: 0 0.5rem;
+}
+
+.container .col .widget:first-child {
+    margin: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.container .col .widget:last-child {
+    margin: 0 0.5rem 0.5rem 0.5rem;
+}
+
+.container .col .widget {
+    border-radius: 0.75rem;
+    min-height: 10rem;
+    padding: 0.75rem;
+
+    background-color: var(--theme-bg-2);
+}
+
+.container .col .widget.control {
+    min-height: initial;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.container .col .widget.control button {
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    background-color: var(--theme-bg-3);
+    border: none;
+    color: var(--theme-fg-1);
+    aspect-ratio: 1;
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container .col .widget.control button.active {
+    background-color: var(--active-bg-1);
+    color: var(--active-fg-1);
+}
+
+.container .col .widget.sm {
+    min-height: 6rem;
+}
+
+.container .col .widget.lg {
+    min-height: 12rem;
+}
+
+.container .col .widget * {
+    margin: 0;
+}
+
+#weather {
+    display: flex;
+    flex-direction: column;
+    background-image: 
+        radial-gradient(circle at top right, rgba(255, 216, 101, 0.6), transparent 60%),
+        radial-gradient(circle at bottom center, rgba(255, 186, 101, 0.6), transparent 60%);
+}
+
+#weather h2 {
+    font-weight: 300;
+    margin-bottom: 0.25rem;
+}
+
+#weather h1 {
+    font-weight: 600;
+}
+
+#weather .forecast {
+    width: 100%;
+    border-top: solid 2px var(--theme-alt-1);
+    margin-top: auto;
+    padding-top: 1rem;
+    display: flex;
+    height: 5rem;
+    /* background-color: red; */
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+#weather .forecast div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+#spotify {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#spotify img {
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.75rem;
+}
+
+#spotify .meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-width: 0;
+}
+
+#spotify .meta span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#spotify .meta .title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+#spotify .meta .author {
+    font-size: 1.3rem;
+    font-weight: 300;
+    opacity: 0.6;
+}
+
+#spotify .controls {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+#spotify .controls button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33.333%;
+    border: none;
+    color: var(--theme-fg-1);
+    background-color: transparent;
+    aspect-ratio: 1;
+
+    transition: scale 0.3s;
+}
+
+#spotify .controls button span {
+    font-size: 2rem;
+}
+
+#spotify .controls button:active {
+    scale: 0.7;
+}
+
+#time {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#time span:first-child {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+#time span:last-child {
+    font-size: 1.6rem;
+    font-weight: 300;
+}
