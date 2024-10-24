@@ -1,5 +1,7 @@
+// Here we define a set of assistant handlers that will be used to communicate with our assistant implementation.
+
 import { ipcMain } from 'electron';
-import Assistant from './services/assistant.js';
+import Assistant from './assistant/assistant.js';
 
 let AssistantService = null;
 

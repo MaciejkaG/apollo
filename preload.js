@@ -1,3 +1,5 @@
+// Here we translate everything from handlers into functions that can be called from the frontend.
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {

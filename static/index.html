@@ -49,22 +49,22 @@
                 </button>
                 <button onclick="$(this).toggleClass('active')">
                     <span class="material-symbols-outlined">
-                        brightness_high
+                        wifi
                     </span>
                 </button>
                 <button onclick="$(this).toggleClass('active')">
                     <span class="material-symbols-outlined">
-                        brightness_high
+                        bluetooth
                     </span>
                 </button>
                 <button onclick="$(this).toggleClass('active')">
                     <span class="material-symbols-outlined">
-                        brightness_high
+                        <img style="max-width: 33%;" src="./assets/svg/chatgpt.svg"></img>
                     </span>
                 </button>
                 <button onclick="$(this).toggleClass('active')">
                     <span class="material-symbols-outlined">
-                        brightness_high
+                        settings
                     </span>
                 </button>
             </div>
@@ -139,13 +139,16 @@
     <script src="./assets/js/services/time.js"></script>
     <script>
         window.backend.assistant.initialize('')
-        .then(() => {
-            console.log('Assistant initialized successfully');
+        .then((response) => {
+            if (response.success) {
+                console.log('Assistant initialized successfully');
+            } else {
+                console.error('Error initializing Assistant:', response.error || 'Unknown error');
+            }
         })
         .catch((error) => {
-            console.error('Error initializing Assistant:', error);
+            console.error('Unexpected error during Assistant initialization:', error);
         });
-
     </script>
 </body>
 </html>
