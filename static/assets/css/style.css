@@ -170,10 +170,10 @@ span.material-symbols-outlined {
 .expand {
     position: absolute;
     background-color: var(--theme-bg-2);
-    border-radius: 10px;
+    border-radius: 0.75rem;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 
     z-index: 400;
 }
@@ -208,6 +208,9 @@ span.material-symbols-outlined {
     height: 100%;
     top: 0;
     left: 0;
+    padding-top: 2.5rem;
+    padding-left: .5rem;
+    box-sizing: border-box;
 }
 
 @keyframes activateAnim {
@@ -233,6 +236,4 @@ span.material-symbols-outlined {
     height: 3.5rem;
     opacity: 0.4;
     border-bottom-right-radius: 0.75rem;
-    backdrop-filter: blur(10px);
-    /* background-color: red; */
 }

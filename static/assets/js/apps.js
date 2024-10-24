@@ -1,5 +1,7 @@
 function openApp(appId, widget) {
     const widgetRect = widget.getBoundingClientRect();
+    const widgetStyle = getComputedStyle(widget);
+    console.log(widgetStyle);
     const expandDiv = document.createElement('div');
     expandDiv.classList.add('expand');
 
@@ -9,6 +11,10 @@ function openApp(appId, widget) {
     expandDiv.style.top = `${widgetRect.top}px`;
     expandDiv.style.left = `${widgetRect.left}px`;
 
+    // Port the backgroundImage (usually gradient)
+    expandDiv.style.backgroundImage = widgetStyle.backgroundImage;
+    console.log(expandDiv.style.backgroundImage);
+
     document.body.appendChild(expandDiv);
 
     // Fade in and expand to full screen after a slight delay
@@ -16,7 +22,10 @@ function openApp(appId, widget) {
         expandDiv.classList.add('show');
         setTimeout(() => {
             expandDiv.classList.add('fullscreen');
-            expandDiv.style = '';
+            expandDiv.style.width = null;
+            expandDiv.style.height = null;
+            expandDiv.style.top = null;
+            expandDiv.style.left = null;
             setTimeout(() => {
                 // Swap the temporary expanding div for the actual apps div.
                 $('.apps').show();
@@ -27,8 +36,8 @@ function openApp(appId, widget) {
 
                 setTimeout(() => {
                     expandDiv.remove();
-                }, 400);
-            }, 350);
+                }, 300);
+            }, 250);
         }, 100); // delay for fade-in
     }, 10); // optional delay to trigger the transition
 }
