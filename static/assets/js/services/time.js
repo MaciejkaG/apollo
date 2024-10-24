@@ -29,4 +29,4 @@ setInterval(() => {
     // Update the time app
     $('#timeApp h1').html(`${hours}:${minutes}:${seconds}`);
     $('#timeApp h3').html(`${dayName} ${dayNumber} ${fullMonth} ${year}<br>${timeZone}`);
-}, 200);  // Refresh every second
+}, 1000);  // Refresh every second
