@@ -1,6 +1,6 @@
-const { OpenAI } = require('openai');
+import { OpenAI } from 'openai';
 
-class Assistant {
+export default class Assistant {
     constructor(apiKey) {
         this.openai = new OpenAI({
             apiKey: apiKey
@@ -92,5 +92,3 @@ class Assistant {
         }
     }
 }
-
-module.exports = Assistant;

@@ -1,27 +1,26 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-
 const AssistantService = {
-    
-    initialize: (apiKey) => 
+
+    initialize: (apiKey) =>
         ipcRenderer.invoke('initialize-assistant', apiKey),
-    
-    sendMessage: (message, conversationId, options) => 
+
+    sendMessage: (message, conversationId, options) =>
         ipcRenderer.invoke('send-message', message, conversationId, options),
-    
-    clearConversation: (conversationId) => 
+
+    clearConversation: (conversationId) =>
         ipcRenderer.invoke('clear-conversation', conversationId),
-    
-    listModels: () => 
+
+    listModels: () =>
         ipcRenderer.invoke('list-models'),
-    
+
     streamMessage: (message, conversationId, options) => {
         return new Promise((resolve, reject) => {
             ipcRenderer.send('stream-message', message, conversationId, options);
-            
+
             const handleChunk = (_, chunk) => {
-                window.dispatchEvent(new CustomEvent('assistant-chunk', { 
-                    detail: chunk 
+                window.dispatchEvent(new CustomEvent('assistant-chunk', {
+                    detail: chunk
                 }));
             };
 
