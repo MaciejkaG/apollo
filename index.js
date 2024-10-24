@@ -1,13 +1,22 @@
-import { app, BrowserWindow } from 'electron';
-import 'dotenv/config';
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+const { initialize } = require('./backend/handlers.js');
+require('dotenv').config()
+
 
 app.whenReady().then(() => {
     const win = new BrowserWindow({
         width: 800,
         height: 480,
-        // If Node is running in production environment, launch the window in kiosk mode.
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+
+          },
         kiosk: process.env.NODE_ENV === 'production',
     });
+
+    initialize();
+
 
     win.setAspectRatio(5/3);
 

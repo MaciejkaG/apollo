@@ -2,7 +2,7 @@
   "name": "apollo",
   "version": "0.1.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
@@ -12,6 +12,9 @@
   "description": "Apollo is an advanced AI voice assistant with a beautiful UI and various integrations.",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "electron": "^33.0.2"
+    "electron": "^33.0.2",
+    "openai": "^4.68.4",
+    "path": "^0.12.7",
+    "url": "^0.11.4"
   }
 }

@@ -135,5 +135,15 @@
     <script src="./assets/js/welcome.js"></script>
     <script src="./assets/js/control.js"></script>
     <script src="./assets/js/apps.js"></script>
+    <script>
+        window.backend.assistant.initialize('')
+        .then(() => {
+            console.log('Assistant initialized successfully');
+        })
+        .catch((error) => {
+            console.error('Error initializing Assistant:', error);
+        });
+
+    </script>
 </body>
 </html>
