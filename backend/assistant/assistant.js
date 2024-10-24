@@ -2,10 +2,32 @@ import { OpenAI } from 'openai';
 
 export default class Assistant {
     constructor(apiKey) {
-        this.openai = new OpenAI({
-            apiKey: apiKey
-        });
+        if (!apiKey || typeof apiKey !== 'string' || apiKey === '') {
+            throw new Error('Invalid API key: API key must be a non-empty string');
+        }
+
+        try {
+            this.openai = new OpenAI({
+                apiKey: apiKey
+            });
+            
+            this.validateApiKey();
+        } catch (error) {
+            throw new Error(`Failed to initialize OpenAI client: ${error.message}`);
+        }
+
         this.conversations = new Map();
+    }
+
+    async validateApiKey() {
+        try {
+            await this.openai.models.list({ limit: 1 });
+        } catch (error) {
+            if (error.status === 401) {
+                throw new Error('Invalid API key: Authentication failed');
+            }
+            throw new Error(`API key validation failed: ${error.message}`);
+        }
     }
 
     async sendMessage(message, conversationId = null, options = {}) {
