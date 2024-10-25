@@ -31,7 +31,7 @@
 
 body.dark-mode {
     --theme-bg-1: rgb(19, 19, 19);
-    --theme-bg-2: rgb(25, 25, 25);
+    --theme-bg-2: rgb(30, 30, 30);
     --theme-bg-3: rgb(40, 40, 40);
 
     --theme-alt-1: rgba(255, 255, 255, 0.1);

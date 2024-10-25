@@ -20,9 +20,22 @@
 #weather {
     display: flex;
     flex-direction: column;
-    background-image:
+
+    /* Backgrounds */
+    --sunny:
         radial-gradient(circle at top right, rgba(255, 216, 101, 0.6), transparent 60%),
         radial-gradient(circle at bottom left, rgba(255, 186, 101, 0.6), transparent 60%);
+    --cloudy:
+        radial-gradient(circle at top right, rgba(97, 169, 200, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(109, 124, 183, 0.6), transparent 60%);
+    --rainy:
+        radial-gradient(circle at top right, rgba(32, 69, 179, 0.6), transparent 60%),
+        radial-gradient(circle at top left, rgba(75, 111, 255, 0.6), transparent 60%);
+    --thunderstorm:
+        radial-gradient(circle at bottom left, rgba(0, 44, 177, 0.6), transparent 60%),
+        radial-gradient(circle at top right, rgba(110, 113, 50, 0.6), transparent 60%);
+
+    background-image: var(--rainy)
 }
 
 #weather h2 {
