@@ -147,19 +147,6 @@
     <script src="./assets/js/welcome.js"></script>
     <script src="./assets/js/control.js"></script>
     <script src="./assets/js/apps.js"></script>
-
     <script src="./assets/js/services/time.js"></script>
-    <script>
-        window.backend.assistant.initialize('')
-        .then((response) => {
-            if (response.success) {
-                console.log('Assistant initialized successfully');
-            } else {
-                console.error('Error initializing Assistant:', response.error || 'Unknown error');
-            }
-        })
-        .catch((error) => {
-            console.error('Unexpected error during Assistant initialization:', error);
-        });
-    </script>
+    <script src="./assets/js/assistant.js"></script>
 </body>
