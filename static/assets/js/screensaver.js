@@ -13,7 +13,7 @@ let idleTimeout, screensaverTimeout;
 
 // Set up the screensaver background
 $('#screensaver canvas').gradient({
-    colors: ['#a960ee', '#ff333d', '#90e0ff', '#ffcb57']
+    colors: ['#a20000', '#1d82ff', '#701dff']
 });
 
 let resettingContainer = false;

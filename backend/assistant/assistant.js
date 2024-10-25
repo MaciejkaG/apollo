@@ -1,6 +1,10 @@
 import { OpenAI } from 'openai';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default class Assistant {
     constructor(apiKey) {
@@ -26,7 +30,7 @@ export default class Assistant {
 
     async initializeTools() {
         try {
-            const pluginsDir = path.join(process.cwd(), 'backend', 'assistant', 'plugins');
+            const pluginsDir = path.join(__dirname, 'plugins');
             const plugins = await this.loadPlugins(pluginsDir);
             
             for (const plugin of plugins) {
