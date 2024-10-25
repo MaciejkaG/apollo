@@ -1,5 +1,3 @@
-// Here we translate everything from handlers into functions that can be called from the frontend.
-
 const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {
@@ -48,6 +46,22 @@ const AssistantService = {
     }
 };
 
+const WeatherService = {
+
+    getCurrentWeather: (params) =>
+        ipcRenderer.invoke('get-weather', params),
+
+    getForecast: (location, units = 'celsius', days = 5) =>
+        ipcRenderer.invoke('get-weather-forecast', location, units, days),
+
+    getHistorical: (location, units = 'celsius', days = 5) =>
+        ipcRenderer.invoke('get-weather-historical', location, units, days),
+
+    getComplete: (params) =>
+        ipcRenderer.invoke('get-weather-complete', params)
+};
+
 contextBridge.exposeInMainWorld('backend', {
-    assistant: AssistantService
+    assistant: AssistantService,
+    weather: WeatherService
 });

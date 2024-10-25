@@ -2,8 +2,8 @@
 
 import { ipcMain } from 'electron';
 import Assistant from './assistant/assistant.js';
+import WeatherPlugin from './assistant/plugins/weather/index.js';
 import 'dotenv/config';
-
 
 let AssistantService = null;
 
@@ -56,5 +56,67 @@ export function setup() {
             throw new Error('Assistant service not initialized');
         }
         return await AssistantService.listModels();
+    });
+
+    ipcMain.handle('get-weather', async (event, params) => {
+        try {
+            const weatherData = await WeatherPlugin.execute(params);
+            return { success: true, data: weatherData };
+        } catch (error) {
+            return { 
+                success: false, 
+                error: error.message 
+            };
+        }
+    });
+
+    ipcMain.handle('get-weather-forecast', async (event, location, units = 'celsius', days = 5) => {
+        try {
+            const weatherData = await WeatherPlugin.execute({
+                location,
+                units,
+                include_forecast: true,
+                forecast_days: days
+            });
+            return { success: true, data: weatherData };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    });
+
+    ipcMain.handle('get-weather-historical', async (event, location, units = 'celsius', days = 5) => {
+        try {
+            const weatherData = await WeatherPlugin.execute({
+                location,
+                units,
+                include_historical: true,
+                historical_days: days
+            });
+            return { success: true, data: weatherData };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    });
+
+    ipcMain.handle('get-weather-complete', async (event, params) => {
+        try {
+            const weatherData = await WeatherPlugin.execute({
+                ...params,
+                include_forecast: true,
+                include_historical: true
+            });
+            return { success: true, data: weatherData };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
     });
 }
