@@ -1,0 +1,44 @@
+{
+    "name": "getWeather",
+    "description": "Get detailed weather information including current conditions, forecasts, and historical data for a specified location",
+    "parameters": {
+        "type": "object",
+        "required": ["location"],
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "The city name or location to get weather for"
+            },
+            "units": {
+                "type": "string",
+                "enum": ["celsius", "fahrenheit"],
+                "default": "celsius",
+                "description": "Temperature units to return"
+            },
+            "include_forecast": {
+                "type": "boolean",
+                "default": false,
+                "description": "Include weather forecast data"
+            },
+            "forecast_days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5,
+                "default": 5,
+                "description": "Number of days to forecast (max 5 days)"
+            },
+            "include_historical": {
+                "type": "boolean",
+                "default": false,
+                "description": "Include historical weather data"
+            },
+            "historical_days": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5,
+                "default": 5,
+                "description": "Number of historical days to retrieve (max 5 days)"
+            }
+        }
+    }
+}

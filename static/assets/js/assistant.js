@@ -1,4 +1,4 @@
-window.backend.assistant.initialize('')
+window.backend.assistant.initialize()
 .then((response) => {
     if (response.success) {
         console.log('Assistant initialized successfully');

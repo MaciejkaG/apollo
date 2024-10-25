@@ -2,13 +2,15 @@
 
 import { ipcMain } from 'electron';
 import Assistant from './assistant/assistant.js';
+import 'dotenv/config';
+
 
 let AssistantService = null;
 
 export function setup() {
-    ipcMain.handle('initialize-assistant', async (event, apiKey) => {
+    ipcMain.handle('initialize-assistant', async (event) => {
         try {
-            AssistantService = new Assistant(apiKey);
+            AssistantService = new Assistant(process.env.OPENAI_API_KEY);
             return { success: true };
         } catch (error) {
             return { success: false, error: error.message };

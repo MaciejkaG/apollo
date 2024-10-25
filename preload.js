@@ -3,8 +3,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {
-    initialize: (apiKey) =>
-        ipcRenderer.invoke('initialize-assistant', apiKey),
+    initialize: () =>
+        ipcRenderer.invoke('initialize-assistant'),
 
     sendMessage: (message, conversationId, options) =>
         ipcRenderer.invoke('send-message', message, conversationId, options),
