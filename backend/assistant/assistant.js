@@ -17,6 +17,10 @@ export default class Assistant {
         }
         this.conversations = new Map();
         this.tools = new Map();
+        this.systemMessage = {
+            role: 'system',
+            content: "You are Apollo, a smart and capable assistant. You aim to provide helpful, accurate, and thoughtful responses while maintaining a friendly and professional demeanor. The responses you provide will be fully spoken, so do not use formatting or data as text. Explain these yourself."
+        };
         this.initializeTools();
     }
 
@@ -98,7 +102,7 @@ export default class Assistant {
 
     async sendMessage(message, conversationId = null, options = {}) {
         try {
-            let messages = this.conversations.get(conversationId) || [];
+            let messages = this.conversations.get(conversationId) || [this.systemMessage];
             messages.push({ role: 'user', content: message });
     
             const tools = Array.from(this.tools.values()).map(tool => ({
@@ -201,7 +205,7 @@ export default class Assistant {
 
     async streamMessage(message, onChunk, conversationId = null, options = {}) {
         try {
-            let messages = this.conversations.get(conversationId) || [];
+            let messages = this.conversations.get(conversationId) || [this.systemMessage];
             messages.push({ role: 'user', content: message });
 
             const tools = Array.from(this.tools.values()).map(tool => ({
@@ -266,11 +270,13 @@ export default class Assistant {
                 }
             }
 
-            messages.push({ 
+            const assistantMessage = { 
                 role: 'assistant', 
                 content: fullResponse,
                 tool_calls: toolCalls
-            });
+            };
+            
+            messages.push(assistantMessage);
 
             if (toolCalls.length > 0) {
                 const toolResults = [];
@@ -315,14 +321,36 @@ export default class Assistant {
                     tool_call_id: toolCalls[0].id 
                 });
 
-                const finalResponse = await this.streamMessage(
-                    "Process the tool results and continue the conversation.",
-                    onChunk,
-                    conversationId,
-                    options
-                );
+                const finalStream = await this.openai.chat.completions.create({
+                    messages: messages,
+                    model: options.model || 'gpt-4o-mini',
+                    temperature: options.temperature || 0.7,
+                    max_tokens: options.maxTokens || 9999,
+                    presence_penalty: options.presencePenalty || 0,
+                    frequency_penalty: options.frequencyPenalty || 0,
+                    stream: true
+                });
 
-                return finalResponse;
+                let finalResponse = '';
+                for await (const chunk of finalStream) {
+                    const content = chunk.choices[0]?.delta?.content || '';
+                    if (content) {
+                        finalResponse += content;
+                        onChunk({ type: 'content', content });
+                    }
+                }
+
+                messages.push({ role: 'assistant', content: finalResponse });
+
+                if (conversationId) {
+                    this.conversations.set(conversationId, messages);
+                }
+
+                return {
+                    message: finalResponse,
+                    conversationId,
+                    toolCalls
+                };
             }
 
             if (conversationId) {
