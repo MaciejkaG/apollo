@@ -23,7 +23,7 @@
 </head>
 <body>
     <div id="welcome">
-        <span id="welcomeText">Witaj w Apollo</span>
+        <span id="welcomeText">Apollo</span>
     </div>
     <div id="screensaver">
         <canvas></canvas>
@@ -40,6 +40,15 @@
         <div class="app" id="weatherApp">
             <h1>23°C</h1>
         </div>
+        <div class="app" id="settings">
+            <div class="categories">
+                <span>Interfejs</span>
+                <span class="active">Wi-Fi</span>
+            </div>
+            <div class="content">
+                <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
+            </div>
+        </div>
     </div>
 
     <div class="container" id="uiContainer">
@@ -54,7 +63,7 @@
                         dark_mode
                     </span>
                 </button>
-                <button onclick="$(this).toggleClass('active')">
+                <button onclick="$(this).toggleClass('active')" oncontextmenu="openApp('settings', $(this).parent().get(0))">
                     <span class="material-symbols-outlined">
                         wifi
                     </span>
@@ -70,6 +79,11 @@
                     </span>
                 </button>
                 <button onclick="$(this).toggleClass('active')">
+                    <span class="material-symbols-outlined">
+                        settings
+                    </span>
+                </button>
+                <button onclick="openApp('settings', $(this).parent().get(0))">
                     <span class="material-symbols-outlined">
                         settings
                     </span>
@@ -157,5 +171,6 @@
 
     <script src="./assets/js/services/time.js"></script>
     <script src="./assets/js/services/weather.js"></script>
+    <script src="./assets/js/services/settings.js"></script>
     <script src="./assets/js/assistant.js"></script>
 </body>

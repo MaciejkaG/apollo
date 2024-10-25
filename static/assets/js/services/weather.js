@@ -7,8 +7,20 @@ async function updateWeather() {
         "overcast clouds": "zachmurzenie",
         "broken clouds": "pochmurnie",
         "scattered clouds": "rozproszone chmury",
-        "few clouds": "mało chmur",
+        "few clouds": "troche chmur",
         "partly cloudy": "częściowe zachmurzenie"
+    };
+
+    const backgrounds = {
+        "clear sky": "var(--sunny)",
+        "rain": "var(--rainy)",
+        "snow": "var(--rainy)",
+        "thunderstorm": "var(--thunderstorm)",
+        "overcast clouds": "var(--cloudy)",
+        "broken clouds": "var(--cloudy)",
+        "scattered clouds": "var(--cloudy)",
+        "few clouds": "var(--sunny)",
+        "partly cloudy": "var(--cloudy)"
     };
 
     try {
@@ -24,6 +36,9 @@ async function updateWeather() {
         if (weatherWidget) {
             const description = translations[current.condition.description.toLowerCase()] || current.condition.description.toLowerCase();
             weatherWidget.querySelector('h1').textContent = `${Math.round(current.temperature.value)}°C, ${description}`;
+
+            // Apply a correct widget and app background according to the current weather.
+            document.documentElement.style.cssText = `--active-weather-background: ${backgrounds[current.condition.description.toLowerCase()] || 'var(--cloudy)'}`;
         }
 
         const forecast = weatherData.data.forecast;

@@ -17,10 +17,7 @@
     font-weight: 300;
 }
 
-#weather {
-    display: flex;
-    flex-direction: column;
-
+:root {
     /* Backgrounds */
     --sunny:
         radial-gradient(circle at top right, rgba(255, 216, 101, 0.6), transparent 60%),
@@ -34,8 +31,14 @@
     --thunderstorm:
         radial-gradient(circle at bottom left, rgba(0, 44, 177, 0.6), transparent 60%),
         radial-gradient(circle at top right, rgba(110, 113, 50, 0.6), transparent 60%);
+    --active-weather-background: var(--sunny);
+}
 
-    background-image: var(--rainy)
+#weather {
+    display: flex;
+    flex-direction: column;
+
+    background-image: var(--active-weather-background)
 }
 
 #weather h2 {

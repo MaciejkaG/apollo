@@ -5,7 +5,6 @@ function openApp(appId, widget) {
     openAnimationRunning = true;
     const widgetRect = widget.getBoundingClientRect();
     const widgetStyle = getComputedStyle(widget);
-    console.log(widgetStyle);
     const expandDiv = document.createElement('div');
     expandDiv.classList.add('expand');
 
@@ -59,8 +58,8 @@ function closeApp() {
         targets: '.apps',
         scale: [1, 0.6],
         opacity: [1, 0],
-        easing: 'easeInOutSine',
-        duration: 300,
+        easing: 'easeInQuad',
+        duration: 350,
         complete: () => {
             $('.apps .app').removeClass('active');
             $('.apps').attr('style', '');

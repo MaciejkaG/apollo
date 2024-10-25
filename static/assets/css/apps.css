@@ -9,10 +9,6 @@
             radial-gradient(ellipse at bottom right, rgba(112, 29, 255, 0.6), transparent 70%);
 }
 
-#timeApp * {
-    margin: 0;
-}
-
 #timeApp.active {
     display: flex;
 }
@@ -25,4 +21,45 @@
 #timeApp h3 {
     font-weight: 300;
     font-size: 1.25rem;
+}
+
+#weatherApp {
+    background-image: var(--active-weather-background);
+}
+
+#settings.active {
+    display: flex;
+}
+
+#settings .categories {
+    flex: 1.25;
+    box-sizing: border-box;
+    padding: 0 0.5rem;
+    padding-top: 3.5rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    font-size: 1.25rem;
+    background-color: var(--theme-bg-2);
+}
+
+#settings .categories span {
+    padding: .3rem .5rem;
+    border-radius: 0.5rem;
+    font-variation-settings: 'wght' 400;
+    transition: font-variation-settings 0.3s, background-color 0.3s, color 0.3s;
+}
+
+#settings .categories span.active {
+    background-color: var(--active-bg-1);
+    color: var(--active-fg-1);
+    font-variation-settings: 'wght' 700;
+}
+
+#settings .content {
+    flex: 3;
+    background-color: var(--theme-bg-1);
+    padding: 0 1rem;
 }

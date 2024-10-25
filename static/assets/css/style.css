@@ -23,7 +23,7 @@
 
     --theme-alt-1: rgba(0, 0, 0, 0.1);
 
-    --active-bg-1: rgb(29, 130, 255);
+    --active-bg-1: rgb(56, 102, 255);
     --active-fg-1: rgb(255, 255, 255);
 
     --theme-fg-1: rgb(0, 0, 0);
@@ -87,7 +87,8 @@ span.material-symbols-outlined {
 }
 
 #welcome .letter {
-    opacity: 0;
+    /* opacity: 0; */
+    color: var(--theme-bg-1);
 }
 
 #screensaver.active {
@@ -171,7 +172,7 @@ span.material-symbols-outlined {
 }
 
 .container .col .widget.control button {
-    border-radius: 0.75rem;
+    border-radius: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -242,6 +243,7 @@ span.material-symbols-outlined {
     height: 100%;
     top: 0;
     left: 0;
+    float: left;
     box-sizing: border-box;
 }
 

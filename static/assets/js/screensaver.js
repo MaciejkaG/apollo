@@ -2,7 +2,7 @@ const container = document.getElementById('uiContainer');
 const screensaver = document.getElementById('screensaver');
 
 // Constants for timings
-const IDLE_FADE_TIME = 45000;                            // Seconds of idle required to start fading
+const IDLE_FADE_TIME = 50000;                            // Seconds of idle required to start fading
 const SCREENSAVER_TIME = 60000;                          // Seconds of idle required to activate screensaver
 const FADE_DURATION = SCREENSAVER_TIME - IDLE_FADE_TIME; // Fade-out duration
 const BLUR_AMOUNT = 10;                                  // Maximum blur in pixels
