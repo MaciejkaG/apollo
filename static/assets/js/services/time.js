@@ -22,11 +22,11 @@ setInterval(() => {
     // Timezone based on the user's system
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    // Update the time widget
-    $('#time .hour').html(`${hours}:${minutes}`);
-    $('#time .date').html(`${dayName} ${dayNumber} ${shortMonth}.`);
+    // Update all the places where time and date is neeeded
+    $('.shorttime').html(`${hours}:${minutes}`);
+    $('.shortdate').html(`${dayName} ${dayNumber} ${shortMonth}.`);
 
     // Update the time app
-    $('#timeApp h1').html(`${hours}:${minutes}:${seconds}`);
-    $('#timeApp h3').html(`${dayName} ${dayNumber} ${fullMonth} ${year}<br>${timeZone}`);
+    $('.fulltime').html(`${hours}:${minutes}:${seconds}`);
+    $('.fulldate').html(`${dayName} ${dayNumber} ${fullMonth} ${year}<br>${timeZone}`);
 }, 1000);  // Refresh every second

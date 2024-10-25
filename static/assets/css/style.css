@@ -56,7 +56,7 @@ span.material-symbols-outlined {
     font-size: 1.6rem
 }
 
-#welcome {
+#welcome, #screensaver {
     position: fixed;
     z-index: 500;
     top: 0;
@@ -74,13 +74,47 @@ span.material-symbols-outlined {
     transition: opacity 0.5s;
 }
 
-#welcome.hidden {
+#welcome.hidden, #screensaver {
     opacity: 0;
     pointer-events: none;
 }
 
+#screensaver {
+    scale: 1.5;
+    flex-direction: column;
+    gap: .5rem;
+    transition: opacity 0.7s, scale 0.7s;
+}
+
 #welcome .letter {
     opacity: 0;
+}
+
+#screensaver.active {
+    opacity: 1;
+    scale: 1;
+    pointer-events: initial;
+}
+
+#screensaver canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+#screensaver span {
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+
+#screensaver span:last-child {
+    font-size: 1.4rem;
+    font-weight: 400;
 }
 
 .container {

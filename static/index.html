@@ -14,6 +14,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="./assets/js/screensaver-gradient.js"></script>
 
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/widgets.css">
@@ -24,23 +25,28 @@
     <div id="welcome">
         <span id="welcomeText">Witaj w Apollo</span>
     </div>
+    <div id="screensaver">
+        <canvas></canvas>
+        <span class="shorttime"></span>
+        <span class="shortdate"></span>
+    </div>
 
     <div class="apps">
         <span class="material-symbols-outlined" id="closeAppButton">close</span>
         <div class="app" id="timeApp">
-            <h1>10:39:52 CET</h1>
-            <h3>Czwartek 24 października 2024</h3>
+            <h1 class="fulltime"></h1>
+            <h3 class="fulldate"></h3>
         </div>
         <div class="app" id="weatherApp">
             <h1>23°C</h1>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="uiContainer">
         <div class="col">
             <div class="widget sm" id="time" onclick="openApp('timeApp', this)">
-                <span class="hour">09:40</span>
-                <span class="date">Czwartek 24 paź.</span>
+                <span class="hour shorttime"></span>
+                <span class="date shortdate"></span>
             </div>
             <div class="widget control">
                 <button onclick="toggleDarkMode(this)">
@@ -147,6 +153,7 @@
     <script src="./assets/js/welcome.js"></script>
     <script src="./assets/js/control.js"></script>
     <script src="./assets/js/apps.js"></script>
+    <script src="./assets/js/screensaver.js"></script>
 
     <script src="./assets/js/services/time.js"></script>
     <script>
