@@ -9,6 +9,10 @@
             radial-gradient(ellipse at bottom right, rgba(112, 29, 255, 0.6), transparent 70%);
 }
 
+#timeApp * {
+    margin: 0;
+}
+
 #timeApp.active {
     display: flex;
 }
