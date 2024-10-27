@@ -31,6 +31,10 @@
     background-image: var(--active-weather-background);
 }
 
+#settings {
+    background-color: var(--theme-bg-1);
+}
+
 #settings.active {
     display: flex;
 }

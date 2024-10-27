@@ -3,10 +3,10 @@ function animateContentChange(contentCategoryId) {
     anime.remove('#settings .content');
     anime({
         targets: '#settings .content',
-        scale: .8,
+        scale: .95,
         opacity: 0,
-        easing: 'easeInOutSine',
-        duration: 250,
+        easing: 'easeInCubic',
+        duration: 200,
         complete: function () {
             // Place for content-changing logic
             // This will be called after the content is out of view
@@ -16,10 +16,10 @@ function animateContentChange(contentCategoryId) {
             // Step 2: Animate content back to original position
             anime({
                 targets: '#settings .content',
-                scale: [.8, 1],
+                scale: [.95, 1],
                 opacity: 1,
-                easing: 'easeInOutSine',
-                duration: 250,
+                easing: 'easeOutCubic',
+                duration: 200,
             });
         }
     });
