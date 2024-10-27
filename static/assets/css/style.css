@@ -50,6 +50,7 @@ body {
     font-family: "Figtree", sans-serif;
     font-optical-sizing: auto;
     user-select: none;
+    transition: background-color 0.3ss;
 }
 
 span.material-symbols-outlined {
@@ -161,6 +162,7 @@ span.material-symbols-outlined {
     padding: 0.75rem;
 
     background-color: var(--theme-bg-2);
+    transition: background-color 0.3s;
 }
 
 .container .col .widget.control {

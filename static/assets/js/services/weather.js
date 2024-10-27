@@ -25,7 +25,7 @@ async function updateWeather() {
 
     try {
         const weatherData = await window.backend.weather.getComplete({ 
-            location: 'Kamionki',
+            location: 'Poznan',
             units: 'celsius',
             forecast_days: 1,
             historical_days: 0

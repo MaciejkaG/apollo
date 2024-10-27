@@ -17,7 +17,7 @@
     text-align: center;
     padding: 0.5rem;
     margin: 0;
-    /* display: inline; */
+    transition: background-color 0.3s;
 }
 
 #chat p.bubble.own {
