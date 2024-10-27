@@ -3,7 +3,7 @@ function animateContentChange(contentCategoryId) {
     anime.remove('#settings .content');
     anime({
         targets: '#settings .content',
-        scale: 0.8,
+        scale: .8,
         opacity: 0,
         easing: 'easeInOutSine',
         duration: 250,
@@ -16,7 +16,7 @@ function animateContentChange(contentCategoryId) {
             // Step 2: Animate content back to original position
             anime({
                 targets: '#settings .content',
-                scale: [1.2, 1],
+                scale: [.8, 1],
                 opacity: 1,
                 easing: 'easeInOutSine',
                 duration: 250,
