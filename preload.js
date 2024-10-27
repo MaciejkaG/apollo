@@ -47,7 +47,6 @@ const AssistantService = {
 };
 
 const WeatherService = {
-
     getCurrentWeather: (params) =>
         ipcRenderer.invoke('get-weather', params),
 
@@ -61,7 +60,81 @@ const WeatherService = {
         ipcRenderer.invoke('get-weather-complete', params)
 };
 
+const SpotifyService = {
+    initialize: (config) => {
+        ipcRenderer.on('spotify-event', (_, { event, data }) => {
+            window.dispatchEvent(new CustomEvent('spotify-event', {
+                detail: { event, data }
+            }));
+        });
+        return ipcRenderer.invoke('initialize-spotify', config);
+    },
+
+    authenticate: (timeout) =>
+        ipcRenderer.invoke('authenticate-spotify', timeout),
+
+    destroy: () => {
+        ipcRenderer.removeAllListeners('spotify-event');
+        return ipcRenderer.invoke('spotify-destroy');
+    },
+
+    play: (options) =>
+        ipcRenderer.invoke('spotify-play', options),
+
+    pause: () =>
+        ipcRenderer.invoke('spotify-pause'),
+
+    next: () =>
+        ipcRenderer.invoke('spotify-next'),
+
+    previous: () =>
+        ipcRenderer.invoke('spotify-previous'),
+
+    seek: (positionMs) =>
+        ipcRenderer.invoke('spotify-seek', positionMs),
+
+    setVolume: (volumePercent) =>
+        ipcRenderer.invoke('spotify-set-volume', volumePercent),
+
+    setRepeat: (state) =>
+        ipcRenderer.invoke('spotify-set-repeat', state),
+
+    setShuffle: (state) =>
+        ipcRenderer.invoke('spotify-set-shuffle', state),
+
+    getCurrentState: () =>
+        ipcRenderer.invoke('spotify-get-current-state'),
+
+    getCurrentTrack: () =>
+        ipcRenderer.invoke('spotify-get-current-track'),
+
+    getQueue: () =>
+        ipcRenderer.invoke('spotify-get-queue'),
+
+    search: (query, types, options) =>
+        ipcRenderer.invoke('spotify-search', query, types, options),
+
+    getPlaylists: (limit, offset) =>
+        ipcRenderer.invoke('spotify-get-playlists', limit, offset),
+
+    createPlaylist: (userId, name, options) =>
+        ipcRenderer.invoke('spotify-create-playlist', userId, name, options),
+
+    addToPlaylist: (playlistId, uris, options) =>
+        ipcRenderer.invoke('spotify-add-to-playlist', playlistId, uris, options),
+
+    getDevices: () =>
+        ipcRenderer.invoke('spotify-get-devices'),
+
+    setDevice: (deviceId) =>
+        ipcRenderer.invoke('spotify-set-device', deviceId),
+
+    addToQueue: (uri) =>
+        ipcRenderer.invoke('spotify-add-to-queue', uri)
+};
+
 contextBridge.exposeInMainWorld('backend', {
     assistant: AssistantService,
-    weather: WeatherService
+    weather: WeatherService,
+    spotify: SpotifyService
 });

@@ -19,7 +19,7 @@ app.whenReady().then(() => {
         },
     });
 
-    setup();
+    setup(win);
 
     win.setAspectRatio(5/3);
 
