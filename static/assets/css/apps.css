@@ -38,25 +38,36 @@
 #settings .categories {
     flex: 1.25;
     box-sizing: border-box;
-    padding: 0 0.5rem;
+    padding: 0 .5rem;
     padding-top: 3.5rem;
 
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: .5rem;
+    z-index: 2;
 
-    font-size: 1.25rem;
     background-color: var(--theme-bg-2);
 }
 
 #settings .categories span {
-    padding: .3rem .5rem;
-    border-radius: 0.5rem;
-    font-variation-settings: 'wght' 400;
-    transition: font-variation-settings 0.3s, background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
 }
 
-#settings .categories span.active {
+#settings .categories .category {
+    font-size: 1.25rem;
+    padding: .3rem .5rem;
+    border-radius: .5rem;
+    font-variation-settings: 'wght' 400;
+    transition: font-variation-settings .3s, background-color 0.3s, color 0.3s;
+}
+
+#settings .categories .category span {
+    font-size: 1.5rem;
+}
+
+#settings .categories .category.active {
     background-color: var(--active-bg-1);
     color: var(--active-fg-1);
     font-variation-settings: 'wght' 700;
@@ -66,4 +77,9 @@
     flex: 3;
     background-color: var(--theme-bg-1);
     padding: 0 1rem;
+    z-index: 1;
+}
+
+#settings .content .category {
+    display: none;
 }

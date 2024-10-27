@@ -38,15 +38,20 @@
             <h3 class="fulldate"></h3>
         </div>
         <div class="app" id="weatherApp">
-            <h1>23°C</h1>
+            <h1 class="temperature">23°C</h1>
         </div>
         <div class="app" id="settings">
             <div class="categories">
-                <span>Interfejs</span>
-                <span class="active">Wi-Fi</span>
+                <span class="category" data-category-id="uiSettings"><span class="material-symbols-outlined fill">brush</span>Interfejs</span>
+                <span class="category active" data-category-id="wifiSettings"><span class="material-symbols-outlined fill">wifi</span>Wi-Fi</span>
             </div>
             <div class="content">
-                <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
+                <div class="category" id="uiSettings">
+                    
+                </div>
+                <div class="category" id="wifiSettings">
+                    <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
+                </div>
             </div>
         </div>
     </div>
