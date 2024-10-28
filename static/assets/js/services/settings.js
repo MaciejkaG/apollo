@@ -27,7 +27,6 @@ function animateContentChange(contentCategoryId) {
 
 function setContentCategory(id) {
     $('#settings .content .category').hide();
-    console.log(`#settings .content .category#${id}`);
     $(`#settings .content .category#${id}`).show();
 }
 
@@ -36,4 +35,8 @@ $('#settings .categories .category').on('click', function (e) {
     animateContentChange($(e.target).data('category-id'));
     $('#settings .categories .category').removeClass('active');
     $(e.target).addClass('active');
+});
+
+$(window).on('load', function() {
+    $('#settings .categories .category:first-child').click();
 });

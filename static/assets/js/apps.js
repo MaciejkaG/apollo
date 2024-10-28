@@ -16,7 +16,6 @@ function openApp(appId, widget) {
 
     // Port the backgroundImage (usually gradient)
     expandDiv.style.backgroundImage = widgetStyle.backgroundImage;
-    console.log(expandDiv.style.backgroundImage);
 
     document.body.appendChild(expandDiv);
 
