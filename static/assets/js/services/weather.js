@@ -8,7 +8,8 @@ async function updateWeather() {
         "broken clouds": "pochmurnie",
         "scattered clouds": "rozproszone chmury",
         "few clouds": "troche chmur",
-        "partly cloudy": "częściowe zachmurzenie"
+        "partly cloudy": "częściowe zachmurzenie",
+        "mist": "mgła",
     };
 
     const backgrounds = {
@@ -20,7 +21,8 @@ async function updateWeather() {
         "broken clouds": "var(--cloudy)",
         "scattered clouds": "var(--cloudy)",
         "few clouds": "var(--sunny)",
-        "partly cloudy": "var(--cloudy)"
+        "partly cloudy": "var(--cloudy)",
+        "mist": "var(--cloudy)",
     };
 
     try {
