@@ -2,6 +2,7 @@ async function updateWeather() {
     const translations = {
         "clear sky": "czyste niebo",
         "rain": "deszcz",
+        "light rain": "mżawka",
         "snow": "śnieg",
         "thunderstorm": "burza",
         "overcast clouds": "zachmurzenie",
@@ -15,6 +16,7 @@ async function updateWeather() {
     const backgrounds = {
         "clear sky": "var(--sunny)",
         "rain": "var(--rainy)",
+        "light rain": "var(--rainy)",
         "snow": "var(--rainy)",
         "thunderstorm": "var(--thunderstorm)",
         "overcast clouds": "var(--cloudy)",

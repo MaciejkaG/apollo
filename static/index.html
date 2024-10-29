@@ -31,7 +31,7 @@
         <span class="shortdate"></span>
     </div>
 
-    <div class="apps">
+    <div class="apps" id="apps">
         <span class="material-symbols-outlined" id="closeAppButton">close</span>
         <div class="app" id="timeApp">
             <h1 class="fulltime"></h1>
@@ -54,7 +54,10 @@
                     <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
                 </div>
                 <div class="category" id="spotifySettings">
-                    <p>Logowanie do spotify i ustawianie rzeczy tutaj</p>
+                    <div class="spotifyLoginAlert active">
+                        <p>Aby korzystać z integracji Spotify, musisz się zalogować poniszym kodem QR.</p>
+                        <img src="" id="spotifyLoginQRCode">
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,6 +148,9 @@
                 </div>
             </div>
             <div class="widget sm" id="spotify">
+                <div class="spotifyLoginAlert active" onclick="openApp('settings', $(this).parent().get(0));animateContentChange('spotifySettings')">
+                    <p>Kliknij aby aktywować integrację ze Spotify w ustawieniach.</p>
+                </div>
                 <img src="https://placehold.co/512x512" alt="">
                 <div class="meta">
                     <span class="title"></span>

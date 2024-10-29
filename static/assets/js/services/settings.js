@@ -1,4 +1,8 @@
 function animateContentChange(contentCategoryId) {
+    // Set category buttons
+    $('#settings .categories .category').removeClass('active');
+    $(`#settings .categories .category[data-category-id="${contentCategoryId}"]`).addClass('active');
+
     // Step 1: Animate content out of view
     anime.remove('#settings .content');
     anime({
@@ -33,8 +37,6 @@ function setContentCategory(id) {
 // Call the function on category click
 $('#settings .categories .category').on('click', function (e) {
     animateContentChange($(e.target).data('category-id'));
-    $('#settings .categories .category').removeClass('active');
-    $(e.target).addClass('active');
 });
 
 $(window).on('load', function() {

@@ -145,6 +145,8 @@ span.material-symbols-outlined {
 }
 
 .container .col .widget {
+    position: relative;
+    /* overflow: hidden; */
     margin: 0 0.5rem;
 }
 

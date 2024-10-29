@@ -1,9 +1,13 @@
 const container = document.getElementById('uiContainer');
+const appsContainer = document.getElementById('apps');
 const screensaver = document.getElementById('screensaver');
 
 // Constants for timings
-const IDLE_FADE_TIME = 50000;                            // Seconds of idle required to start fading
-const SCREENSAVER_TIME = 60000;                          // Seconds of idle required to activate screensaver
+//const IDLE_FADE_TIME = 50000;                            // Seconds of idle required to start fading
+//const SCREENSAVER_TIME = 60000;                          // Seconds of idle required to activate screensaver
+
+const IDLE_FADE_TIME = 5000;                            // Seconds of idle required to start fading
+const SCREENSAVER_TIME = 10000;                          // Seconds of idle required to activate screensaver
 const FADE_DURATION = SCREENSAVER_TIME - IDLE_FADE_TIME; // Fade-out duration
 const BLUR_AMOUNT = 10;                                  // Maximum blur in pixels
 const MIN_SCALE = 0.7;                                   // Minimum scale of the container
@@ -27,9 +31,10 @@ function resetIdleTimer() {
 
     // Restore container properties if active animations are present
     anime.remove(container); // Cancel any ongoing animation
+    anime.remove(appsContainer); // Cancel any ongoing animation
     resettingContainer = true;
     anime({
-        targets: container,
+        targets: [container, appsContainer],
         scale: 1,
         opacity: [1],
         filter: 'blur(0px)',
@@ -37,6 +42,11 @@ function resetIdleTimer() {
         easing: 'easeOutQuad',
         complete: () => {
             container.style = '';
+
+            appsContainer.style.transform = '';
+            appsContainer.style.filter = '';
+            appsContainer.style.opacity = '';
+
             resettingContainer = false;
         }
     });
@@ -51,9 +61,8 @@ function resetIdleTimer() {
 
 // Function to start fading (blur, scale down, fade out) effect
 function startFade() {
-    closeApp();
     anime({
-        targets: container,
+        targets: [container, appsContainer],
         scale: MIN_SCALE,
         filter: `blur(${BLUR_AMOUNT}px)`,
         opacity: 0.05,

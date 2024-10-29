@@ -87,3 +87,34 @@
 #settings .content .category {
     display: none;
 }
+
+.spotifyLoginAlert {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.spotifyLoginAlert.active {
+    opacity: 1;
+    pointer-events: initial;
+}
+
+#settings #spotifySettings .spotifyLoginAlert {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem;
+    box-sizing: border-box;
+}
+
+#settings #spotifySettings .loginOverlay.active {
+    opacity: 1;
+    pointer-events: initial;
+}

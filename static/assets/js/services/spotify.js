@@ -15,11 +15,11 @@ class SpotifyWidget {
 
     async initializeSpotify() {
         try {
-            const result = await window.backend.spotify.initialize({
-            });
+            const result = await window.backend.spotify.initialize({});
             
             if (result.success) {
-                console.log(result)
+                console.log(result);
+                $('#spotifyLoginQRCode').attr('src', result.qrCode);
                 await window.backend.spotify.authenticate();
             }
         } catch (error) {
@@ -34,10 +34,16 @@ class SpotifyWidget {
             switch (event) {
                 case 'authenticated':
                     console.log('Authentication successful');
+                    $('.spotifyLoginAlert').removeClass('active');
                     this.updateCurrentTrack();
                     break;
                     
                 case 'error':
+                    if (data === 'Authentication timeout') {
+                        setTimeout(() => {
+                            this.initializeSpotify();
+                        }, 2000);
+                    }
                     console.error('Spotify error:', data);
                     break;
             }
