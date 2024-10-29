@@ -8,7 +8,7 @@ let AssistantService = null;
 let SpotifyService = null;
 
 export function setup(mainWindow) {
-    // Assistant handlers
+
     ipcMain.handle('initialize-assistant', async (event) => {
         try {
             AssistantService = new Assistant(process.env.OPENAI_API_KEY);
@@ -59,7 +59,6 @@ export function setup(mainWindow) {
         return await AssistantService.listModels();
     });
 
-    // Weather handlers
     ipcMain.handle('get-weather', async (event, params) => {
         try {
             const weatherData = await WeatherPlugin.execute(params);
@@ -130,23 +129,38 @@ export function setup(mainWindow) {
 
     ipcMain.handle('initialize-spotify', async (event, config) => {
         try {
+            if (SpotifyService) {
+                SpotifyService.destroy();
+            }
+
             SpotifyService = new SpotifyClient(config);
-            
             
             SpotifyService.on('authInitialized', (data) => {
                 forwardEvent('authInitialized', data);
             });
             
-            SpotifyService.on('authenticated', (data) => { 
-                forwardEvent('authenticated', data)
+            SpotifyService.on('authUrlVisited', () => {
+                forwardEvent('authUrlVisited');
             });
 
-            SpotifyService.on('tokenRefreshed', (data) => forwardEvent('tokenRefreshed', data));
-            SpotifyService.on('ready', (data) => forwardEvent('ready', data));
-            SpotifyService.on('error', (error) => forwardEvent('error', error.message));
+            SpotifyService.on('authenticated', (data) => {
+                forwardEvent('authenticated', data);
+            });
+
+            SpotifyService.on('tokenRefreshed', (data) => {
+                forwardEvent('tokenRefreshed', data);
+            });
+
+            SpotifyService.on('ready', (data) => {
+                forwardEvent('ready', data);
+            });
+
+            SpotifyService.on('error', (error) => {
+                forwardEvent('error', error.message);
+            });
             
-            const authInfo = await SpotifyService.initialize();
-            return { success: true, ...authInfo };
+            const result = await SpotifyService.initialize();
+            return { success: true, ...result };
         } catch (error) {
             return { success: false, error: error.message };
         }
@@ -154,24 +168,18 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-destroy', () => {
         if (SpotifyService) {
-            SpotifyService.removeAllListeners();
             SpotifyService.destroy();
             SpotifyService = null;
         }
         return { success: true };
     });
 
-    ipcMain.handle('authenticate-spotify', async (event, timeout) => {
-        try {
-            await SpotifyService.authenticate(timeout);
-            return { success: true };
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    });
 
     ipcMain.handle('spotify-play', async (event, options) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.play(options);
             return { success: true };
         } catch (error) {
@@ -181,6 +189,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-pause', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.pause();
             return { success: true };
         } catch (error) {
@@ -190,6 +201,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-next', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.next();
             return { success: true };
         } catch (error) {
@@ -199,6 +213,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-previous', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.previous();
             return { success: true };
         } catch (error) {
@@ -208,6 +225,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-seek', async (event, positionMs) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.seek(positionMs);
             return { success: true };
         } catch (error) {
@@ -217,6 +237,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-set-volume', async (event, volumePercent) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.setVolume(volumePercent);
             return { success: true };
         } catch (error) {
@@ -226,6 +249,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-set-repeat', async (event, state) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.setRepeatMode(state);
             return { success: true };
         } catch (error) {
@@ -235,6 +261,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-set-shuffle', async (event, state) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.setShuffle(state);
             return { success: true };
         } catch (error) {
@@ -244,6 +273,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-get-current-state', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const state = await SpotifyService.getCurrentState();
             return { success: true, state };
         } catch (error) {
@@ -253,6 +285,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-get-current-track', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const track = await SpotifyService.getCurrentTrack();
             return { success: true, track };
         } catch (error) {
@@ -262,6 +297,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-get-queue', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const queue = await SpotifyService.getQueue();
             return { success: true, queue };
         } catch (error) {
@@ -271,6 +309,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-search', async (event, query, types, options) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const results = await SpotifyService.search(query, types, options);
             return { success: true, results };
         } catch (error) {
@@ -280,6 +321,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-get-playlists', async (event, limit, offset) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const playlists = await SpotifyService.getUserPlaylists(limit, offset);
             return { success: true, playlists };
         } catch (error) {
@@ -289,6 +333,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-create-playlist', async (event, userId, name, options) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const playlist = await SpotifyService.createPlaylist(userId, name, options);
             return { success: true, playlist };
         } catch (error) {
@@ -298,6 +345,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-add-to-playlist', async (event, playlistId, uris, options) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const result = await SpotifyService.addTracksToPlaylist(playlistId, uris, options);
             return { success: true, result };
         } catch (error) {
@@ -307,6 +357,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-get-devices', async () => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             const devices = await SpotifyService.getDevices();
             return { success: true, devices };
         } catch (error) {
@@ -316,6 +369,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-set-device', async (event, deviceId) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.setDevice(deviceId);
             return { success: true };
         } catch (error) {
@@ -325,6 +381,9 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-add-to-queue', async (event, uri) => {
         try {
+            if (!SpotifyService?.isAuthenticated) {
+                throw new Error('Spotify client not authenticated');
+            }
             await SpotifyService.addToQueue(uri);
             return { success: true };
         } catch (error) {
