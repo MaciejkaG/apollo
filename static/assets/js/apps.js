@@ -53,6 +53,9 @@ function setActiveApp(appId) {
 
 // This closes the current app
 function closeApp() {
+    if (openAnimationRunning) return;
+
+    openAnimationRunning = true;
     anime({
         targets: '.apps',
         scale: [1, 0.6],
@@ -62,6 +65,7 @@ function closeApp() {
         complete: () => {
             $('.apps .app').removeClass('active');
             $('.apps').attr('style', '');
+            openAnimationRunning = false;
         }
     });
 }
