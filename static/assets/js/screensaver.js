@@ -67,7 +67,7 @@ function startFade() {
         filter: `blur(${BLUR_AMOUNT}px)`,
         opacity: 0.05,
         duration: FADE_DURATION, // Smooth transition to match screensaver timing
-        easing: 'easeInOutSine'
+        easing: 'easeInSine'
     });
 }
 
