@@ -15,13 +15,14 @@ export class SpotifyClient extends EventEmitter {
             authServerUrl: config.authServerUrl || 'https://spotify-callback.ibss.pl',
             autoRefresh: config.autoRefresh !== false,
             refreshThreshold: config.refreshThreshold || 300,
-            tokenRefreshPadding: config.tokenRefreshPadding || 60
+            tokenRefreshPadding: config.tokenRefreshPadding || 60,
+            autoSelectDevice: config.autoSelectDevice !== false
         };
         
         this.accessToken = store.get('spotify.accessToken');
         this.refreshToken = store.get('spotify.refreshToken');
         this.expiresAt = store.get('spotify.expiresAt');
-        this.deviceId = null;
+        this.deviceId = store.get('spotify.deviceId');
         this.refreshTimeout = null;
         this.eventSource = null;
     }
@@ -178,6 +179,11 @@ export class SpotifyClient extends EventEmitter {
                 await this._refreshAccessToken();
                 return this._apiRequest(method, endpoint, data);
             }
+            
+            if (endpoint === '/me/player/devices') {
+                return { devices: [] };
+            }
+            
             throw this._formatApiError(error);
         }
     }
@@ -203,42 +209,73 @@ export class SpotifyClient extends EventEmitter {
     }
 
     async play(options = {}) {
-        const deviceOptions = this.deviceId ? { device_id: this.deviceId } : {};
+        const deviceId = await this._ensureDevice();
+        const deviceOptions = deviceId ? { device_id: deviceId } : {};
         await this._apiRequest('PUT', '/me/player/play', {
             ...deviceOptions,
             ...options
         });
     }
 
+    async _ensureDevice() {
+        if (!this.deviceId) {
+            const devices = await this.getDevices();
+            if (devices.length > 0 && this.config.autoSelectDevice) {
+                await this.setDevice(devices[0].id);
+                return this.deviceId;
+            }
+            throw new Error('No active device available. Please select a device using setDevice()');
+        }
+        return this.deviceId;
+    }
+
+    async setDevice(deviceId) {
+        await this._apiRequest('PUT', '/me/player', {
+            device_ids: [deviceId],
+            play: false
+        });
+        this.deviceId = deviceId;
+        store.set('spotify.deviceId', deviceId);
+        this.emit('deviceSelected', { deviceId });
+    }
+
     async resume() {
+        const deviceId = await this._ensureDevice();
         await this.play();
     }
 
     async pause() {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('PUT', '/me/player/pause');
     }
 
     async next() {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('POST', '/me/player/next');
     }
 
     async previous() {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('POST', '/me/player/previous');
     }
 
     async seek(positionMs) {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('PUT', '/me/player/seek', { position_ms: positionMs });
     }
 
     async setVolume(volumePercent) {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('PUT', '/me/player/volume', { volume_percent: volumePercent });
     }
 
     async setRepeatMode(state) {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('PUT', '/me/player/repeat', { state });
     }
 
     async setShuffle(state) {
+        const deviceId = await this._ensureDevice();
         await this._apiRequest('PUT', '/me/player/shuffle', { state });
     }
 
@@ -302,14 +339,16 @@ export class SpotifyClient extends EventEmitter {
 
     async _initializeSpotifyConnection() {
         try {
-            const devices = await this.getDevices();
-            if (devices.length > 0) {
-                await this.setDevice(devices[0].id);
-                this.emit('ready', { deviceId: this.deviceId });
+            this.emit('ready');
+            
+            if (this.config.autoSelectDevice) {
+                const devices = await this.getDevices();
+                if (devices.length > 0) {
+                    await this.setDevice(devices[0].id);
+                }
             }
         } catch (error) {
-            this.emit('error', new Error('Failed to initialize Spotify connection'));
-            throw error;
+            this.emit('warning', new Error('No active devices found. Please connect a device to play music.'));
         }
     }
 }

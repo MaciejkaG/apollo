@@ -1,9 +1,5 @@
-// BUG HERE IF WE GO TO THE START OF THE PLAYLIST AND GO BACK THE FADEOUT STAYS, FIX COMING SOON
-
-
 class SpotifyWidget {
     constructor() {
-
         this.widget = document.getElementById('spotify');
         this.albumArt = this.widget.querySelector('img');
         this.titleSpan = this.widget.querySelector('.title');
@@ -14,10 +10,12 @@ class SpotifyWidget {
         
         this.isPlaying = false;
         this.updateInterval = null;
+        this.devicePollInterval = null;
         this.currentTrackId = null;
         this.animations = {};
         this.currentImageUrl = null;
         
+        // Initialize with opacity 0
         this.albumArt.style.opacity = '0';
         this.titleSpan.style.opacity = '0';
         this.authorSpan.style.opacity = '0';
@@ -28,14 +26,14 @@ class SpotifyWidget {
     }
 
     setupAnimations() {
-        // animacja zmiany utworu
+        // Track change animation
         this.animations.trackChange = anime.timeline({
             autoplay: false,
             duration: 300,
             easing: 'easeInOutQuad'
         });
 
-        // animacja wciśnięcia przycisku
+        // Button press animation
         this.animations.buttonPress = anime({
             targets: null,
             scale: [1, 0.95, 1],
@@ -64,13 +62,7 @@ class SpotifyWidget {
     async initializeSpotify() {
         try {
             const result = await window.backend.spotify.initialize();
-            if (result.success) {
-                if (result.qrCode) {
-                    $('#spotifyLoginQRCode').attr('src', result.qrCode);
-                    // pokaż alert logowania
-                    $('.spotifyLoginAlert').addClass('active')
-                }
-            } else {
+            if (!result.success) {
                 console.error('Spotify initialization failed:', result.error);
             }
         } catch (error) {
@@ -79,32 +71,44 @@ class SpotifyWidget {
     }
 
     setupEventListeners() {
-        window.addEventListener('spotify-event', (e) => {
+        window.addEventListener('spotify-event', async (e) => {
             const { event, data } = e.detail;
             
-            // obsługa różnych eventów Spotify
             switch (event) {
                 case 'authInitialized':
-                    // pokaz kod qr
                     if (data.qrCode) {
                         $('#spotifyLoginQRCode').attr('src', data.qrCode);
+                        $('.spotifyLoginAlert').addClass('active');
                     }
                     break;
 
                 case 'authUrlVisited':
-                    // pokaz kod qr
                     $('#spotifyQrBlur').addClass('active');
                     break;
 
                 case 'authenticated':
-                    // schowaj alert logowania
                     $('.spotifyLoginAlert').removeClass('active');
                     break;
 
                 case 'ready':
-                    // all done
-                    console.log('Spotify ready with device:', data.deviceId);
+                    console.log('Spotify ready, checking for devices...');
+                    await this.checkAndPollForDevices();
+                    break;
+
+                case 'deviceSelected':
+                    console.log('Device selected:', data.deviceId);
+                    if (this.devicePollInterval) {
+                        clearInterval(this.devicePollInterval);
+                        this.devicePollInterval = null;
+                    }
                     this.startTrackUpdates();
+                    break;
+
+                case 'error':
+                    if (data.includes('No active device')) {
+                        this.checkAndPollForDevices();
+                    }
+                    console.error('Spotify error:', data);
                     break;
             }
         });
@@ -117,13 +121,41 @@ class SpotifyWidget {
             }, 200));
         });
 
-        // linkujemy przyciski do funkcji
         this.playButton.addEventListener('click', this.debounce(() => this.togglePlayback(), 200));
         this.prevButton.addEventListener('click', this.debounce(() => this.previousTrack(), 200));
         this.nextButton.addEventListener('click', this.debounce(() => this.nextTrack(), 200));
     }
 
-    // debounce do przycisków
+    async checkAndPollForDevices() {
+        const checkDevices = async () => {
+            try {
+                const response = await window.backend.spotify.getDevices();
+                console.log('Devices:', response);
+                if (response.success && response.result?.devices?.length > 0) {
+                    const device = response.result.devices[0];
+                    await this.startTrackUpdates();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking devices:', error);
+                return false;
+            }
+        };
+
+        // Initial check
+        const hasDevice = await checkDevices();
+        if (!hasDevice && !this.devicePollInterval) {
+            this.devicePollInterval = setInterval(async () => {
+                const found = await checkDevices();
+                if (found && this.devicePollInterval) {
+                    clearInterval(this.devicePollInterval);
+                    this.devicePollInterval = null;
+                }
+            }, 3000);
+        }
+    }
+
     debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -136,8 +168,8 @@ class SpotifyWidget {
         };
     }
 
-    // loop do sprawdzania co aktualnie leci
     startTrackUpdates() {
+        console.log('Starting track updates');
         if (this.updateInterval) {
             clearInterval(this.updateInterval);
         }
@@ -150,10 +182,16 @@ class SpotifyWidget {
             this.isPlaying = !this.isPlaying;
             this.updatePlayButton();
             
-            if (this.isPlaying) {
-                await window.backend.spotify.play();
-            } else {
+            const response = this.isPlaying ? 
+                await window.backend.spotify.play() :
                 await window.backend.spotify.pause();
+                
+            if (!response.success) {
+                this.isPlaying = !this.isPlaying;
+                this.updatePlayButton();
+                if (response.errorType === 'NO_DEVICE') {
+                    await this.checkAndPollForDevices();
+                }
             }
         } catch (error) {
             this.isPlaying = !this.isPlaying;
@@ -162,7 +200,6 @@ class SpotifyWidget {
         }
     }
 
-    // zmień ikonkę play/pause
     updatePlayButton() {
         const iconSpan = this.playButton.querySelector('span');
         iconSpan.textContent = this.isPlaying ? 'pause' : 'play_arrow';
@@ -171,7 +208,10 @@ class SpotifyWidget {
     async previousTrack() {
         try {
             this.nextTrackFadeout();
-            await window.backend.spotify.previous();
+            const response = await window.backend.spotify.previous();
+            if (!response.success && response.errorType === 'NO_DEVICE') {
+                await this.checkAndPollForDevices();
+            }
         } catch (error) {
             console.error('Failed to play previous track:', error);
         }
@@ -180,17 +220,19 @@ class SpotifyWidget {
     async nextTrack() {
         try {
             this.nextTrackFadeout();
-            await window.backend.spotify.next();
+            const response = await window.backend.spotify.next();
+            if (!response.success && response.errorType === 'NO_DEVICE') {
+                await this.checkAndPollForDevices();
+            }
         } catch (error) {
             console.error('Failed to play next track:', error);
         }
     }
 
-    async nextTrackFadeout() { 
+    nextTrackFadeout() {
         anime(this.animations.oldSongOut);
     }
 
-    // sprawdza co aktualnie leci i aktualizuje widget
     async updateCurrentTrack() {
         try {
             const [trackResponse, stateResponse] = await Promise.all([
@@ -198,9 +240,8 @@ class SpotifyWidget {
                 window.backend.spotify.getCurrentState()
             ]);
 
-            // aktualizuj informacje o utworze jeśli się zmieniły
-            if (trackResponse?.success && trackResponse?.track) {
-                const track = trackResponse.track;
+            if (trackResponse?.success && trackResponse?.result?.track) {
+                const track = trackResponse.result.track;
                 
                 if (this.currentTrackId !== track.item?.id) {
                     this.currentTrackId = track.item?.id;
@@ -208,8 +249,8 @@ class SpotifyWidget {
                     const newTitle = track.item?.name || 'Unknown Track';
                     const newArtist = track.item?.artists?.map(artist => 
                         artist.name).join(', ') || 'Unknown Artist';
+                    console.log(newTitle, newArtist)
                     
-                    // znajdujemy miniaturke (najgorszej jakosci, best for loading tho)
                     let newImageUrl = null;
                     if (track.item?.album?.images?.length > 0) {
                         const smallestImage = track.item.album.images.reduce((prev, current) =>
@@ -218,7 +259,6 @@ class SpotifyWidget {
                         newImageUrl = smallestImage.url;
                     }
 
-                    // aktualizacja widgetu z animacją
                     if (newImageUrl && newImageUrl !== this.currentImageUrl) {
                         await this.updateTrackContent(newTitle, newArtist, newImageUrl);
                     } else {
@@ -227,9 +267,8 @@ class SpotifyWidget {
                 }
             }
 
-            // aktualizacja stanu odtwarzania
-            if (stateResponse?.success && stateResponse?.state) {
-                const newIsPlaying = stateResponse.state.is_playing;
+            if (stateResponse?.success && stateResponse?.data?.state) {
+                const newIsPlaying = stateResponse.data.state.is_playing;
                 if (this.isPlaying !== newIsPlaying) {
                     this.isPlaying = newIsPlaying;
                     this.updatePlayButton();
@@ -237,16 +276,16 @@ class SpotifyWidget {
             }
         } catch (error) {
             console.error('Failed to update current track:', error);
+            if (error.message.includes('No active device')) {
+                await this.checkAndPollForDevices();
+            }
         }
     }
 
-    // aktualizuje teksty i miniaturke na widgecie (animacje)
     async updateTrackContent(newTitle, newArtist, newImageUrl) {
-        // zamieniamy tresc tytulu i autora
         this.titleSpan.textContent = newTitle;
         this.authorSpan.textContent = newArtist;
 
-        // zaladuj miniaturke jesli jest
         if (newImageUrl) {
             await new Promise((resolve, reject) => {
                 const img = new Image();
@@ -260,27 +299,27 @@ class SpotifyWidget {
             });
         }
 
-        // miniaturke i teksty odslaniamy razem
         anime(this.animations.newSongIn);
     }
 
-    // cleanup
     destroy() {
         if (this.updateInterval) {
             clearInterval(this.updateInterval);
         }
+        if (this.devicePollInterval) {
+            clearInterval(this.devicePollInterval);
+        }
         
-        // wszystkie animacje zatrzymujemy
-        Object.values(this.animations).forEach(animation => animation.pause());
+        Object.values(this.animations).forEach(animation => {
+            if (animation.pause) animation.pause();
+        });
         this.animations = {};
         
-        // spotify destroy
         window.backend.spotify.destroy()
             .catch(error => console.error('Failed to destroy Spotify client:', error));
     }
 }
 
-// klase odpalamy on load
 document.addEventListener('DOMContentLoaded', () => {
     window.spotifyWidget = new SpotifyWidget();
 });
