@@ -3,6 +3,10 @@ import EventEmitter from 'events';
 import QRCode from 'qrcode';
 import 'dotenv/config';
 import EventSource from 'eventsource';
+import Store from 'electron-store';
+
+const store = new Store();
+console.log(store.path);
 
 export class SpotifyClient extends EventEmitter {
     constructor(config = {}) {
@@ -14,9 +18,9 @@ export class SpotifyClient extends EventEmitter {
             tokenRefreshPadding: config.tokenRefreshPadding || 60
         };
         
-        this.accessToken = null;
-        this.refreshToken = null;
-        this.expiresAt = null;
+        this.accessToken = store.get('spotify.accessToken');
+        this.refreshToken = store.get('spotify.refreshToken');
+        this.expiresAt = store.get('spotify.expiresAt');
         this.deviceId = null;
         this.refreshTimeout = null;
         this.eventSource = null;
@@ -27,6 +31,16 @@ export class SpotifyClient extends EventEmitter {
     }
 
     async initialize() {
+        if (this.accessToken && this.refreshToken && this.expiresAt) {
+            this.emit('authInitialized', { authUrl: '', qrCode: '' });
+            await this._handleAuthenticationSuccess({
+                access_token: this.accessToken,
+                refresh_token: this.refreshToken,
+                expires_at: this.expiresAt
+            });
+            return new Promise((resolve, reject) => resolve({ success: true }));
+        } 
+
         try {
             const response = await axios.get(`${this.config.authServerUrl}/start-auth`);
             const { state, url } = response.data;
@@ -71,7 +85,13 @@ export class SpotifyClient extends EventEmitter {
     async _handleAuthenticationSuccess(tokens) {
         this.accessToken = tokens.access_token;
         this.refreshToken = tokens.refresh_token;
-        this.expiresAt = Date.now() + (tokens.expires_in * 1000);
+        if (!this.expiresAt) {
+            this.expiresAt = Date.now() + (tokens.expires_in * 1000);
+        }
+
+        store.set('spotify.accessToken', this.accessToken);
+        store.set('spotify.refreshToken', this.refreshToken);
+        store.set('spotify.expiresAt', this.expiresAt);
 
         if (this.config.autoRefresh) {
             this._scheduleTokenRefresh();
