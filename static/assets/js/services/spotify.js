@@ -44,6 +44,21 @@ class SpotifyWidget {
             autoplay: false
         });
 
+        this.animations.newSongIn = {
+            targets: [this.titleSpan, this.authorSpan, this.albumArt],
+            opacity: [0, 1],
+            translateX: [-20, 0],
+            duration: 150,
+            easing: 'easeOutSine'
+        };
+
+        this.animations.oldSongOut = {
+            targets: [this.titleSpan, this.authorSpan, this.albumArt],
+            opacity: [1, 0],
+            translateX: [0, 20],
+            duration: 150,
+            easing: 'easeInSine'
+        };
     }
 
     async initializeSpotify() {
@@ -51,16 +66,9 @@ class SpotifyWidget {
             const result = await window.backend.spotify.initialize();
             if (result.success) {
                 if (result.qrCode) {
-                    const qrCode = $('#spotifyLoginQRCode');
-                    qrCode.attr('src', result.qrCode);
+                    $('#spotifyLoginQRCode').attr('src', result.qrCode);
                     // pokaż alert logowania
-                    anime({
-                        targets: '.spotifyLoginAlert',
-                        opacity: [0, 1],
-                        translateY: [20, 0],
-                        duration: 400,
-                        begin: () => $('.spotifyLoginAlert').addClass('active')
-                    });
+                    $('.spotifyLoginAlert').addClass('active')
                 }
             } else {
                 console.error('Spotify initialization failed:', result.error);
@@ -80,25 +88,17 @@ class SpotifyWidget {
                     // pokaz kod qr
                     if (data.qrCode) {
                         $('#spotifyLoginQRCode').attr('src', data.qrCode);
-                        anime({
-                            targets: '.spotifyLoginAlert',
-                            opacity: [0, 1],
-                            translateY: [20, 0],
-                            duration: 400,
-                            begin: () => $('.spotifyLoginAlert').addClass('active')
-                        });
                     }
+                    break;
+
+                case 'authUrlVisited':
+                    // pokaz kod qr
+                    $('#spotifyQrBlur').addClass('active');
                     break;
 
                 case 'authenticated':
                     // schowaj alert logowania
-                    anime({
-                        targets: '.spotifyLoginAlert',
-                        opacity: [1, 0],
-                        translateY: [0, -20],
-                        duration: 400,
-                        complete: () => $('.spotifyLoginAlert').removeClass('active')
-                    });
+                    $('.spotifyLoginAlert').removeClass('active');
                     break;
 
                 case 'ready':
@@ -187,13 +187,7 @@ class SpotifyWidget {
     }
 
     async nextTrackFadeout() { 
-        anime({
-            targets: [this.titleSpan, this.authorSpan, this.albumArt],
-            opacity: 0,
-            translateY: [0, 5],
-            duration: 350,
-            delay: anime.stagger(50)
-        });
+        anime(this.animations.oldSongOut);
     }
 
     // sprawdza co aktualnie leci i aktualizuje widget
@@ -267,13 +261,7 @@ class SpotifyWidget {
         }
 
         // miniaturke i teksty odslaniamy razem
-        anime({
-            targets: [this.titleSpan, this.authorSpan, this.albumArt],
-            opacity: 1,
-            translateY: [5, 0],
-            duration: 350,
-            delay: anime.stagger(50)
-        });
+        anime(this.animations.newSongIn);
     }
 
     // cleanup

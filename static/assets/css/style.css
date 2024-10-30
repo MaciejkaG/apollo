@@ -21,6 +21,8 @@
     --theme-bg-2: rgb(233, 233, 233);
     --theme-bg-3: rgb(206, 206, 206);
 
+    --theme-transparent: rgba(255, 255, 255, 0.6);
+
     --theme-alt-1: rgba(0, 0, 0, 0.1);
 
     --active-bg-1: rgb(56, 102, 255);
@@ -33,6 +35,8 @@ body.dark-mode {
     --theme-bg-1: rgb(19, 19, 19);
     --theme-bg-2: rgb(30, 30, 30);
     --theme-bg-3: rgb(40, 40, 40);
+
+    --theme-transparent: rgba(0, 0, 0, 0.6);
 
     --theme-alt-1: rgba(255, 255, 255, 0.1);
 

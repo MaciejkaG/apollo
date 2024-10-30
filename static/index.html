@@ -55,9 +55,15 @@
                 </div>
                 <div class="category" id="spotifySettings">
                     <div class="spotifyLoginAlert active">
+                        <div class="qrBlur" id="spotifyQrBlur">
+                            <span>Kontynuuj logowanie na telefonie</span>
+                            <button onclick="$(this).parent().removeClass('active')">Pokaż kod QR</button>
+                        </div>
                         <p>Aby korzystać z integracji Spotify, musisz się zalogować poniszym kodem QR.</p>
                         <img src="" id="spotifyLoginQRCode">
                     </div>
+
+                    <p>Jeśli to widzisz to znaczy, że pomyślnie udało ci się połączyć konto Spotify!</p>
                 </div>
             </div>
         </div>
