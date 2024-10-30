@@ -62,6 +62,9 @@
                         <p>Aby korzystać z integracji Spotify, musisz podłączyć swoje konto Spotify. W tym celu zeskanuj poniższy kod QR telefonem.</p>
                         <img src="" id="spotifyLoginQRCode">
                     </div>
+                    <div class="spotifyDeviceAlert active">
+                        <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
+                    </div>
 
                     <p>Jeśli to widzisz to znaczy, że pomyślnie udało ci się połączyć konto Spotify!</p>
                 </div>
@@ -156,6 +159,9 @@
             <div class="widget sm" id="spotify">
                 <div class="spotifyLoginAlert active" onclick="openApp('settings', $(this).parent().get(0));animateContentChange('spotifySettings')">
                     <p>Kliknij aby aktywować integrację ze Spotify w ustawieniach.</p>
+                </div>
+                <div class="spotifyDeviceAlert active">
+                    <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
                 </div>
                 <img src="https://placehold.co/512x512" alt="">
                 <div class="meta">

@@ -144,7 +144,8 @@
     scale: 0.7;
 }
 
-#spotify .spotifyLoginAlert {
+#spotify .spotifyLoginAlert,
+#spotify .spotifyDeviceAlert {
     position: absolute;
     backdrop-filter: blur(10px);
     width: 100%;
@@ -156,4 +157,9 @@
     align-items: center;
     text-align: center;
     border-radius: inherit;
+    z-index: 5;
+}
+
+#spotify .spotifyDeviceAlert {
+    z-index: 2;
 }
