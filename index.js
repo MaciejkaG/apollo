@@ -3,6 +3,9 @@ import { fileURLToPath } from 'node:url';
 import { setup } from './backend/handlers.js';
 import { app, BrowserWindow } from 'electron';
 import 'dotenv/config';
+import Store from 'electron-store';
+
+const store = new Store();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +14,7 @@ app.whenReady().then(() => {
     const win = new BrowserWindow({
         width: 800,
         height: 480,
+        backgroundColor: store.get('misc.darkTheme') ? '#131313' : '#ffffff',
         // If Node is running in production environment, launch the window in kiosk mode.
         kiosk: process.env.NODE_ENV === 'production',
 

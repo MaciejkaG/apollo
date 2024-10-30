@@ -41,7 +41,7 @@ async function updateWeather() {
         const weatherWidget = document.getElementById('weather');
         if (weatherWidget) {
             const description = translations[current.condition.description.toLowerCase()] || current.condition.description.toLowerCase();
-            weatherWidget.querySelector('h1').textContent = `${Math.round(current.temperature.value)}°C, ${description}`;
+            weatherWidget.querySelector('h1').textContent = `${Math.round(current.temperature.value)}° ${description}`;
 
             // Apply a correct widget and app background according to the current weather.
             document.documentElement.style.cssText = `--active-weather-background: ${backgrounds[current.condition.description.toLowerCase()] || 'var(--cloudy)'}`;

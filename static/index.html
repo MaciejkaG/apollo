@@ -59,7 +59,7 @@
                             <span>Kontynuuj logowanie na telefonie</span>
                             <button onclick="$(this).parent().removeClass('active')">Pokaż kod QR</button>
                         </div>
-                        <p>Aby korzystać z integracji Spotify, musisz się zalogować poniszym kodem QR.</p>
+                        <p>Aby korzystać z integracji Spotify, musisz podłączyć swoje konto Spotify. W tym celu zeskanuj poniższy kod QR telefonem.</p>
                         <img src="" id="spotifyLoginQRCode">
                     </div>
 
@@ -76,7 +76,7 @@
                 <span class="date shortdate"></span>
             </div>
             <div class="widget control">
-                <button onclick="toggleDarkMode(this)">
+                <button onclick="toggleDarkMode(this)" id="darkModeButton"">
                     <span class="material-symbols-outlined">
                         dark_mode
                     </span>

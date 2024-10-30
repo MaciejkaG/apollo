@@ -3,11 +3,24 @@ import Assistant from './assistant/assistant.js';
 import WeatherPlugin from './assistant/plugins/weather/index.js';
 import { SpotifyClient } from './spotify/index.js';
 import 'dotenv/config';
+import Store from 'electron-store';
+
+const store = new Store();
 
 let AssistantService = null;
 let SpotifyService = null;
 
 export function setup(mainWindow) {
+    ipcMain.handle('misc-set-dark-theme', (event, darkTheme) => {
+        // We use this funny comparison just in case darkTheme turns out not to be a boolean.
+        store.set('misc.darkTheme', darkTheme === 1);
+    });
+
+    ipcMain.handle('misc-get-dark-theme', (darkTheme) => {
+        // We use this funny comparison just in case darkTheme turns out not to be a boolean.
+        return store.get('misc.darkTheme');
+    });
+
 
     ipcMain.handle('initialize-assistant', async (event) => {
         try {

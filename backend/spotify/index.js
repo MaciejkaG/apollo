@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import QRCode from 'qrcode';
 import 'dotenv/config';
 import EventSource from 'eventsource';
-import Store from 'electron-store';
+import Store from 'electron-store'
 
 const store = new Store();
 console.log(store.path);
@@ -151,7 +151,14 @@ export class SpotifyClient extends EventEmitter {
 
     async _apiRequest(method, endpoint, data = null) {
         if (!this.isAuthenticated) {
-            throw new Error('Not authenticated');
+            this.accessToken = null;
+            this.refreshToken = null;
+            this.expiresAt = null;
+            this.deviceId = null;
+            this.refreshTimeout = null;
+            this.eventSource = null;
+            this.initialize();
+            return;
         }
 
         try {

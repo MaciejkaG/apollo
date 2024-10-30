@@ -116,6 +116,10 @@
     pointer-events: initial;
 }
 
+#spotifyLoginQRCode {
+    width: 15rem;
+}
+
 #settings #spotifySettings .qrBlur {
     position: absolute;
     backdrop-filter: blur(10px);

@@ -102,8 +102,16 @@ const SpotifyService = {
     addToQueue: (uri) => ipcRenderer.invoke('spotify-add-to-queue', uri)
 };
 
+const misc = {
+    setDarkTheme: (darkTheme) => 
+        ipcRenderer.invoke('misc-set-dark-theme', darkTheme),
+    getDarkTheme: () => 
+        ipcRenderer.invoke('misc-get-dark-theme')
+};
+
 contextBridge.exposeInMainWorld('backend', {
     assistant: AssistantService,
     weather: WeatherService,
-    spotify: SpotifyService
+    spotify: SpotifyService,
+    misc
 });

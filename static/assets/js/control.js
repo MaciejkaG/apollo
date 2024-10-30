@@ -3,7 +3,9 @@ function toggleDarkMode(btn) {
 
     if ($(btn).hasClass('active')) { // Dark mode on
         $('body').addClass('dark-mode');
-    } else {
+        window.backend.misc.setDarkTheme(1);
+    } else { // Dark mode off (light mode)
         $('body').removeClass('dark-mode');
+        window.backend.misc.setDarkTheme(0);
     }
 }

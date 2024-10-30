@@ -91,11 +91,6 @@ span.material-symbols-outlined {
     transition: opacity 0.7s, scale 0.7s;
 }
 
-#welcome .letter {
-    /* opacity: 0; */
-    color: var(--theme-bg-1);
-}
-
 #screensaver.active {
     opacity: 1;
     scale: 1;
