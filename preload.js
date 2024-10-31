@@ -13,12 +13,11 @@ const AssistantService = {
     listModels: () =>
         ipcRenderer.invoke('list-models'),
 
-    streamMessage: (message, conversationId, options) => {
+    streamMessage: (message, id, conversationId = null, options = {}) => {
         return new Promise((resolve, reject) => {
-            ipcRenderer.send('stream-message', message, conversationId, options);
-
             const handleChunk = (_, chunk) => {
-                window.dispatchEvent(new CustomEvent('assistant-chunk', {
+                console.log(chunk);
+                window.dispatchEvent(new CustomEvent(id + '-assistant-chunk', {
                     detail: chunk
                 }));
             };
@@ -42,6 +41,8 @@ const AssistantService = {
             ipcRenderer.on('stream-chunk', handleChunk);
             ipcRenderer.once('stream-end', handleEnd);
             ipcRenderer.once('stream-error', handleError);
+
+            ipcRenderer.send('stream-message', message, conversationId, options);
         });
     }
 };

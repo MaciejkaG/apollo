@@ -38,7 +38,7 @@ export function setup(mainWindow) {
         return await AssistantService.sendMessage(message, conversationId, options);
     });
 
-    ipcMain.on('stream-message', async (event, message, conversationId, options) => {
+    ipcMain.on('stream-message', async (event, message, conversationId, options = {}) => {
         if (!AssistantService) {
             event.reply('stream-error', 'Assistant service not initialized');
             return;
@@ -46,8 +46,8 @@ export function setup(mainWindow) {
 
         try {
             await AssistantService.streamMessage(
-                (chunk) => event.reply('stream-chunk', chunk),
                 message,
+                (chunk) => event.reply('stream-chunk', chunk),
                 conversationId,
                 options
             );

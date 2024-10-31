@@ -240,6 +240,7 @@ export default class Assistant {
             let currentToolCall = null;
 
             for await (const chunk of stream) {
+                console.log(chunk.choices[0].delta);
                 const content = chunk.choices[0]?.delta?.content || '';
                 const toolCallDelta = chunk.choices[0]?.delta?.tool_calls?.[0];
 
@@ -284,7 +285,7 @@ export default class Assistant {
 
             if (toolCalls.length > 0) {
                 const toolResults = [];
-                
+
                 for (const toolCall of toolCalls) {
                     if (toolCall.type === 'function') {
                         const toolName = toolCall.function.name;

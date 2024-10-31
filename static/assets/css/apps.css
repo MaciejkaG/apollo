@@ -53,17 +53,23 @@
 #weatherApp h1 {
     margin: 0;
     font-size: 5rem;
+    font-weight: 600;
+}
+
+#weatherApp h2 {
+    margin: 0;
+    /* margin-bottom: 1rem; */
+    font-size: 1.8rem;
     font-weight: 500;
 }
 
-h2 {
-    margin: 0;
-    /* margin-bottom: 1rem; */
-    font-size: 1.7rem;
+#weatherApp h3 {
+    font-size: 1.6rem;
     font-weight: 400;
+    margin: 0;
 }
 
-#weatherApp h3 {
+#weatherApp .flex .child:last-child h3 {
     background-image: var(--magic-theme);
     max-width: fit-content;
 
@@ -71,14 +77,15 @@ h2 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin: 0;
     margin-top: 1rem;
 
     display: flex;
     align-items: center;
     gap: .5rem;
+}
+
+#weatherApp p {
+    font-size: 1.1rem;
 }
 
 #settings {
