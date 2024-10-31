@@ -29,6 +29,56 @@
 
 #weatherApp {
     background-image: var(--active-weather-background);
+    padding-top: 3.5rem;
+    padding-left: 1.5rem;
+}
+
+#weatherApp .flex {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#weatherApp .flex .child {
+    flex: 1;
+}
+
+#weatherApp .flex .child:first-child {
+    padding-left: .5rem;
+}
+
+#weatherApp .flex .child:last-child {
+    padding-right: .5rem;
+}
+
+#weatherApp h1 {
+    margin: 0;
+    font-size: 5rem;
+    font-weight: 500;
+}
+
+h2 {
+    margin: 0;
+    /* margin-bottom: 1rem; */
+    font-size: 1.7rem;
+    font-weight: 400;
+}
+
+#weatherApp h3 {
+    background-image: var(--magic-theme);
+    max-width: fit-content;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 1rem;
+
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
 #settings {
