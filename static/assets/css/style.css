@@ -54,7 +54,7 @@ body {
     font-family: "Figtree", sans-serif;
     font-optical-sizing: auto;
     user-select: none;
-    transition: background-color 0.3ss;
+    transition: background-color 0.3s;
 }
 
 span.material-symbols-outlined {
