@@ -14,6 +14,8 @@ class SpotifyWidget {
         this.currentTrackId = null;
         this.animations = {};
         this.currentImageUrl = null;
+
+        this.device = null;
         
         // Initialize with opacity 0
         this.albumArt.style.opacity = '0';
@@ -105,9 +107,6 @@ class SpotifyWidget {
                     break;
 
                 case 'error':
-                    if (data.includes('No active device')) {
-                        this.checkAndPollForDevices();
-                    }
                     console.error('Spotify error:', data);
                     break;
             }
@@ -134,12 +133,13 @@ class SpotifyWidget {
                 if (response.success && response.result?.devices?.length > 0) {
                     const device = response.result.devices[0];
                     await this.startTrackUpdates();
-                    return true;
+                    this.device = device;
+                    return device;
                 }
-                return false;
+                return null;
             } catch (error) {
                 console.error('Error checking devices:', error);
-                return false;
+                return null;
             }
         };
 
@@ -147,10 +147,12 @@ class SpotifyWidget {
         const hasDevice = await checkDevices();
         if (!hasDevice && !this.devicePollInterval) {
             this.devicePollInterval = setInterval(async () => {
-                const found = await checkDevices();
-                if (found && this.devicePollInterval) {
-                    clearInterval(this.devicePollInterval);
-                    this.devicePollInterval = null;
+                const device = await checkDevices();
+                this.device = device;
+                if (device) {
+                    $('.spotifyDeviceAlert').removeClass('active');
+                } else {
+                    $('.spotifyDeviceAlert').addClass('active');
                 }
             }, 3000);
         }
@@ -189,9 +191,6 @@ class SpotifyWidget {
             if (!response.success) {
                 this.isPlaying = !this.isPlaying;
                 this.updatePlayButton();
-                if (response.errorType === 'NO_DEVICE') {
-                    await this.checkAndPollForDevices();
-                }
             }
         } catch (error) {
             this.isPlaying = !this.isPlaying;
@@ -209,9 +208,6 @@ class SpotifyWidget {
         try {
             this.nextTrackFadeout();
             const response = await window.backend.spotify.previous();
-            if (!response.success && response.errorType === 'NO_DEVICE') {
-                await this.checkAndPollForDevices();
-            }
         } catch (error) {
             console.error('Failed to play previous track:', error);
         }
@@ -221,9 +217,6 @@ class SpotifyWidget {
         try {
             this.nextTrackFadeout();
             const response = await window.backend.spotify.next();
-            if (!response.success && response.errorType === 'NO_DEVICE') {
-                await this.checkAndPollForDevices();
-            }
         } catch (error) {
             console.error('Failed to play next track:', error);
         }
@@ -234,6 +227,7 @@ class SpotifyWidget {
     }
 
     async updateCurrentTrack() {
+        if (!this.device) return;
         try {
             const [trackResponse, stateResponse] = await Promise.all([
                 window.backend.spotify.getCurrentTrack(),
@@ -246,10 +240,9 @@ class SpotifyWidget {
                 if (this.currentTrackId !== track.item?.id) {
                     this.currentTrackId = track.item?.id;
                     
-                    const newTitle = track.item?.name || 'Unknown Track';
+                    const newTitle = track.item?.name || 'Nieznana ścieżka';
                     const newArtist = track.item?.artists?.map(artist => 
-                        artist.name).join(', ') || 'Unknown Artist';
-                    console.log(newTitle, newArtist)
+                        artist.name).join(', ') || 'Nieznany artysta';
                     
                     let newImageUrl = null;
                     if (track.item?.album?.images?.length > 0) {
@@ -267,8 +260,8 @@ class SpotifyWidget {
                 }
             }
 
-            if (stateResponse?.success && stateResponse?.data?.state) {
-                const newIsPlaying = stateResponse.data.state.is_playing;
+            if (stateResponse?.success && stateResponse?.result?.state) {
+                const newIsPlaying = stateResponse.result.state.is_playing;
                 if (this.isPlaying !== newIsPlaying) {
                     this.isPlaying = newIsPlaying;
                     this.updatePlayButton();
@@ -276,9 +269,6 @@ class SpotifyWidget {
             }
         } catch (error) {
             console.error('Failed to update current track:', error);
-            if (error.message.includes('No active device')) {
-                await this.checkAndPollForDevices();
-            }
         }
     }
 
