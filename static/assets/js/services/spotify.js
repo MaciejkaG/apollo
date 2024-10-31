@@ -99,10 +99,6 @@ class SpotifyWidget {
 
                 case 'deviceSelected':
                     console.log('Device selected:', data.deviceId);
-                    if (this.devicePollInterval) {
-                        clearInterval(this.devicePollInterval);
-                        this.devicePollInterval = null;
-                    }
                     this.startTrackUpdates();
                     break;
 
@@ -126,7 +122,7 @@ class SpotifyWidget {
     }
 
     async checkAndPollForDevices() {
-        const checkDevices = async () => {
+        const getDevice = async () => {
             try {
                 const response = await window.backend.spotify.getDevices();
                 console.log('Devices:', response);
@@ -143,19 +139,16 @@ class SpotifyWidget {
             }
         };
 
-        // Initial check
-        const hasDevice = await checkDevices();
-        if (!hasDevice && !this.devicePollInterval) {
-            this.devicePollInterval = setInterval(async () => {
-                const device = await checkDevices();
-                this.device = device;
-                if (device) {
-                    $('.spotifyDeviceAlert').removeClass('active');
-                } else {
-                    $('.spotifyDeviceAlert').addClass('active');
-                }
-            }, 3000);
-        }
+        this.devicePollInterval = setInterval(async () => {
+            console.log('asdasdads')
+            const device = await getDevice();
+            this.device = device;
+            if (device) {
+                $('.spotifyDeviceAlert').removeClass('active');
+            } else {
+                $('.spotifyDeviceAlert').addClass('active');
+            }
+        }, 3000);
     }
 
     debounce(func, wait) {
