@@ -125,7 +125,7 @@ class SpotifyWidget {
         const getDevice = async () => {
             try {
                 const response = await window.backend.spotify.getDevices();
-                console.log('Devices:', response);
+                // console.log('Devices:', response);
                 if (response.success && response.result?.devices?.length > 0) {
                     const device = response.result.devices[0];
                     await this.startTrackUpdates();
@@ -140,7 +140,6 @@ class SpotifyWidget {
         };
 
         this.devicePollInterval = setInterval(async () => {
-            console.log('asdasdads')
             const device = await getDevice();
             this.device = device;
             if (device) {
