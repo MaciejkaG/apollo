@@ -7,8 +7,7 @@ import Store from 'electron-store';
 
 const store = new Store();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.whenReady().then(() => {
     const win = new BrowserWindow({
