@@ -80,7 +80,7 @@
 
 #spotify {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
 
     background-image: radial-gradient(ellipse at bottom right, rgba(28, 215, 96, 0.6), transparent 70%);
 }
@@ -103,7 +103,7 @@
 #spotify .meta span {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    position: relative;
 }
 
 #spotify .meta .title {
@@ -115,6 +115,38 @@
     font-size: 1.3rem;
     font-weight: 300;
     opacity: 0.6;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    10% {
+        transform: translateX(0);
+    }
+
+    80% {
+        transform: translateX(var(--scroll-width));
+    }
+
+    90% {
+        transform: translateX(var(--scroll-width));
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+#spotify .meta span .text {
+    display: inline-block;
+    padding-right: 20px;
+    position: relative;
+}
+
+#spotify .meta span .text.animate {
+    animation: marquee 8s linear infinite;
 }
 
 #spotify .controls {

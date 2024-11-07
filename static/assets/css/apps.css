@@ -77,7 +77,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
 
     display: flex;
     align-items: center;

@@ -19,6 +19,8 @@ function openApp(appId, widget) {
 
     document.body.appendChild(expandDiv);
 
+
+
     // Fade in and expand to full screen after a slight delay
     setTimeout(() => {
         expandDiv.classList.add('show');
@@ -49,6 +51,11 @@ function openApp(appId, widget) {
 function setActiveApp(appId) {
     $('.apps .app').removeClass('active');
     $(`.apps .app#${appId}`).addClass('active');
+
+    const event = document.createEvent('Event');
+
+    event.initEvent('appopen');
+    document.getElementById(appId).dispatchEvent(event);
 }
 
 // This closes the current app

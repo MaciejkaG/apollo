@@ -1,5 +1,11 @@
 let city = 'Poznan';
 
+const weatherApp = document.getElementById('weatherApp');
+
+weatherApp.addEventListener('appopen', () => {
+    if ($('#weatherSummary').html().length === 0) summariseWeather();
+});
+
 async function updateWeather() {
     const translations = {
         "clear sky": "czyste niebo",
@@ -44,6 +50,7 @@ async function updateWeather() {
         if (weatherWidget) {
             const description = translations[current.condition.description.toLowerCase()] || current.condition.description.toLowerCase();
             weatherWidget.querySelector('h1').textContent = `${Math.round(current.temperature.value)}° ${description}`;
+            $('#weatherApp .currentTemperature').html(`${Math.round(current.temperature.value)}°`);
 
             // Apply a correct widget and app background according to the current weather.
             document.documentElement.style.cssText = `--active-weather-background: ${backgrounds[current.condition.description.toLowerCase()] || 'var(--cloudy)'}`;
@@ -94,27 +101,7 @@ async function updateWeather() {
             forecastContainer.appendChild(forecastDiv);
         });
 
-        const prompt = `Podsumuj dzisiejszą prognozę pogody, oraz prognozę na następne 3 dni w maksymalnie 50 słowach dla miejscowości: "${city}"`;
-        const id = 'weather-summary';
-        window.backend.assistant.streamMessage(prompt, id)
-            .then(() => {
-                console.log("Streaming completed successfully.");
-            })
-            .catch((error) => {
-                console.error("Streaming error:", error);
-            });
-
         $('#weatherSummary').html('');
-        // Listen for the assistant-chunk events on the window object
-        window.addEventListener(`${id}-assistant-chunk`, (event) => {
-            const chunk = event.detail;
-            // Handle each chunk of data as it arrives
-            console.log("Received chunk:", chunk);
-            // You can update your UI or process the chunk here
-            if (chunk.content) {
-                $('#weatherSummary').get(0).innerHTML += chunk.content;
-            }
-        });
     } catch (error) {
         console.error('Error updating weather:', error);
     }
@@ -122,3 +109,33 @@ async function updateWeather() {
 
 updateWeather();
 setInterval(updateWeather, 3600000);
+
+function summariseWeather() {
+    let time;
+    const hours = new Date().getHours();
+    if (hours < 6 || hours >= 21) time = 'rano';
+    else if (hours < 12) time = 'w południe';
+    else if (hours < 18) time = 'popołudnieu';
+    else time = 'wieczorem';
+    const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na następne 3 dni tygodnia dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity względem omawianego okresu. Całość nie może przekroczyć 90 słów. Pamiętaj aby zawrzeć twarde dane tj. niże i wyże temperaturowe, wiatr w km/h, temperaturę odczuwalną. Poza tym dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
+    const id = 'weather-summary';
+    window.backend.assistant.streamMessage(prompt, id)
+        .then(() => {
+            console.log("Streaming completed successfully.");
+        })
+        .catch((error) => {
+            console.error("Streaming error:", error);
+        });
+
+    $('#weatherSummary').html('');
+    // Listen for the assistant-chunk events on the window object
+    window.addEventListener(`${id}-assistant-chunk`, (event) => {
+        const chunk = event.detail;
+        // Handle each chunk of data as it arrives
+        console.log("Received chunk:", chunk);
+        // You can update your UI or process the chunk here
+        if (chunk.content) {
+            $('#weatherSummary').get(0).innerHTML += chunk.content.replace(/\n/g, "<br />");
+        }
+    });
+}
