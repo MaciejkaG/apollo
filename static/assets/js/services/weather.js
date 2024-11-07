@@ -94,25 +94,27 @@ async function updateWeather() {
             forecastContainer.appendChild(forecastDiv);
         });
 
-        // const prompt = `Podsumuj dzisiejszą prognozę pogody, oraz prognozę na następne 3 dni w maksymalnie 50 słowach dla miejscowości: "${city}"`;
-        // const id = 'weather-summary';
-        // window.backend.assistant.streamMessage(prompt, id)
-        //     .then(() => {
-        //         console.log("Streaming completed successfully.");
-        //     })
-        //     .catch((error) => {
-        //         console.error("Streaming error:", error);
-        //     });
+        const prompt = `Podsumuj dzisiejszą prognozę pogody, oraz prognozę na następne 3 dni w maksymalnie 50 słowach dla miejscowości: "${city}"`;
+        const id = 'weather-summary';
+        window.backend.assistant.streamMessage(prompt, id)
+            .then(() => {
+                console.log("Streaming completed successfully.");
+            })
+            .catch((error) => {
+                console.error("Streaming error:", error);
+            });
 
-        // $('#weatherSummary').html('');
-        // // Listen for the assistant-chunk events on the window object
-        // window.addEventListener(`${id}-assistant-chunk`, (event) => {
-        //     const chunk = event.detail;
-        //     // Handle each chunk of data as it arrives
-        //     console.log("Received chunk:", chunk);
-        //     // You can update your UI or process the chunk here
-        //     $('#weatherSummary').get(0).innerHTML += chunk;
-        // });
+        $('#weatherSummary').html('');
+        // Listen for the assistant-chunk events on the window object
+        window.addEventListener(`${id}-assistant-chunk`, (event) => {
+            const chunk = event.detail;
+            // Handle each chunk of data as it arrives
+            console.log("Received chunk:", chunk);
+            // You can update your UI or process the chunk here
+            if (chunk.content) {
+                $('#weatherSummary').get(0).innerHTML += chunk.content;
+            }
+        });
     } catch (error) {
         console.error('Error updating weather:', error);
     }

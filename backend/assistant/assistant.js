@@ -211,7 +211,7 @@ export default class Assistant {
         try {
             let messages = this.conversations.get(conversationId) || [this.systemMessage];
             messages.push({ role: 'user', content: message });
-
+    
             const tools = Array.from(this.tools.values()).map(tool => ({
                 type: 'function',
                 function: {
@@ -220,8 +220,16 @@ export default class Assistant {
                     parameters: tool.parameters
                 }
             }));
-            
-            const streamParams = {
+    
+            let fullResponse = '';
+            let toolCalls = [];
+            let currentToolCall = null;
+            let functionBuffer = {
+                name: '',
+                arguments: ''
+            };
+    
+            const stream = await this.openai.chat.completions.create({
                 messages: messages,
                 model: options.model || 'gpt-4o-mini',
                 temperature: options.temperature || 0.7,
@@ -231,78 +239,97 @@ export default class Assistant {
                 stream: true,
                 tools: tools.length > 0 ? tools : undefined,
                 tool_choice: options.tool_choice || 'auto'
-            };
-
-            const stream = await this.openai.chat.completions.create(streamParams);
-
-            let fullResponse = '';
-            let toolCalls = [];
-            let currentToolCall = null;
-
+            });
+    
             for await (const chunk of stream) {
-                console.log(chunk.choices[0].delta);
-                const content = chunk.choices[0]?.delta?.content || '';
-                const toolCallDelta = chunk.choices[0]?.delta?.tool_calls?.[0];
-
+                const delta = chunk.choices[0].delta;
+                const content = delta?.content || '';
+                const toolCallDelta = delta?.tool_calls?.[0];
+    
+                if (content) {
+                    fullResponse += content;
+                    onChunk({ 
+                        type: 'content', 
+                        content,
+                        done: false
+                    });
+                }
+    
                 if (toolCallDelta) {
                     if (!currentToolCall && toolCallDelta.index === 0) {
                         currentToolCall = {
                             id: toolCallDelta.id || '',
                             type: toolCallDelta.type || '',
                             function: {
-                                name: toolCallDelta.function?.name || '',
-                                arguments: toolCallDelta.function?.arguments || ''
+                                name: '',
+                                arguments: ''
                             }
                         };
-                    } else if (currentToolCall) {
-                        if (toolCallDelta.function?.name) {
-                            currentToolCall.function.name += toolCallDelta.function.name;
-                        }
-                        if (toolCallDelta.function?.arguments) {
-                            currentToolCall.function.arguments += toolCallDelta.function.arguments;
-                        }
                     }
-
-                    if (chunk.choices[0].finish_reason === 'tool_calls') {
-                        toolCalls.push(currentToolCall);
-                        currentToolCall = null;
+    
+                    if (toolCallDelta.function?.name) {
+                        functionBuffer.name += toolCallDelta.function.name;
+                        currentToolCall.function.name = functionBuffer.name;
                     }
+                    if (toolCallDelta.function?.arguments) {
+                        functionBuffer.arguments += toolCallDelta.function.arguments;
+                        currentToolCall.function.arguments = functionBuffer.arguments;
+                    }
+    
+                    onChunk({
+                        type: 'tool_call_progress',
+                        toolCall: { ...currentToolCall },
+                        done: false
+                    });
                 }
-
-                if (content) {
-                    fullResponse += content;
-                    onChunk({ type: 'content', content });
+    
+                if (chunk.choices[0].finish_reason === 'tool_calls' && currentToolCall) {
+                    toolCalls.push({ ...currentToolCall });
+                    onChunk({
+                        type: 'tool_call_complete',
+                        toolCall: { ...currentToolCall },
+                        done: false
+                    });
+                    currentToolCall = null;
+                    functionBuffer = { name: '', arguments: '' };
                 }
             }
-
-            const assistantMessage = { 
-                role: 'assistant', 
+    
+            const assistantMessage = {
+                role: 'assistant',
                 content: fullResponse,
                 tool_calls: toolCalls
             };
-            
             messages.push(assistantMessage);
-
+    
             if (toolCalls.length > 0) {
                 const toolResults = [];
-
+    
                 for (const toolCall of toolCalls) {
                     if (toolCall.type === 'function') {
                         const toolName = toolCall.function.name;
                         try {
                             const toolArgs = JSON.parse(toolCall.function.arguments);
                             const toolToCall = this.tools.get(toolName);
-                            
+    
                             if (toolToCall) {
+                                onChunk({
+                                    type: 'tool_execution_start',
+                                    toolName,
+                                    done: false
+                                });
+    
                                 const toolResult = await toolToCall.execute(toolArgs);
                                 toolResults.push({
                                     toolCall,
                                     result: toolResult
                                 });
-                                onChunk({ 
-                                    type: 'tool_result', 
+    
+                                onChunk({
+                                    type: 'tool_result',
                                     toolName,
-                                    result: toolResult 
+                                    result: toolResult,
+                                    done: false
                                 });
                             }
                         } catch (error) {
@@ -311,21 +338,22 @@ export default class Assistant {
                                 toolCall,
                                 error: error.message
                             });
-                            onChunk({ 
-                                type: 'tool_error', 
+                            onChunk({
+                                type: 'tool_error',
                                 toolName,
-                                error: error.message 
+                                error: error.message,
+                                done: false
                             });
                         }
                     }
                 }
-
-                messages.push({ 
-                    role: 'tool', 
-                    content: JSON.stringify(toolResults), 
-                    tool_call_id: toolCalls[0].id 
+    
+                messages.push({
+                    role: 'tool',
+                    content: JSON.stringify(toolResults),
+                    tool_call_id: toolCalls[0].id
                 });
-
+    
                 const finalStream = await this.openai.chat.completions.create({
                     messages: messages,
                     model: options.model || 'gpt-4o-mini',
@@ -335,33 +363,43 @@ export default class Assistant {
                     frequency_penalty: options.frequencyPenalty || 0,
                     stream: true
                 });
-
+    
                 let finalResponse = '';
                 for await (const chunk of finalStream) {
                     const content = chunk.choices[0]?.delta?.content || '';
                     if (content) {
                         finalResponse += content;
-                        onChunk({ type: 'content', content });
+                        onChunk({
+                            type: 'content',
+                            content,
+                            done: chunk.choices[0].finish_reason === 'stop'
+                        });
                     }
                 }
-
+    
                 messages.push({ role: 'assistant', content: finalResponse });
-
+    
                 if (conversationId) {
                     this.conversations.set(conversationId, messages);
                 }
-
+    
                 return {
                     message: finalResponse,
                     conversationId,
                     toolCalls
                 };
             }
-
+    
             if (conversationId) {
                 this.conversations.set(conversationId, messages);
             }
-
+    
+            onChunk({
+                type: 'content',
+                content: '',
+                done: true
+            });
+    
             return {
                 message: fullResponse,
                 conversationId,
@@ -369,6 +407,11 @@ export default class Assistant {
             };
         } catch (error) {
             console.error('Assistant Stream Error:', error);
+            onChunk({
+                type: 'error',
+                error: error.message,
+                done: true
+            });
             throw error;
         }
     }
