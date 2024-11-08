@@ -131,11 +131,22 @@ function summariseWeather() {
     // Listen for the assistant-chunk events on the window object
     window.addEventListener(`${id}-assistant-chunk`, (event) => {
         const chunk = event.detail;
-        // Handle each chunk of data as it arrives
-        console.log("Received chunk:", chunk);
-        // You can update your UI or process the chunk here
+
         if (chunk.content) {
-            $('#weatherSummary').get(0).innerHTML += chunk.content.replace(/\n/g, "<br />");
+            const content = `<span class="animated-word">${chunk.content}</span>`.replace(/\n/g, "<br />");
+
+            // Insert the content as a span into the #weatherSummary element
+            $('#weatherSummary').append(content);
+
+            // Animate each new chunk without affecting previous animations
+            anime({
+                targets: '#weatherSummary .animated-word:not(.animated)', // Only animate new words
+                opacity: [0, 1],
+                duration: 400,
+                easing: 'easeOutQuad',
+            });
+
+            $('#weatherSummary .animated-word:not(.animated)').addClass('animated')
         }
     });
 }
