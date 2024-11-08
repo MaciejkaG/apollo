@@ -117,7 +117,7 @@ function summariseWeather() {
     else if (hours < 12) time = 'w południe';
     else if (hours < 18) time = 'popołudnieu';
     else time = 'wieczorem';
-    const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na następne 3 dni tygodnia dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity względem omawianego okresu. Całość nie może przekroczyć 90 słów. Pamiętaj aby zawrzeć twarde dane tj. niże i wyże temperaturowe, wiatr w km/h, temperaturę odczuwalną. Poza tym dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
+    const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na kolejne 3 dni tygodnia (podaj nazwy, po dniu dzisiejszym) dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity. Użyj max. 90 słów. Zawrzyj twarde dane tj. niże i wyże temperatury, wiatr w km/h, temperaturę odczuwalną. Używaj liczb całkowitych i zapisuj je numerycznie. Dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
     const id = 'weather-summary';
     window.backend.assistant.streamMessage(prompt, id)
         .then(() => {
