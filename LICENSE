@@ -1,0 +1,127 @@
+# Personal Use Software License
+## For Apollo Personal Assistant Software
+## Version 1.0
+
+## Terms and Conditions
+
+### 1. Definitions
+- "Software" refers to Apollo, including but not limited to its source code, object code, documentation, APIs, interfaces, configuration files, scripts, databases, machine learning models, and any associated materials provided under this license.
+- "Personal Use" means use by an individual for non-commercial purposes, including hobby, educational, research, or personal productivity purposes.
+- "Commercial Use" means any use intended for or directed toward commercial advantage or monetary compensation, whether direct or indirect.
+- "Derivative Work" means any work based upon or incorporating all or part of the Software.
+- "Distribution" means any transfer, sharing, or making available of the Software to third parties.
+- "You" means the individual exercising the rights granted under this License.
+
+### 2. Grant of Rights
+2.1. Basic Rights
+Subject to the terms and conditions of this License, you are hereby granted a worldwide, royalty-free, non-exclusive, non-transferable license to:
+- Use and execute the Software for Personal Use
+- Modify the Software and create Derivative Works based on the Software for Personal Use
+- Copy and distribute the Software, solely for Personal Use
+
+2.2. Scope of Personal Use
+Personal Use explicitly includes:
+- Using the Software for personal task management and automation
+- Customizing the Software for individual needs
+- Learning and educational purposes
+- Non-commercial research
+- Contributing improvements back to the project
+
+### 3. Restrictions
+
+3.1. Commercial Use Prohibition
+You may not use the Software for any Commercial Use, including but not limited to:
+- Incorporating the Software or any portion thereof into a commercial product
+- Using the Software to provide commercial services or products
+- Using the Software in a commercial organization's operations
+- Using the Software to generate revenue, directly or indirectly
+- Offering paid support, consulting, or maintenance services related to the Software
+- Using the Software in a commercial cloud service or hosting environment
+- Using the Software to train or develop commercial AI models or services
+
+3.2. Distribution Restrictions
+Any distribution of the Software or Derivative Works must:
+- Be for Personal Use only
+- Include this entire license without modification
+- Retain all copyright, patent, trademark, and attribution notices
+- Clearly document and timestamp any modifications made
+- Include the source code or a link to where the source code can be obtained
+- Not misrepresent the origin or ownership of the Software
+- Not use our logo in a way that suggests endorsement or affiliation
+
+3.3. Technical Restrictions
+You may not:
+- Remove or alter any license, copyright, or other proprietary notices
+- Reverse engineer, decompile, or disassemble the Software except as permitted by law
+- Bypass or disable any license validation or security mechanisms
+- Use the Software to create competing personal assistant products
+- Combine the Software with code licensed under terms that would impose conflicting obligations
+
+### 4. Intellectual Property
+
+4.1. Ownership
+The Software and all worldwide intellectual property rights therein are the exclusive property of Julian Zientkowski & Maciej Gomoła. This License does not grant you any rights to patents, copyrights, trade secrets, trade names, trademarks (whether registered or unregistered), or any other rights, franchises, or licenses.
+
+4.2. Contributions
+Any contributions you intentionally submit for inclusion in the Software shall be under the terms and conditions of this License. You retain copyright to your modifications but grant the original authors an irrevocable, worldwide, non-exclusive, royalty-free license to use, modify, and distribute your contributions.
+
+### 5. Privacy and Data Collection
+
+5.1. Data Collection
+The Software may collect usage data and metrics solely for the purpose of improving the Software's functionality. This data collection:
+- Must be clearly disclosed to users
+- Must be anonymized and non-personally identifiable
+- Must not include user content or sensitive information
+- Must be optional and allow users to opt-out
+
+### 6. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### 7. Limitation of Liability
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+### 8. Termination
+
+8.1. Automatic Termination
+This License automatically terminates if you fail to comply with any term or condition. Upon termination:
+- All rights granted under this License cease immediately
+- You must cease all use, distribution, and possession of the Software
+- You must destroy all copies of the Software in your possession or control
+
+8.2. Survival
+The following sections survive termination:
+- Section 4 (Intellectual Property)
+- Section 6 (Disclaimer of Warranty)
+- Section 7 (Limitation of Liability)
+- Any other provisions that by their nature should survive termination
+
+### 9. General
+
+9.1. Severability
+If any provision of this License is held to be unenforceable or invalid, that provision will be enforced to the maximum extent possible, and the other provisions will remain in full force and effect.
+
+9.2. No Waiver
+No failure or delay by the copyright holders in exercising any right under this License shall constitute a waiver of that right.
+
+9.3. Governing Law
+This License shall be governed by and construed in accordance with the laws of the jurisdiction in which the primary copyright holder resides, without regard to its conflict of law provisions.
+
+9.4. Complete Agreement
+This License constitutes the entire agreement between the parties with respect to the use of the Software and supersedes all prior or contemporaneous understandings regarding such subject matter.
+
+### 10. Updates to License Terms
+
+The copyright holders reserve the right to update or modify this License at any time. Your continued use of the Software after any such changes constitutes your acceptance of the new terms.
+
+### 11. Contact Information
+
+For questions about this License or to request permissions beyond its scope, please contact:
+Julian Zientkowski & Maciej Gomoła
+julianzkw1@gmail.com
+
+### 12. Copyright Notice
+
+Copyright © 2024 Julian Zientkowski & Maciej Gomoła
+All rights reserved.
