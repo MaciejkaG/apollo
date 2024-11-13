@@ -1,4 +1,4 @@
-setInterval(() => {
+function refreshClock() {
     const now = new Date();
 
     // Format hours and minutes with leading zeros if needed
@@ -29,4 +29,7 @@ setInterval(() => {
     // Update the time app
     $('.fulltime').html(`${hours}:${minutes}:${seconds}`);
     $('.fulldate').html(`${dayName} ${dayNumber} ${fullMonth} ${year}<br>${timeZone}`);
-}, 1000);  // Refresh every second
+}
+
+refreshClock();
+setInterval(refreshClock, 1000);  // Refresh every second

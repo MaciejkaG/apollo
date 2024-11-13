@@ -307,22 +307,6 @@ class SpotifyWidget {
     }
 }
 
-function setupMarquee(element) {
-    const text = element.textContent;
-    const marqueeSpan = document.createElement('span');
-    marqueeSpan.textContent = text;
-    marqueeSpan.classList.add('marquee-text');
-
-    // Clear existing children and add the marquee text
-    element.innerHTML = '';
-    element.appendChild(marqueeSpan);
-
-    // Set up animation if text overflows
-    if (marqueeSpan.scrollWidth > element.clientWidth) {
-        marqueeSpan.style.animation = `scroll ${marqueeSpan.scrollWidth / 50}s linear infinite`;
-    }
-}
-
 // Function to update scroll width for each text element
 function updateScrollWidth() {
     document.querySelectorAll('#spotify .meta span').forEach(container => {
@@ -330,6 +314,8 @@ function updateScrollWidth() {
         if (text && container.scrollWidth > container.clientWidth) {
             const scrollAmount = -(text.offsetWidth - container.offsetWidth);
             container.style.setProperty('--scroll-width', `${scrollAmount}px`);
+        } else {
+            container.style.setProperty('--scroll-width', '');
         }
     });
 
@@ -342,13 +328,6 @@ function updateScrollWidth() {
 // Update on load and whenever content changes
 window.addEventListener('load', updateScrollWidth);
 window.addEventListener('resize', updateScrollWidth);
-
-// Example of how to handle dynamic content changes
-function updateContent(title, author) {
-    document.querySelector('.title .text').textContent = title;
-    document.querySelector('.author .text').textContent = author;
-    updateScrollWidth();
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     window.spotifyWidget = new SpotifyWidget();

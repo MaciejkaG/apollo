@@ -1,9 +1,10 @@
 let city = 'Poznan';
 
 const weatherApp = document.getElementById('weatherApp');
+let summaryDone = false;
 
 weatherApp.addEventListener('appopen', () => {
-    if ($('#weatherSummary').html().length === 0) summariseWeather();
+    if ($('#weatherSummary').html().length === 0 && !summaryDone) summariseWeather();
 });
 
 async function updateWeather() {
@@ -102,6 +103,8 @@ async function updateWeather() {
 
             forecastContainer.appendChild(forecastDiv);
         });
+
+        $('#weatherSummary').html('');
     } catch (error) {
         console.error('Error updating weather:', error);
     }
@@ -111,23 +114,29 @@ updateWeather();
 setInterval(updateWeather, 3600000);
 
 function summariseWeather() {
+    summaryDone = true;
     let time;
-    const hours = new Date().getHours();
+    const now = new Date();
+    const hours = now.getHours();
     if (hours < 6 || hours >= 21) time = 'rano';
     else if (hours < 12) time = 'w południe';
     else if (hours < 18) time = 'popołudnieu';
     else time = 'wieczorem';
-    const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na kolejne 3 dni tygodnia (podaj nazwy, po dniu dzisiejszym) dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity. Użyj max. 90 słów. Zawrzyj twarde dane tj. niże i wyże temperatury, wiatr w km/h, temperaturę odczuwalną. Używaj liczb całkowitych i zapisuj je numerycznie. Dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
-    const id = 'weather-summary';
-    // window.backend.assistant.streamMessage(prompt, id)
-    //     .then(() => {
-    //         console.log("Streaming completed successfully.");
-    //     })
-    //     .catch((error) => {
-    //         console.error("Streaming error:", error);
-    //     });
 
-    // $('#weatherSummary').html('');
+    const days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
+    const dayName = days[now.getDay()];
+
+    const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na kolejne 3 dni tygodnia (podaj nazwy dni tygodnia, zacznij od jutra. Dzisiejszy dzień tygodnia to ${dayName}) dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity. Użyj max. 90 słów. Zawrzyj twarde dane tj. niże i wyże temperatury, wiatr w km/h, temperaturę odczuwalną. Używaj liczb całkowitych i zapisuj je numerycznie. Dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
+    const id = 'weather-summary';
+    window.backend.assistant.streamMessage(prompt, id)
+        .then(() => {
+            console.log("Streaming completed successfully.");
+        })
+        .catch((error) => {
+            console.error("Streaming error:", error);
+        });
+
+    $('#weatherSummary').html('');
     // Listen for the assistant-chunk events on the window object
     window.addEventListener(`${id}-assistant-chunk`, (event) => {
         const chunk = event.detail;
