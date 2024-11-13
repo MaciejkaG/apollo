@@ -13,6 +13,7 @@ async function updateWeather() {
         "light rain": "mżawka",
         "moderate rain": "umiarkowany deszcz",
         "snow": "śnieg",
+        "light snow": "przelotny śnieg",
         "thunderstorm": "burza",
         "overcast clouds": "zachmurzenie",
         "broken clouds": "pochmurnie",
@@ -51,6 +52,7 @@ async function updateWeather() {
             const description = translations[current.condition.description.toLowerCase()] || current.condition.description.toLowerCase();
             weatherWidget.querySelector('h1').textContent = `${Math.round(current.temperature.value)}° ${description}`;
             $('#weatherApp .currentTemperature').html(`${Math.round(current.temperature.value)}°`);
+            $('#weatherApp .currentState').html(capitaliseFirstLetter(description));
 
             // Apply a correct widget and app background according to the current weather.
             document.documentElement.style.cssText = `--active-weather-background: ${backgrounds[current.condition.description.toLowerCase()] || 'var(--cloudy)'}`;
@@ -100,8 +102,6 @@ async function updateWeather() {
 
             forecastContainer.appendChild(forecastDiv);
         });
-
-        $('#weatherSummary').html('');
     } catch (error) {
         console.error('Error updating weather:', error);
     }
@@ -119,15 +119,15 @@ function summariseWeather() {
     else time = 'wieczorem';
     const prompt = `Podsumuj teraźniejszą prognozę pogody, ${time} oraz na kolejne 3 dni tygodnia (podaj nazwy, po dniu dzisiejszym) dla miejscowości: "${city}". Podziel podsumowanie na maks. 2 akapity. Użyj max. 90 słów. Zawrzyj twarde dane tj. niże i wyże temperatury, wiatr w km/h, temperaturę odczuwalną. Używaj liczb całkowitych i zapisuj je numerycznie. Dodaj krótką poradę dotyczącą ubioru lub akcesoriów na dzisiaj ${time}, w zależności od pogody. Jeżeli nie uda ci się uzyskać informacji o pogodzie, krótko przeproś i nie oferuj dalszej pomocy.`;
     const id = 'weather-summary';
-    window.backend.assistant.streamMessage(prompt, id)
-        .then(() => {
-            console.log("Streaming completed successfully.");
-        })
-        .catch((error) => {
-            console.error("Streaming error:", error);
-        });
+    // window.backend.assistant.streamMessage(prompt, id)
+    //     .then(() => {
+    //         console.log("Streaming completed successfully.");
+    //     })
+    //     .catch((error) => {
+    //         console.error("Streaming error:", error);
+    //     });
 
-    $('#weatherSummary').html('');
+    // $('#weatherSummary').html('');
     // Listen for the assistant-chunk events on the window object
     window.addEventListener(`${id}-assistant-chunk`, (event) => {
         const chunk = event.detail;
@@ -149,4 +149,8 @@ function summariseWeather() {
             $('#weatherSummary .animated-word:not(.animated)').addClass('animated')
         }
     });
+}
+
+function capitaliseFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
