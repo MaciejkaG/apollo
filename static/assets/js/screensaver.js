@@ -22,9 +22,11 @@ $('#screensaver canvas').gradient({
 });
 
 let resettingContainer = false;
+let screensaverActive = true;
 // Function to reset idle time
 function resetIdleTimer() {
-    if (resettingContainer || openAnimationRunning) return;
+    if (resettingContainer || openAnimationRunning || !screensaverActive) return;
+    console.log('a')
 
     // Clear existing timeouts
     clearTimeout(idleTimeout);
@@ -49,7 +51,8 @@ function resetIdleTimer() {
             appsContainer.style.opacity = '';
 
             resettingContainer = false;
-        }
+            screensaverActive = false;
+        },
     });
 
     // Deactivate screensaver
@@ -62,18 +65,20 @@ function resetIdleTimer() {
 
 // Function to start fading (blur, scale down, fade out) effect
 function startFade() {
+    screensaverActive = true;
     anime({
         targets: [container, appsContainer],
         scale: MIN_SCALE,
         filter: `blur(${BLUR_AMOUNT}px)`,
         opacity: 0.05,
         duration: FADE_DURATION, // Smooth transition to match screensaver timing
-        easing: 'easeInSine'
+        easing: 'easeInSine',
     });
 }
 
 // Function to activate the screensaver
 function activateScreensaver() {
+    screensaverActive = true;
     screensaver.classList.add('active');
 }
 
