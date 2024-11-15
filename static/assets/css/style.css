@@ -90,6 +90,7 @@ span.material-symbols-outlined {
     scale: 1.5;
     flex-direction: column;
     gap: .5rem;
+    background-color: black;
     transition: opacity 0.7s, scale 0.7s;
 }
 
@@ -106,17 +107,18 @@ span.material-symbols-outlined {
     z-index: 1;
     top: 0;
     left: 0;
+    opacity: 0.5;
 }
 
 #screensaver span {
     z-index: 2;
     color: rgba(255, 255, 255, 0.75);
-    font-size: 2.6rem;
+    font-size: 3rem;
     font-weight: 700;
 }
 
 #screensaver span:last-child {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 400;
 }
 

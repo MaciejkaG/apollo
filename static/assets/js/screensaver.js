@@ -3,8 +3,8 @@ const appsContainer = document.getElementById('apps');
 const screensaver = document.getElementById('screensaver');
 
 // Constants for timings
-const IDLE_FADE_TIME = 50000;                            // Seconds of idle required to start fading
-const SCREENSAVER_TIME = 60000;                          // Seconds of idle required to activate screensaver
+const IDLE_FADE_TIME = 60000;                            // Seconds of idle required to start fading
+const SCREENSAVER_TIME = 60500;                          // Seconds of idle required to activate screensaver
 
 // debug values
 //const IDLE_FADE_TIME = 5000;                            // Seconds of idle required to start fading
