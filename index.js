@@ -9,6 +9,14 @@ const store = new Store();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// If we're working in a production environment
+if (process.env.NODE_ENV === 'production') {
+    // Ensure GPU acceleration is on.
+    app.commandLine.appendSwitch('enable-gpu-rasterization');
+    app.commandLine.appendSwitch('disable-software-rasterizer');
+    app.commandLine.appendSwitch('ignore-gpu-blacklist');
+}
+
 app.whenReady().then(() => {
     const win = new BrowserWindow({
         width: 800,
