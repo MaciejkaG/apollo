@@ -83,7 +83,7 @@ function activateScreensaver() {
 }
 
 // Event listeners to reset idle time on user interactions
-['mousemove', 'keydown', 'mousedown', 'touchstart'].forEach(event => {
+['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'].forEach(event => {
     document.addEventListener(event, resetIdleTimer);
 });
 
