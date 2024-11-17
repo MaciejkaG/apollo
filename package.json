@@ -18,7 +18,7 @@
     "electron-store": "^10.0.0",
     "eventsource": "^2.0.2",
     "node-record-lpcm16": "^1.0.1",
-    "openai": "^4.68.4",
+    "openai": "^4.72.0",
     "qrcode": "^1.5.4"
   }
 }
