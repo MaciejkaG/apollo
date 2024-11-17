@@ -4,6 +4,16 @@ import WeatherPlugin from './assistant/plugins/weather/index.js';
 import { SpotifyClient } from './spotify/index.js';
 import 'dotenv/config';
 import Store from 'electron-store';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+    Porcupine,
+    BuiltinKeyword,
+} from "@picovoice/porcupine-node";
+import Speech from './speech/index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const store = new Store();
 
@@ -11,20 +21,61 @@ let AssistantService = null;
 let SpotifyService = null;
 
 export function setup(mainWindow) {
-    ipcMain.handle('misc-set-dark-theme', (event, darkTheme) => {
-        // We use this funny comparison just in case darkTheme turns out not to be a boolean.
-        store.set('misc.darkTheme', darkTheme === 1);
-    });
+    ipcMain.handle('misc-set-dark-theme', (event, darkTheme) => 
+        store.set('misc.darkTheme', darkTheme === 1)
+    );
 
-    ipcMain.handle('misc-get-dark-theme', (darkTheme) => {
-        // We use this funny comparison just in case darkTheme turns out not to be a boolean.
-        return store.get('misc.darkTheme');
-    });
-
+    ipcMain.handle('misc-get-dark-theme', () => 
+        store.get('misc.darkTheme'));
 
     ipcMain.handle('initialize-assistant', async (event) => {
         try {
+            // Initialise OpenAI API integration
             AssistantService = new Assistant(process.env.OPENAI_API_KEY);
+
+            // Initialise wake word detection
+            // Get all files' paths from the models/wakewords folder.
+            const wakeWordsDir = path.join(__dirname, `../models/wakewords/${process.platform}`);
+            const keywordPaths = fs.readdirSync(wakeWordsDir, { withFileTypes: true })
+                .filter(dirent => dirent.isFile())
+                .map(dirent => path.join(wakeWordsDir, dirent.name));
+
+            const sensitivities = [...keywordPaths].fill(0.5);
+
+            const porcupine = new Porcupine(
+                process.env.PICOVOICE_ACCESSKEY,
+                keywordPaths,
+                sensitivities
+            );
+            const speech = new Speech(porcupine);
+
+            // Wake word detection ("Apollo")
+            const forwardEvent = (event, data) => {
+                if (mainWindow?.webContents) {
+                    mainWindow.webContents.send('speech-event', { event, data });
+                }
+            };
+
+            // Initialize microphone before processing loop
+            speech.init().then(() => {
+                // Mic is ready
+                // Main processing loop
+                const processAudio = () => {
+                    const audioFrame = speech.getNextAudioFrame();
+                    if (audioFrame) {
+                        const keywordIndex = porcupine.process(audioFrame);
+                        if (keywordIndex >= 0) { // Keyword detected.
+                            forwardEvent('wake'); // Forward the wake event to the preload using a previously defined function
+                        }
+                    }
+                    setImmediate(processAudio); // Loop efficiently
+                };
+
+                processAudio(); // Start the processing loop
+            }).catch((err) => {
+                console.error('Failed to initialize microphone:', err);
+            });
+
             return { success: true };
         } catch (error) {
             return { success: false, error: error.message };
@@ -134,13 +185,13 @@ export function setup(mainWindow) {
         }
     });
 
-    const forwardEvent = (event, data) => {
-        if (mainWindow?.webContents) {
-            mainWindow.webContents.send('spotify-event', { event, data });
-        }
-    };
-
     ipcMain.handle('initialize-spotify', async (event, config) => {
+        const forwardEvent = (event, data) => {
+            if (mainWindow?.webContents) {
+                mainWindow.webContents.send('spotify-event', { event, data });
+            }
+        };
+    
         try {
             if (SpotifyService) {
                 SpotifyService.destroy();

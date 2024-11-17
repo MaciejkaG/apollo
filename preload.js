@@ -1,8 +1,16 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {
-    initialize: () =>
-        ipcRenderer.invoke('initialize-assistant'),
+    initialize: () => {
+        // Handle speech module events like the wake event.
+        ipcRenderer.on('speech-event', (_, { event, data }) => {
+            window.dispatchEvent(new CustomEvent('speech-event', {
+                detail: { event, data }
+            }));
+        });
+
+        return ipcRenderer.invoke('initialize-assistant');
+    },
 
     sendMessage: (message, conversationId, options) =>
         ipcRenderer.invoke('send-message', message, conversationId, options),
