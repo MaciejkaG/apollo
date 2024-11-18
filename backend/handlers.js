@@ -53,7 +53,6 @@ export function setup(mainWindow) {
             // Wake word detection ("Apollo")
             const forwardEvent = (event, data) => {
                 if (mainWindow?.webContents) {
-                    record.pause();
                     mainWindow.webContents.send('wake-event', { event, data });
                 }
             };
@@ -382,6 +381,7 @@ export function setup(mainWindow) {
             }
         };
 
+        record.pause();
         transcribeStream(
             (transcript) => forwardEvent('chunk', transcript),
             (transcript) => {
