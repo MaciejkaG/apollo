@@ -216,23 +216,41 @@
             </div>
         </div>
         <div class="col" id="apolloScreen">
-            <div class="idleScreen active">
-                <span>Powiedz</span>
-                <span id="examplePrompt"></span>
+            <!-- Idle Screen -->
+            <div class="screen idleScreen active">
+                <span class="prompt-intro">Powiedz</span>
+                <span id="examplePrompt" class="example-prompt"></span>
             </div>
-
-            <!-- <div id="chat">
-                <p class="bubble">
-                    Hej, w czym mogę pomóc?
-                </p>
-                <p class="bubble own">
-                    Jaka pogoda będzie jutro w Poznaniu?
-                </p>
-            </div> -->
-
-            <div class="prompt">
-                <span>Słucham...</span>
-                <p id="transcript"></p>
+        
+            <!-- Listening Screen -->
+            <div class="screen listeningScreen">
+                <span class="prompt-intro">Słucham...</span>
+                <p id="transcript" class="transcript">...</p>
+                <div class="listening-indicator">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        
+            <!-- Processing Screen -->
+            <div class="screen processingScreen">
+                <div class="processing-spinner"></div>
+                <span class="prompt-intro">Przetwarzam...</span>
+            </div>
+        
+            <!-- Chat Screen -->
+            <div class="screen chatScreen">
+                <div id="chatContainer" class="chat-container">
+                    <div id="messagesContainer" class="messages-container">
+                        <!-- Messages will be inserted here -->
+                    </div>
+                    <div id="typingIndicator" class="typing-indicator hidden">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

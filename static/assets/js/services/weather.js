@@ -13,6 +13,7 @@ async function updateWeather() {
         "rain": "deszcz",
         "light rain": "mżawka",
         "moderate rain": "umiarkowany deszcz",
+        "light intensity shower rain": "lekki, przelotny deszcz",
         "snow": "śnieg",
         "light snow": "przelotny śnieg",
         "thunderstorm": "burza",
@@ -29,6 +30,7 @@ async function updateWeather() {
         "rain": "var(--rainy)",
         "light rain": "var(--rainy)",
         "moderate rain": "var(--rainy)",
+        "light intensity shower rain": "var(--rainy)",
         "snow": "var(--rainy)",
         "thunderstorm": "var(--thunderstorm)",
         "overcast clouds": "var(--cloudy)",
@@ -155,7 +157,7 @@ function summariseWeather() {
                 easing: 'easeOutQuad',
             });
 
-            $('#weatherSummary .animated-word:not(.animated)').addClass('animated')
+            $('#weatherSummary .animated-word:not(.animated)').addClass('animated');
         }
     });
 }

@@ -1,8 +1,16 @@
+// Voice recognition
 import { SpeechClient } from '@google-cloud/speech';
 import record from 'node-record-lpcm16';
 
-// Initialize the Speech client
+// TTS
+import OpenAI from 'openai';
+import { spawn } from 'child_process';
+
+// Initialise the Speech client
 const client = new SpeechClient();
+
+// Initialise the OpenAI SDK and a sound player
+const openai = new OpenAI();
 
 export function transcribeStream(onTranscript, onFinalResult) {
     // Configure request for streaming recognition
@@ -31,7 +39,7 @@ export function transcribeStream(onTranscript, onFinalResult) {
         .on('error', console.error);
 
     let lastSpokenTime = Date.now(); // Track last speech time
-    const silenceTimeout = 3000; // Silence threshold (3 seconds)
+    const silenceTimeout = 2000; // Silence threshold (2 seconds)
 
     // Initialize the streaming recognize client
     let lastTranscript = ''; // To store the last full transcript
@@ -76,9 +84,37 @@ export function transcribeStream(onTranscript, onFinalResult) {
     }, 300);
 }
 
+export async function synthesize(text, voiceName = 'alloy') {
+    const response = await openai.audio.speech.create({
+        model: 'tts-1',
+        voice: voiceName,
+        input: text,
+        response_format: 'opus'
+    });
+
+    const ffplay = spawn('ffplay', [
+        '-i', 'pipe:0',  // read from stdin
+        '-nodisp',       // no video display
+        '-autoexit'      // exit when playback is done
+    ], { stdio: ['pipe', 'ignore', 'ignore'] });
+
+    for await (const chunk of response.body) {
+        ffplay.stdin.write(chunk);
+    }
+    ffplay.stdin.end();
+
+    return new Promise((resolve, reject) => {
+        ffplay.on('close', (code) => {
+            code === 0 ? resolve() : reject(new Error(`ffplay exited with code ${code}`));
+        });
+    });
+}
+
 // Example usage
 // transcribeStream((chunk) => {
 //     console.log(`${new Date()} Chunk: ${chunk}`);
 // }, (transcript) => {
 //     console.log(`\n${new Date()} Speech end. Final result: ${transcript}`)
 // });
+
+// synthesize('This is a test of the TTS service.', 'nova');
