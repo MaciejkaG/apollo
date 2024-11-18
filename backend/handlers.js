@@ -29,30 +29,31 @@ export function setup(mainWindow) {
     ipcMain.handle('misc-get-dark-theme', () => 
         store.get('misc.darkTheme'));
 
+    // Initialise wake word detection
+    // Get all files' paths from the models/wakewords folder.
+    const wakeWordsDir = path.join(__dirname, `../models/wakewords/${process.platform}`);
+    const keywordPaths = fs.readdirSync(wakeWordsDir, { withFileTypes: true })
+        .filter(dirent => dirent.isFile())
+        .map(dirent => path.join(wakeWordsDir, dirent.name));
+
+    const sensitivities = [...keywordPaths].fill(0.5);
+
+    const porcupine = new Porcupine(
+        process.env.PICOVOICE_ACCESSKEY,
+        keywordPaths,
+        sensitivities
+    );
+
+    const record = new Record(porcupine);
     ipcMain.handle('initialize-assistant', async (event) => {
         try {
             // Initialise OpenAI API integration
             AssistantService = new Assistant(process.env.OPENAI_API_KEY);
 
-            // Initialise wake word detection
-            // Get all files' paths from the models/wakewords folder.
-            const wakeWordsDir = path.join(__dirname, `../models/wakewords/${process.platform}`);
-            const keywordPaths = fs.readdirSync(wakeWordsDir, { withFileTypes: true })
-                .filter(dirent => dirent.isFile())
-                .map(dirent => path.join(wakeWordsDir, dirent.name));
-
-            const sensitivities = [...keywordPaths].fill(0.5);
-
-            const porcupine = new Porcupine(
-                process.env.PICOVOICE_ACCESSKEY,
-                keywordPaths,
-                sensitivities
-            );
-            const record = new Record(porcupine);
-
             // Wake word detection ("Apollo")
             const forwardEvent = (event, data) => {
                 if (mainWindow?.webContents) {
+                    record.pause();
                     mainWindow.webContents.send('wake-event', { event, data });
                 }
             };
@@ -383,7 +384,10 @@ export function setup(mainWindow) {
 
         transcribeStream(
             (transcript) => forwardEvent('chunk', transcript),
-            (transcript) => forwardEvent('finished', transcript),
+            (transcript) => {
+                forwardEvent('finished', transcript);
+                record.unpause();
+            } ,
         );
     });
 }

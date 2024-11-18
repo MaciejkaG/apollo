@@ -71,18 +71,27 @@ export default class Speech {
     stop() {
         if (this.recording) {
             try {
-                this.recording.stop();
+                this.recording.destroy();
                 this.audioBuffer = []; // Clear the buffer
             } catch (err) {
                 console.error('Error stopping recording:', err);
             }
         }
     }
+    
+    pause() {
+        this.recording?.pause();
+        this.audioBuffer = [];
+    }
+
+    unpause() {
+        this.recording?.resume();
+    }
 
     // Add cleanup method
     cleanup() {
         this.stop();
-        this.audioBuffer = null;
+        this.audioBuffer = [];
         this.recording = null;
     }
 }

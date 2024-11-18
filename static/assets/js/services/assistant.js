@@ -12,7 +12,7 @@ window.backend.assistant.initialize()
 
 // Update example prompt
 window.addEventListener('DOMContentLoaded', async () => {
-    const response = await window.backend.assistant.sendMessage('Napisz przykładowy zwrot do asystenta głosowego Apollo np. "Apollo, czy powinienem jutro zabrać parasol?". Pytanie powinno zaczynać się zwrotem bezpośrednim "Apollo". Zapytanie powinno nawiązywać do ostatnich globalnych wydarzeń lub do wydarzeń związanych z Polską (np. pytanie o informacje polityczne, wiadomości, pogodę). Odpowiedz samym zwrotem. Pytanie powinno być gruntownie proste i nie może przekraczać 15 słów.');
+    const response = await window.backend.assistant.sendMessage('Napisz losowy zwrot do asystenta głosowego Apollo np. "Apollo, czy powinienem jutro zabrać parasol?", "Apollo, jakie były wyniki ostatnich wyborów prezydenckich w USA?". Pytanie powinno zaczynać się zwrotem bezpośrednim "Apollo". Zapytanie powinno nawiązywać do ostatnich globalnych wydarzeń lub do wydarzeń związanych z Polską (np. pytanie o informacje polityczne, wiadomości, pogodę). Odpowiedz samym zwrotem. Pytanie powinno być gruntownie proste i nie może przekraczać 15 słów.');
 
     $('#examplePrompt').html(response.message);
 });
