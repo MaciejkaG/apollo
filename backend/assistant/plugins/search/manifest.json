@@ -1,0 +1,21 @@
+{
+    "name": "searchPlugin",
+    "description": "A plugin for searching the web using Google search results",
+    "parameters": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "The search query to execute"
+            },
+            "num": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "default": 5,
+                "description": "Number of search results to return (max 10)"
+            }
+        }
+    }
+}

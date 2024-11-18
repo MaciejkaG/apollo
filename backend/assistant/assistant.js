@@ -109,7 +109,6 @@ export default class Assistant {
             let messages = this.conversations.get(conversationId) || [this.systemMessage];
             messages.push({ role: 'user', content: message });
 
-            // Only include tools and tool_choice if there are actually tools defined
             const tools = Array.from(this.tools.values()).map(tool => ({
                 type: 'function',
                 function: {
@@ -119,7 +118,6 @@ export default class Assistant {
                 }
             }));
 
-            // Base completion options
             const completionOptions = {
                 messages,
                 model: options.model || 'gpt-4o-mini',
@@ -130,7 +128,6 @@ export default class Assistant {
                 stream: options.stream || false,
             };
 
-            // Only add tools and tool_choice if tools exist
             if (tools.length > 0) {
                 completionOptions.tools = tools;
                 if (options.tool_choice) {
@@ -142,7 +139,6 @@ export default class Assistant {
             const assistantMessage = completion.choices[0].message;
             messages.push(assistantMessage);
 
-            // Handle tool calls if present
             if (assistantMessage.tool_calls?.length > 0) {
                 const toolResults = [];
 
@@ -184,14 +180,12 @@ export default class Assistant {
                     }
                 }
 
-                // Add tool results to messages
                 messages.push({
                     role: 'tool',
                     content: JSON.stringify(toolResults),
                     tool_call_id: assistantMessage.tool_calls[0].id
                 });
 
-                // Create second completion with tool results
                 const completion2 = await this.openai.chat.completions.create(completionOptions);
                 const assistantMessage2 = completion2.choices[0].message;
                 messages.push(assistantMessage2);
@@ -209,7 +203,6 @@ export default class Assistant {
                 };
             }
 
-            // Handle normal response without tool calls
             messages.push({ role: 'assistant', content: assistantMessage.content });
 
             if (conversationId) {
@@ -319,7 +312,7 @@ export default class Assistant {
             const assistantMessage = {
                 role: 'assistant',
                 content: fullResponse,
-                tool_calls: toolCalls.length > 0 ? toolCalls : undefined // Only include if there are tool calls
+                tool_calls: toolCalls.length > 0 ? toolCalls : undefined 
             };
             messages.push(assistantMessage);
     
@@ -342,7 +335,7 @@ export default class Assistant {
     
                                 const toolResult = await toolToCall.execute(toolArgs);
                                 toolResults.push({
-                                    tool_call_id: toolCall.id,  // Add the tool_call_id
+                                    tool_call_id: toolCall.id,  
                                     function: {
                                         name: toolName,
                                         arguments: toolCall.function.arguments

@@ -1,4 +1,3 @@
-// index.js
 import { spawn } from 'child_process';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -46,7 +45,7 @@ export default {
       }
 
       targetDate.setDate(targetDate.getDate() + daysToAdd);
-      const weekday = targetDate.getDay() - 1; // 0 is Monday in our array
+      const weekday = targetDate.getDay() - 1; 
 
       if (weekday < 0 || weekday > 4) {
         resolve({
