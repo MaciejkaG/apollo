@@ -39,8 +39,8 @@ function openApp(appId, widget) {
                 setTimeout(() => {
                     expandDiv.remove();
                     openAnimationRunning = false;
-                }, 300);
-            }, 250);
+                }, 200);
+            }, 200);
         }, 100); // delay for fade-in
     }, 10); // optional delay to trigger the transition
 }
