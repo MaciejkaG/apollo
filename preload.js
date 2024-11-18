@@ -128,7 +128,7 @@ const misc = {
     setDarkTheme: (darkTheme) => 
         ipcRenderer.invoke('misc-set-dark-theme', darkTheme),
     getDarkTheme: () => 
-        ipcRenderer.invoke('misc-get-dark-theme')
+        ipcRenderer.invoke('misc-get-dark-theme'),
 };
 
 contextBridge.exposeInMainWorld('backend', {

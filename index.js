@@ -23,6 +23,7 @@ app.whenReady().then(() => {
     const win = new BrowserWindow({
         width: 800,
         height: 480,
+        resizable: false,
         backgroundColor: store.get('misc.darkTheme') ? '#131313' : '#ffffff',
         // If Node is running in production environment, launch the window in kiosk mode.
         kiosk: process.env.NODE_ENV === 'production',
@@ -33,8 +34,6 @@ app.whenReady().then(() => {
     });
 
     setup(win);
-
-    win.setAspectRatio(5/3);
 
     win.loadFile('./static/index.html');
 });

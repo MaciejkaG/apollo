@@ -12,7 +12,13 @@ const client = new SpeechClient();
 // Initialise the OpenAI SDK and a sound player
 const openai = new OpenAI();
 
+// Keep track of the current ffplay instance
+const noPlayer = { kill: () => null };
+let currentPlayer = null;
+
 export function transcribeStream(onTranscript, onFinalResult) {
+    currentPlayer = noPlayer; // Interrupt the currently running TTS player.
+
     // Configure request for streaming recognition
     const request = {
         config: {
@@ -85,6 +91,12 @@ export function transcribeStream(onTranscript, onFinalResult) {
 }
 
 export async function synthesize(text, voiceName = 'alloy') {
+    // Kill any currently playing audio
+    if (currentPlayer) {
+        currentPlayer.kill();
+        currentPlayer = null;
+    }
+
     const response = await openai.audio.speech.create({
         model: 'tts-1',
         voice: voiceName,
@@ -93,19 +105,43 @@ export async function synthesize(text, voiceName = 'alloy') {
     });
 
     const ffplay = spawn('ffplay', [
-        '-i', 'pipe:0',  // read from stdin
-        '-nodisp',       // no video display
-        '-autoexit'      // exit when playback is done
+        '-i', 'pipe:0',
+        '-nodisp',
+        '-autoexit'
     ], { stdio: ['pipe', 'ignore', 'ignore'] });
 
+    // Store the new player as the current instance
+    currentPlayer = ffplay;
+
     for await (const chunk of response.body) {
-        ffplay.stdin.write(chunk);
+        // Check if this is still the current player before writing
+        if (ffplay === currentPlayer) {
+            ffplay.stdin.write(chunk);
+        } else {
+            // If it's not the current player anymore, clean up and exit
+            ffplay.kill();
+            return;
+        }
     }
-    ffplay.stdin.end();
+
+    if (ffplay === currentPlayer) {
+        ffplay.stdin.end();
+    }
+
+    setInterval(() => {
+        if (ffplay !== currentPlayer) {
+            ffplay.kill();
+            return;
+        }
+    }, 300);
 
     return new Promise((resolve, reject) => {
         ffplay.on('close', (code) => {
-            code === 0 ? resolve() : reject(new Error(`ffplay exited with code ${code}`));
+            // Only resolve/reject if this is still the current player
+            if (ffplay === currentPlayer) {
+                currentPlayer = null;
+                code === 0 ? resolve() : reject(new Error(`ffplay exited with code ${code}`));
+            }
         });
     });
 }

@@ -22,6 +22,7 @@ class ApolloUI {
             "Apollo, jak się masz?",
         ];
         this.currentPromptIndex = 0;
+        this.isStreamingResponse = 0;
 
         this.setupEventListeners();
         this.startPromptCycle();
@@ -32,7 +33,7 @@ class ApolloUI {
         // Wake word detection
         window.addEventListener('wake-event', (e) => {
             const { event } = e.detail;
-            if (event === 'wake') {
+            if (event === 'wake' && !this.isStreamingResponse) {
                 resetIdleTimer();
                 this.startListening();
             }
@@ -225,7 +226,9 @@ class ApolloUI {
             window.addEventListener(streamId + '-assistant-chunk', chunkListener);
 
             // Stream the message
+            this.isStreamingResponse = true;
             await window.backend.assistant.streamMessage(query, streamId, this.conversationId);
+            this.isStreamingResponse = false;
 
             // Remove chunk listener
             window.removeEventListener(streamId + '-assistant-chunk', chunkListener);
@@ -309,6 +312,10 @@ class ApolloUI {
                 duration: 400,
                 easing: 'easeOutQuad'
             });
+
+            // Scroll to bottom
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     }
 }
