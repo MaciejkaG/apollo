@@ -238,10 +238,10 @@ class ApolloUI {
 
             // Synthesize the full response
             window.backend.speech.synthesize(currentResponse);
-
         } catch (error) {
             console.error('Error getting response:', error);
-            this.addMessage('assistant', 'Przepraszam, wystąpił błąd. Spróbuj ponownie.');
+            document.getElementById('typingIndicator').classList.add('hidden');
+            this.updateLastAssistantMessage('Przepraszam, wystąpił błąd. Spróbuj ponownie.');
         }
     }
 
