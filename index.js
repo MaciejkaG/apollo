@@ -9,6 +9,8 @@ const store = new Store();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+process.env.GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, 'google-cloud-key.json');
+
 // If we're working in a production environment
 if (process.env.NODE_ENV === 'production') {
     // Ensure GPU acceleration is on.

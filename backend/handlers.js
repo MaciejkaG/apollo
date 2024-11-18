@@ -11,7 +11,8 @@ import {
     Porcupine,
     BuiltinKeyword,
 } from "@picovoice/porcupine-node";
-import Speech from './speech/index.js';
+import Record from './wakeword/index.js';
+import { transcribeStream } from './speech/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -47,21 +48,21 @@ export function setup(mainWindow) {
                 keywordPaths,
                 sensitivities
             );
-            const speech = new Speech(porcupine);
+            const record = new Record(porcupine);
 
             // Wake word detection ("Apollo")
             const forwardEvent = (event, data) => {
                 if (mainWindow?.webContents) {
-                    mainWindow.webContents.send('speech-event', { event, data });
+                    mainWindow.webContents.send('wake-event', { event, data });
                 }
             };
 
             // Initialize microphone before processing loop
-            speech.init().then(() => {
+            record.init().then(() => {
                 // Mic is ready
                 // Main processing loop
                 const processAudio = () => {
-                    const audioFrame = speech.getNextAudioFrame();
+                    const audioFrame = record.getNextAudioFrame();
                     if (audioFrame) {
                         const keywordIndex = porcupine.process(audioFrame);
                         if (keywordIndex >= 0) { // Keyword detected.
@@ -371,5 +372,18 @@ export function setup(mainWindow) {
 
     ipcMain.handle('spotify-add-to-queue', async (event, uri) => {
         return await handleSpotifyCall(() => SpotifyService.addToQueue(uri));
+    });
+
+    ipcMain.handle('speech-transcribe-stream', async (event) => {
+        const forwardEvent = (event, data) => {
+            if (mainWindow?.webContents) {
+                mainWindow.webContents.send('speech-event', { event, data });
+            }
+        };
+
+        transcribeStream(
+            (transcript) => forwardEvent('chunk', transcript),
+            (transcript) => forwardEvent('finished', transcript),
+        );
     });
 }

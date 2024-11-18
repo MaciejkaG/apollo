@@ -131,3 +131,6 @@ dist
 
 # macOS Finder data
 .DS_STORE
+
+# Google Cloud Credentials file
+google-cloud-key.json

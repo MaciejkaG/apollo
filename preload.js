@@ -2,9 +2,16 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 const AssistantService = {
     initialize: () => {
-        // Handle speech module events like the wake event.
+        // Handle speech module events.
         ipcRenderer.on('speech-event', (_, { event, data }) => {
             window.dispatchEvent(new CustomEvent('speech-event', {
+                detail: { event, data }
+            }));
+        });
+
+        // Handle wake word module events.
+        ipcRenderer.on('wake-event', (_, { event, data }) => {
+            window.dispatchEvent(new CustomEvent('wake-event', {
                 detail: { event, data }
             }));
         });
@@ -111,6 +118,11 @@ const SpotifyService = {
     addToQueue: (uri) => ipcRenderer.invoke('spotify-add-to-queue', uri)
 };
 
+const SpeechService = {
+    transcribeStream: () => 
+        ipcRenderer.invoke('speech-transcribe-stream'),
+};
+
 const misc = {
     setDarkTheme: (darkTheme) => 
         ipcRenderer.invoke('misc-set-dark-theme', darkTheme),
@@ -122,5 +134,6 @@ contextBridge.exposeInMainWorld('backend', {
     assistant: AssistantService,
     weather: WeatherService,
     spotify: SpotifyService,
-    misc
+    speech: SpeechService,
+    misc,
 });

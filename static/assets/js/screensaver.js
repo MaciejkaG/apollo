@@ -8,7 +8,7 @@ const SCREENSAVER_TIME = 60500;                          // Seconds of idle requ
 
 // debug values
 //const IDLE_FADE_TIME = 5000;                            // Seconds of idle required to start fading
-//const SCREENSAVER_TIME = 10000;                          // Seconds of idle required to activate screensaver
+//const SCREENSAVER_TIME = 5500;                          // Seconds of idle required to activate screensaver
 const FADE_DURATION = SCREENSAVER_TIME - IDLE_FADE_TIME; // Fade-out duration
 const BLUR_AMOUNT = 10;                                  // Maximum blur in pixels
 const MIN_SCALE = 0.7;                                   // Minimum scale of the container
@@ -25,12 +25,17 @@ let resettingContainer = false;
 let screensaverActive = true;
 // Function to reset idle time
 function resetIdleTimer() {
-    if (resettingContainer || openAnimationRunning || !screensaverActive) return;
-    console.log('a')
+    if (resettingContainer || openAnimationRunning) return;
 
     // Clear existing timeouts
     clearTimeout(idleTimeout);
     clearTimeout(screensaverTimeout);
+
+    // Restart idle timers
+    idleTimeout = setTimeout(startFade, IDLE_FADE_TIME);
+    screensaverTimeout = setTimeout(activateScreensaver, SCREENSAVER_TIME);
+
+    if (!screensaverActive) return;
 
     // Restore container properties if active animations are present
     anime.remove(container); // Cancel any ongoing animation
@@ -57,10 +62,6 @@ function resetIdleTimer() {
 
     // Deactivate screensaver
     screensaver.classList.remove('active');
-
-    // Restart idle timers
-    idleTimeout = setTimeout(startFade, IDLE_FADE_TIME);
-    screensaverTimeout = setTimeout(activateScreensaver, SCREENSAVER_TIME);
 }
 
 // Function to start fading (blur, scale down, fade out) effect

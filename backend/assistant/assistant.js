@@ -108,7 +108,8 @@ export default class Assistant {
         try {
             let messages = this.conversations.get(conversationId) || [this.systemMessage];
             messages.push({ role: 'user', content: message });
-    
+
+            // Only include tools and tool_choice if there are actually tools defined
             const tools = Array.from(this.tools.values()).map(tool => ({
                 type: 'function',
                 function: {
@@ -117,67 +118,87 @@ export default class Assistant {
                     parameters: tool.parameters
                 }
             }));
-    
-            const completion = await this.openai.chat.completions.create({
-                messages: messages,
+
+            // Base completion options
+            const completionOptions = {
+                messages,
                 model: options.model || 'gpt-4o-mini',
                 temperature: options.temperature || 0.7,
                 max_tokens: options.maxTokens || 9999,
                 presence_penalty: options.presencePenalty || 0,
                 frequency_penalty: options.frequencyPenalty || 0,
                 stream: options.stream || false,
-                tools: tools.length > 0 ? tools : undefined,
-                tool_choice: options.tool_choice || 'auto'
-            });
-    
+            };
+
+            // Only add tools and tool_choice if tools exist
+            if (tools.length > 0) {
+                completionOptions.tools = tools;
+                if (options.tool_choice) {
+                    completionOptions.tool_choice = options.tool_choice;
+                }
+            }
+
+            const completion = await this.openai.chat.completions.create(completionOptions);
             const assistantMessage = completion.choices[0].message;
-    
             messages.push(assistantMessage);
 
-            if (assistantMessage.tool_calls) {
+            // Handle tool calls if present
+            if (assistantMessage.tool_calls?.length > 0) {
                 const toolResults = [];
-                
+
                 for (const toolCall of assistantMessage.tool_calls) {
                     if (toolCall.type === 'function') {
                         const toolName = toolCall.function.name;
-                        const toolArgs = JSON.parse(toolCall.function.arguments);
-                        
-                        const toolToCall = this.tools.get(toolName);
-                        if (toolToCall) {
-                            try {
-                                const toolResult = await toolToCall.execute(toolArgs);
+                        try {
+                            const toolArgs = JSON.parse(toolCall.function.arguments);
+                            const toolToCall = this.tools.get(toolName);
+
+                            if (toolToCall) {
+                                try {
+                                    const toolResult = await toolToCall.execute(toolArgs);
+                                    toolResults.push({
+                                        toolCall,
+                                        result: toolResult
+                                    });
+                                } catch (error) {
+                                    console.error(`Error executing tool ${toolName}:`, error);
+                                    toolResults.push({
+                                        toolCall,
+                                        error: error.message
+                                    });
+                                }
+                            } else {
+                                console.warn(`Tool ${toolName} not found`);
                                 toolResults.push({
                                     toolCall,
-                                    result: toolResult
-                                });
-                            } catch (error) {
-                                console.error(`Error executing tool ${toolName}:`, error);
-                                toolResults.push({
-                                    toolCall,
-                                    error: error.message
+                                    error: `Tool ${toolName} not found`
                                 });
                             }
+                        } catch (error) {
+                            console.error(`Error parsing tool arguments for ${toolName}:`, error);
+                            toolResults.push({
+                                toolCall,
+                                error: `Failed to parse tool arguments: ${error.message}`
+                            });
                         }
                     }
                 }
 
-                messages.push({ role: 'tool', content: JSON.stringify(toolResults), tool_call_id: assistantMessage.tool_calls[0].id });
-
-                const completion2 = await this.openai.chat.completions.create({
-                    messages: messages,
-                    model: options.model || 'gpt-4o-mini',
-                    temperature: options.temperature || 0.7,
-                    max_tokens: options.maxTokens || 9999,
-                    presence_penalty: options.presencePenalty || 0,
-                    frequency_penalty: options.frequencyPenalty || 0,
-                    stream: options.stream || false,
-                    tools: tools.length > 0 ? tools : undefined,
-                    tool_choice: options.tool_choice || 'auto'
+                // Add tool results to messages
+                messages.push({
+                    role: 'tool',
+                    content: JSON.stringify(toolResults),
+                    tool_call_id: assistantMessage.tool_calls[0].id
                 });
 
+                // Create second completion with tool results
+                const completion2 = await this.openai.chat.completions.create(completionOptions);
                 const assistantMessage2 = completion2.choices[0].message;
+                messages.push(assistantMessage2);
 
-                messages.push({ role: 'assistant', content: completion2.choices[0].message.content });
+                if (conversationId) {
+                    this.conversations.set(conversationId, messages);
+                }
 
                 return {
                     message: assistantMessage2.content,
@@ -187,8 +208,9 @@ export default class Assistant {
                     toolCalls: assistantMessage2.tool_calls
                 };
             }
-    
-            messages.push({ role: 'assistant', content: completion.choices[0].message.content });
+
+            // Handle normal response without tool calls
+            messages.push({ role: 'assistant', content: assistantMessage.content });
 
             if (conversationId) {
                 this.conversations.set(conversationId, messages);

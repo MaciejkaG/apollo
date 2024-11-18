@@ -1,88 +1,84 @@
-// Speech by mcjk in collaboration with ChatGPT <3
-
+import { SpeechClient } from '@google-cloud/speech';
 import record from 'node-record-lpcm16';
 
-export default class Speech {
-    constructor(porcupine) {
-        this.audioBuffer = [];
-        this.porcupine = porcupine;
-        this.recording = null;
-        this.frameSize = porcupine.frameLength;
-        // Add buffer threshold to prevent memory leaks
-        this.maxBufferSize = this.frameSize * 30; // Store max 30 frames worth of data
-    }
+// Initialize the Speech client
+const client = new SpeechClient();
 
-    init() {
-        return new Promise((resolve, reject) => {
-            try {
-                // Configure recording with correct format for Porcupine
-                this.recording = record.record({
-                    sampleRateHertz: this.porcupine.sampleRate,
-                    channels: 1,  // Porcupine expects mono audio
-                    audioType: 'raw',  // Raw PCM data
-                    encoding: 'signed-integer',  // Signed 16-bit integers
-                    threshold: 0,
-                    verbose: false,
-                    recorder: 'sox',  // Explicitly specify recorder
-                })
-                    .stream()
-                    .on('data', (chunk) => {
-                        // Convert buffer to Int16Array considering endianness
-                        const int16Array = new Int16Array(
-                            chunk.buffer,
-                            chunk.byteOffset,
-                            chunk.length / 2
-                        );
+export function transcribeStream(onTranscript, onFinalResult) {
+    // Configure request for streaming recognition
+    const request = {
+        config: {
+            encoding: 'LINEAR16', // Audio encoding
+            sampleRateHertz: 16000, // Sample rate
+            languageCode: 'pl-PL', // Preferred language
+        },
+        interimResults: true, // For real-time results
+    };
 
-                        // Buffer management to prevent memory leaks
-                        if (this.audioBuffer.length < this.maxBufferSize) {
-                            this.audioBuffer.push(...int16Array);
-                        } else {
-                            // Remove oldest frame worth of data
-                            this.audioBuffer.splice(0, this.frameSize);
-                            this.audioBuffer.push(...int16Array);
-                        }
-                    })
-                    .on('error', (err) => {
-                        console.error('Recording error:', err);
-                        reject(err);
-                    });
+    // Create a readable stream from the microphone
+    const audioStream = record
+        .record({
+            channels: 1,  // Mono audio
+            audioType: 'raw',  // Raw PCM data
+            sampleRateHertz: 16000,
+            threshold: 0, // Silence threshold
+            verbose: false,
+            recordProgram: 'rec', // 'arecord' or 'rec'
+            recorder: 'sox',
+            device: null, // Specify device if necessary
+        })
+        .stream()
+        .on('error', console.error);
 
-                resolve();
-            } catch (err) {
-                console.error('Failed to initialize recording:', err);
-                reject(err);
+    let lastSpokenTime = Date.now(); // Track last speech time
+    const silenceTimeout = 3000; // Silence threshold (3 seconds)
+
+    // Initialize the streaming recognize client
+    let lastTranscript = ''; // To store the last full transcript
+
+    const recognizeStream = client
+        .streamingRecognize(request)
+        .on('error', console.error)
+        .on('data', (data) => {
+            lastSpokenTime = Date.now(); // Reset silence timer
+
+            const result = data.results[0];
+            const transcript = result?.alternatives[0]?.transcript;
+            const isFinal = result?.isFinal;
+
+            if (transcript) {
+                // Only output new transcription if it differs from the last one
+                if (transcript !== lastTranscript) {
+                    onTranscript(transcript);  // Pass the updated transcript to the callback
+                    lastTranscript = transcript;
+                }
+            }
+
+            if (isFinal) {
+                // Final transcription callback
+                lastSpokenTime = 0; // User doesn't speak
             }
         });
-    }
 
-    getNextAudioFrame() {
-        if (this.audioBuffer.length >= this.frameSize) {
-            // Create a new frame buffer
-            const frameBuffer = new Int16Array(this.frameSize);
-            // Copy and remove the frame data from the buffer
-            frameBuffer.set(this.audioBuffer.slice(0, this.frameSize));
-            this.audioBuffer = this.audioBuffer.slice(this.frameSize);
-            return frameBuffer;
+    // Pipe the audio stream to the recognition stream
+    audioStream.pipe(recognizeStream);
+
+    // Monitor silence
+    const silenceChecker = setInterval(() => {
+        if (Date.now() - lastSpokenTime > silenceTimeout) {
+            clearInterval(silenceChecker); // Stop checking for silence
+
+            // End recognition and stop recording
+            recognizeStream.end();
+            audioStream.destroy();
+            onFinalResult(lastTranscript);
         }
-        return null;
-    }
-
-    stop() {
-        if (this.recording) {
-            try {
-                this.recording.stop();
-                this.audioBuffer = []; // Clear the buffer
-            } catch (err) {
-                console.error('Error stopping recording:', err);
-            }
-        }
-    }
-
-    // Add cleanup method
-    cleanup() {
-        this.stop();
-        this.audioBuffer = null;
-        this.recording = null;
-    }
+    }, 300);
 }
+
+// Example usage
+// transcribeStream((chunk) => {
+//     console.log(`${new Date()} Chunk: ${chunk}`);
+// }, (transcript) => {
+//     console.log(`\n${new Date()} Speech end. Final result: ${transcript}`)
+// });

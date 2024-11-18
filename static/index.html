@@ -216,17 +216,23 @@
             </div>
         </div>
         <div class="col" id="apolloScreen">
-            <div id="chat">
+            <div class="idleScreen active">
+                <span>Powiedz</span>
+                <span id="examplePrompt"></span>
+            </div>
+
+            <!-- <div id="chat">
                 <p class="bubble">
                     Hej, w czym mogę pomóc?
                 </p>
                 <p class="bubble own">
                     Jaka pogoda będzie jutro w Poznaniu?
                 </p>
-            </div>
+            </div> -->
 
-            <div class="preview">
-
+            <div class="prompt">
+                <span>Słucham...</span>
+                <p id="transcript"></p>
             </div>
         </div>
     </div>
@@ -241,5 +247,4 @@
     <script src="./assets/js/services/settings.js"></script>
     <script src="./assets/js/services/spotify.js"></script>
     <script src="./assets/js/services/assistant.js"></script>
-    <script src="./assets/js/services/wakeword.js"></script>
 </body>
