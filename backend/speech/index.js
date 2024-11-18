@@ -45,7 +45,7 @@ export function transcribeStream(onTranscript, onFinalResult) {
         .on('error', console.error);
 
     let lastSpokenTime = Date.now(); // Track last speech time
-    const silenceTimeout = 2000; // Silence threshold (2 seconds)
+    const silenceTimeout = 3000; // Max silence window in ms
 
     // Initialize the streaming recognize client
     let lastTranscript = ''; // To store the last full transcript
