@@ -228,7 +228,6 @@ export default class Assistant {
             throw error;
         }
     }
-
     async streamMessage(message, onChunk, conversationId = null, options = {}) {
         try {
             let messages = this.conversations.get(conversationId) || [this.systemMessage];
@@ -320,7 +319,7 @@ export default class Assistant {
             const assistantMessage = {
                 role: 'assistant',
                 content: fullResponse,
-                tool_calls: toolCalls
+                tool_calls: toolCalls.length > 0 ? toolCalls : undefined // Only include if there are tool calls
             };
             messages.push(assistantMessage);
     
@@ -343,7 +342,11 @@ export default class Assistant {
     
                                 const toolResult = await toolToCall.execute(toolArgs);
                                 toolResults.push({
-                                    toolCall,
+                                    tool_call_id: toolCall.id,  // Add the tool_call_id
+                                    function: {
+                                        name: toolName,
+                                        arguments: toolCall.function.arguments
+                                    },
                                     result: toolResult
                                 });
     
@@ -357,7 +360,11 @@ export default class Assistant {
                         } catch (error) {
                             console.error(`Error executing tool ${toolName}:`, error);
                             toolResults.push({
-                                toolCall,
+                                tool_call_id: toolCall.id,  // Add the tool_call_id
+                                function: {
+                                    name: toolName,
+                                    arguments: toolCall.function.arguments
+                                },
                                 error: error.message
                             });
                             onChunk({
@@ -370,11 +377,14 @@ export default class Assistant {
                     }
                 }
     
-                messages.push({
-                    role: 'tool',
-                    content: JSON.stringify(toolResults),
-                    tool_call_id: toolCalls[0].id
-                });
+                // Add tool results as a separate message for each tool call
+                for (const result of toolResults) {
+                    messages.push({
+                        role: 'tool',
+                        content: JSON.stringify(result.result || result.error),
+                        tool_call_id: result.tool_call_id
+                    });
+                }
     
                 const finalStream = await this.openai.chat.completions.create({
                     messages: messages,
@@ -399,7 +409,10 @@ export default class Assistant {
                     }
                 }
     
-                messages.push({ role: 'assistant', content: finalResponse });
+                messages.push({ 
+                    role: 'assistant', 
+                    content: finalResponse 
+                });
     
                 if (conversationId) {
                     this.conversations.set(conversationId, messages);
