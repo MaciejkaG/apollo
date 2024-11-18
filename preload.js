@@ -31,7 +31,6 @@ const AssistantService = {
     streamMessage: (message, id, conversationId = null, options = {}) => {
         return new Promise((resolve, reject) => {
             const handleChunk = (_, chunk) => {
-                console.log(chunk);
                 window.dispatchEvent(new CustomEvent(id + '-assistant-chunk', {
                     detail: chunk
                 }));

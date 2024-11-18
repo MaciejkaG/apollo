@@ -36,7 +36,7 @@ export function setup(mainWindow) {
         .filter(dirent => dirent.isFile())
         .map(dirent => path.join(wakeWordsDir, dirent.name));
 
-    const sensitivities = [...keywordPaths].fill(0.5);
+    const sensitivities = [...keywordPaths].fill(0.3);
 
     const porcupine = new Porcupine(
         process.env.PICOVOICE_ACCESSKEY,

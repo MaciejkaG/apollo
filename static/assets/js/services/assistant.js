@@ -14,6 +14,7 @@ class ApolloUI {
     constructor() {
         this.currentScreen = 'idle';
         this.messages = [];
+        this.conversationId = null;
         this.examplePrompts = [
             "Apollo, jaka będzie dzisiaj pogoda w Poznaniu?",
             "Apollo, opowiedz mi żart",
@@ -32,7 +33,6 @@ class ApolloUI {
         window.addEventListener('wake-event', (e) => {
             const { event } = e.detail;
             if (event === 'wake') {
-                console.log('aa')
                 this.startListening();
             }
         });
@@ -52,34 +52,29 @@ class ApolloUI {
     }
 
     setupAnimations() {
-        // Listening indicator animation
-        anime({
-            targets: '.listening-indicator .circle',
-            scale: [1, 1.4, 1],
-            opacity: [1, 0.5, 1],
-            delay: anime.stagger(100),
+        // Listening and Processing Animations
+        this.listeningAnimation = anime.timeline({
+            autoplay: false,
+            targets: '.listening-processing-indicator .circle',
             loop: true,
-            easing: 'easeInOutSine',
+            easing: 'easeInOutSine'
+        }).add({
+            scale: [1, 1.6, 1],
+            opacity: [1, 0.4, 1],
+            delay: anime.stagger(100),
             duration: 1000
         });
 
-        // Processing spinner animation
-        anime({
-            targets: '.processing-spinner',
-            rotate: '360deg',
+        // Processing all dots pulsing animation
+        this.processingAnimation = anime.timeline({
+            autoplay: false,
+            targets: '.listening-processing-indicator .circle',
             loop: true,
-            duration: 1000,
-            easing: 'linear'
-        });
-
-        // Typing indicator animation
-        anime({
-            targets: '.typing-indicator .dot',
-            translateY: [0, -10, 0],
-            delay: anime.stagger(100),
-            loop: true,
-            easing: 'easeInOutSine',
-            duration: 600
+            easing: 'easeInOutSine'
+        }).add({
+            scale: [1, 1.6, 1],
+            opacity: 1,
+            duration: 1000
         });
     }
 
@@ -118,7 +113,17 @@ class ApolloUI {
     }
 
     startListening() {
-        this.switchScreen('listening');
+        this.switchScreen('listeningProcessing');
+
+        // Start listening animation
+        const circles = document.querySelectorAll('.listening-processing-indicator .circle');
+        circles.forEach((circle, index) => {
+            circle.classList.remove('processing-dot');
+            circle.style.transform = '';
+            circle.style.opacity = '1';
+        });
+        this.listeningAnimation.restart();
+
         window.backend.speech.transcribeStream();
     }
 
@@ -128,46 +133,115 @@ class ApolloUI {
     }
 
     async handleFinishedSpeech(finalTranscript) {
-        this.switchScreen('processing');
-        await this.handleQuery(finalTranscript);
+        // Transition from listening to processing
+        const circles = document.querySelectorAll('.listening-processing-indicator .circle');
+
+        // First animation: transform circles
+        anime.timeline()
+            .add({
+                targets: circles,
+                scale: [1, 0.6],
+                opacity: [1, 0.6],
+                duration: 300,
+                easing: 'easeInOutQuad',
+                complete: () => {
+                    // Add processing class
+                    circles.forEach((circle, index) => {
+                        circle.classList.add('processing-dot');
+                    });
+                }
+            })
+            .add({
+                targets: '.prompt-intro',
+                opacity: [1, 0],
+                translateY: [0, -10],
+                easing: 'easeOutQuad',
+                duration: 300,
+                complete: () => {
+                    document.querySelectorAll('.prompt-intro')[1].textContent = 'Przetwarzam...';
+                    anime({
+                        targets: '.prompt-intro',
+                        opacity: [0, 1],
+                        translateY: [10, 0],
+                        easing: 'easeOutQuad',
+                        duration: 300
+                    });
+                }
+            });
+
+        // Stop listening animation, start processing
+        this.listeningAnimation.pause();
+        this.processingAnimation.restart();
+
+        setTimeout(async () => {
+            await this.handleQuery(finalTranscript);
+        }, 2000);
     }
 
     async handleQuery(query) {
+        // Generate conversation ID if it's the first query
+        if (!this.conversationId) {
+            this.conversationId = 'conv-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Ensure messages are added before switching screens
         this.addMessage('user', query);
 
         try {
             const streamId = 'apollo-response-' + Date.now();
             let currentResponse = '';
 
+            // Add assistant message immediately 
+            this.addMessage('assistant', '');
+
+            // Switch to chat screen before processing
+            this.switchScreen('chat');
+
             // Show typing indicator
             document.getElementById('typingIndicator').classList.remove('hidden');
 
             // Listen for streaming chunks
-            window.addEventListener(streamId + '-assistant-chunk', (e) => {
+            const chunkListener = (e) => {
                 const chunk = e.detail;
                 if (chunk.content) {
-                    currentResponse += e.detail.content;
+                    currentResponse += chunk.content;
                     this.updateLastAssistantMessage(currentResponse);
                 }
-            });
+            };
+            window.addEventListener(streamId + '-assistant-chunk', chunkListener);
 
-            this.addMessage('assistant', '');
-            this.switchScreen('chat');
+            // Stream the message
+            await window.backend.assistant.streamMessage(query, streamId, this.conversationId);
 
-            await window.backend.assistant.streamMessage(query, streamId);
+            // Remove chunk listener
+            window.removeEventListener(streamId + '-assistant-chunk', chunkListener);
 
             // Hide typing indicator
             document.getElementById('typingIndicator').classList.add('hidden');
 
-            // Clear the previous transcript.
+            // Clear the previous transcript
             this.updateTranscript('');
 
-            // Synthesize the full response.
+            // Synthesize the full response
             window.backend.speech.synthesize(currentResponse);
+
         } catch (error) {
             console.error('Error getting response:', error);
             this.addMessage('assistant', 'Przepraszam, wystąpił błąd. Spróbuj ponownie.');
         }
+    }
+
+    // New method to reset conversation
+    resetConversation() {
+        // Clear messages
+        const messagesContainer = document.getElementById('messagesContainer');
+        messagesContainer.innerHTML = '';
+
+        // Reset conversation ID
+        this.conversationId = null;
+
+        // Switch back to idle screen
+        this.switchScreen('idle');
     }
 
     addMessage(role, content) {
@@ -228,4 +302,5 @@ class ApolloUI {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.apollo = new ApolloUI();
+    // window.apollo.switchScreen('listeningProcessing')
 });

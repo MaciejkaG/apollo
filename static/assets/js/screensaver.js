@@ -81,6 +81,7 @@ function startFade() {
 function activateScreensaver() {
     screensaverActive = true;
     screensaver.classList.add('active');
+    window.apollo.resetConversation();
 }
 
 // Event listeners to reset idle time on user interactions

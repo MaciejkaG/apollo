@@ -33,7 +33,7 @@
     --theme-fg-1: rgb(0, 0, 0);
 }
 
-body.dark-mode {
+:root.dark-mode {
     --theme-bg-1: rgb(19, 19, 19);
     --theme-bg-2: rgb(30, 30, 30);
     --theme-bg-3: rgb(40, 40, 40);
@@ -261,30 +261,6 @@ span.material-symbols-outlined {
     min-height: 2em;
 }
 
-.listening-indicator {
-    position: absolute;
-    bottom: 2rem;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.listening-indicator .circle {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--theme-fg-1);
-}
-
-/* Processing Screen Styles */
-.processing-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--theme-fg-1);
-    border-top-color: transparent;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
 /* Chat Screen Styles */
 .chat-container {
     width: 100%;
@@ -301,7 +277,7 @@ span.material-symbols-outlined {
 
 .message {
     max-width: 80%;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
     border-radius: 1rem;
     animation: messageAppear 0.3s ease-out;
 }
@@ -328,6 +304,35 @@ span.material-symbols-outlined {
     height: 6px;
     background-color: var(--theme-fg-1);
     border-radius: 50%;
+}
+
+.listening-processing-indicator {
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    transition: gap 0.3s;
+}
+
+.listening-processing-indicator .circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--theme-fg-1);
+    transition: all 0.3s ease;
+}
+
+.listening-processing-indicator .circle.processing-dot {
+    width: 14px;
+    height: 14px;
+    background-color: var(--active-bg-1);
+    opacity: 0.6;
+}
+
+.listening-processing-indicator:has(.circle.processing-dot) {
+    gap: 1.4rem;
 }
 
 .hidden {

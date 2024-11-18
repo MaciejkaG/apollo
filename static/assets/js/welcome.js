@@ -5,7 +5,7 @@ window.addEventListener('load', async () => {
     // Activate dark theme if it's enabled in the config.
     const darkModeActive = await window.backend.misc.getDarkTheme();
     if (darkModeActive) {
-        $(document.body).addClass('dark-mode');
+        $(document.documentElement).addClass('dark-mode');
         $('#darkModeButton').toggleClass('active');
     }
 
