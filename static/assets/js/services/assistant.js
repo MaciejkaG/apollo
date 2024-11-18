@@ -114,6 +114,7 @@ class ApolloUI {
     }
 
     startListening() {
+        document.querySelectorAll('.prompt-intro')[1].textContent = 'Słucham...';
         this.switchScreen('listeningProcessing');
 
         // Start listening animation
@@ -134,6 +135,18 @@ class ApolloUI {
     }
 
     async handleFinishedSpeech(finalTranscript) {
+        if (finalTranscript.length === 0) { // If no speech was detected
+            if (this.conversationId) {
+                // If there is an active conversation, switch back to chat screen.
+                this.switchScreen('chat');
+            } else {
+                // If there is no active conversation, call resetConversation() as it will ensure everything is cleaned and switch back to the idle screen.
+                this.resetConversation();
+            }
+
+            return;
+        }
+
         // Transition from listening to processing
         const circles = document.querySelectorAll('.listening-processing-indicator .circle');
 
@@ -174,9 +187,7 @@ class ApolloUI {
         this.listeningAnimation.pause();
         this.processingAnimation.restart();
 
-        setTimeout(async () => {
-            await this.handleQuery(finalTranscript);
-        }, 2000);
+        await this.handleQuery(finalTranscript);
     }
 
     async handleQuery(query) {
@@ -195,15 +206,17 @@ class ApolloUI {
             // Add assistant message immediately 
             this.addMessage('assistant', '');
 
-            // Switch to chat screen before processing
-            this.switchScreen('chat');
-
             // Show typing indicator
             document.getElementById('typingIndicator').classList.remove('hidden');
 
             // Listen for streaming chunks
             const chunkListener = (e) => {
                 const chunk = e.detail;
+                if (currentResponse.length === 0) { // If this is the first chunk
+                    // Switch to chat screen before starting the message.
+                    this.switchScreen('chat');
+                }
+
                 if (chunk.content) {
                     currentResponse += chunk.content;
                     this.updateLastAssistantMessage(currentResponse);
