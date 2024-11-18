@@ -1,0 +1,15 @@
+{
+    "name": "getSchedule",
+    "description": "Get school schedule from MobiDziennik platform for a specific day",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "day": {
+                "type": "string",
+                "enum": ["today", "tomorrow", "dayaftertomorrow"],
+                "default": "tomorrow",
+                "description": "Which day's schedule to retrieve"
+            }
+        }
+    }
+}
