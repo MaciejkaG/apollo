@@ -33,6 +33,7 @@ class ApolloUI {
         window.addEventListener('wake-event', (e) => {
             const { event } = e.detail;
             if (event === 'wake') {
+                resetIdleTimer();
                 this.startListening();
             }
         });
