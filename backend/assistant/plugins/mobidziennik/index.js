@@ -57,7 +57,7 @@ export default {
       }
 
       const pythonScript = path.join(__dirname, 'mobi.py');
-      const python = spawn('python', [
+      const python = spawn(process.platform === 'win32' ? 'python' : 'python3', [
         pythonScript,
         '-u', USERNAME,
         '-p', PASSWORD
