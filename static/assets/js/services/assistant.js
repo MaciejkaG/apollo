@@ -115,7 +115,8 @@ class ApolloUI {
     }
 
     startListening() {
-        document.querySelectorAll('.prompt-intro')[1].textContent = 'Słucham...';
+        $('.apolloOverlay').addClass('active');
+        $('.listeningProcessingScreen .prompt-intro, .apolloOverlay .prompt-intro').text('Słucham...');
         this.switchScreen('listeningProcessing');
 
         // Start listening animation
@@ -131,8 +132,7 @@ class ApolloUI {
     }
 
     updateTranscript(text) {
-        const transcript = document.getElementById('transcript');
-        transcript.textContent = text;
+        $('.transcript').text(text);
     }
 
     async handleFinishedSpeech(finalTranscript) {
@@ -167,15 +167,15 @@ class ApolloUI {
                 }
             })
             .add({
-                targets: '.prompt-intro',
+                targets: ['.listeningProcessingScreen .prompt-intro', '.apolloOverlay .prompt-intro'],
                 opacity: [1, 0],
                 translateY: [0, -10],
                 easing: 'easeOutQuad',
                 duration: 300,
                 complete: () => {
-                    document.querySelectorAll('.prompt-intro')[1].textContent = 'Przetwarzam...';
+                    $('.listeningProcessingScreen .prompt-intro, .apolloOverlay .prompt-intro').text('Przetwarzam...');
                     anime({
-                        targets: '.prompt-intro',
+                        targets: ['.listeningProcessingScreen .prompt-intro', '.apolloOverlay .prompt-intro'],
                         opacity: [0, 1],
                         translateY: [10, 0],
                         easing: 'easeOutQuad',
@@ -216,6 +216,7 @@ class ApolloUI {
                 if (currentResponse.length === 0) { // If this is the first chunk
                     // Switch to chat screen before starting the message.
                     this.switchScreen('chat');
+                    $('.apolloOverlay').removeClass('active');
                 }
 
                 if (chunk.content) {
