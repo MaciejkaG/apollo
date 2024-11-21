@@ -1,0 +1,128 @@
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background-color: var(--theme-bg-2);
+    border-radius: 12px;
+    min-height: 3.5rem;
+}
+
+.setting-text {
+    flex: 1;
+}
+
+.setting-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.setting-description {
+    font-size: 0.9rem;
+    color: var(--theme-fg-2);
+    margin: 0;
+}
+
+/* Button Styles */
+.button {
+    background-color: var(--active-bg-1);
+    border: none;
+    border-radius: 8px;
+    color: var(--active-fg-1);
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--theme-bg-3);
+    transition: 0.2s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: var(--theme-fg-1);
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+    background-color: var(--active-bg-1);
+}
+
+input:checked+.toggle-slider:before {
+    transform: translateX(26px);
+    background-color: var(--active-fg-1);
+}
+
+/* Select Menu */
+.select-wrapper {
+    position: relative;
+    min-width: 200px;
+}
+
+.select {
+    appearance: none;
+    background-color: var(--theme-alt-1);
+    border: none;
+    border-radius: 8px;
+    color: var(--theme-fg-1);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.8rem 2.5rem 0.8rem 1rem;
+    width: 100%;
+}
+
+.select-wrapper::after {
+    content: "▼";
+    font-size: 0.8rem;
+    color: var(--theme-fg-1);
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.select option {
+    background-color: var(--theme-bg-2);
+}
+
+.select:focus {
+    outline: 0;
+    box-shadow: none;
+}

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/widgets.css">
     <link rel="stylesheet" href="./assets/css/apps.css">
-    <link rel="stylesheet" href="./assets/css/chats.css">
+    <link rel="stylesheet" href="./assets/css/apolloui.css">
 </head>
 <body>
     <div id="welcome">
@@ -97,13 +97,44 @@
             </div>
             <div class="content">
                 <div class="category" id="uiSettings">
-                    <p>Tutaj będą ustawienia UI.</p>
+                    <div class="setting-row">
+                        <div class="setting-text">
+                            <h3 class="setting-title">Tryb ciemny</h3>
+                            <p class="setting-description">Oszczędź oczu używając wygodniejszej alternatywy do domyślnego motywu.</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                 </div>
                 <div class="category" id="speechSettings">
-                    <p>Możesz zmienić głos stosowany przez Apollo</p>
-                    <select name="" id="">
-                        
-                    </select>
+                    <div class="setting-row">
+                        <div class="setting-text">
+                            <h3 class="setting-title">Włącz mowę</h3>
+                            <p class="setting-description">Sprawia, że Apollo będzie wypowiadać swoje odpowiedzi na głos przy użyciu głosu AI.</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-text">
+                            <h3 class="setting-title">Głos Apollo</h3>
+                            <p class="setting-description">Możesz zmienić jakiego głosu będzie używać asystent.</p>
+                        </div>
+                        <div class="select-wrapper">
+                            <select class="select">
+                                <option>Alloy</option>
+                                <option>Echo</option>
+                                <option>Fable</option>
+                                <option>Onyx</option>
+                                <option>Nova</option>
+                                <option>Shimmer</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="category" id="wifiSettings">
                     <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
