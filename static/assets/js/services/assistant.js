@@ -115,6 +115,7 @@ class ApolloUI {
     }
 
     startListening() {
+        $('.transcript').html('');
         $('.apolloOverlay').addClass('active');
         $('.listeningProcessingScreen .prompt-intro, .apolloOverlay .prompt-intro').text('Słucham...');
         this.switchScreen('listeningProcessing');
