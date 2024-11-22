@@ -393,7 +393,7 @@ export function setup(mainWindow) {
     });
 
     ipcMain.handle('speech-synthesize', async (event, text) => {
-        const voice = store.get('speech.voice', 'alloy');
+        const voice = store.get('settings.speech.voice', 'alloy');
         synthesize(text, voice);
     });
 
