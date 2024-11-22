@@ -96,6 +96,7 @@ input:checked+.toggle-slider:before {
 }
 
 .select {
+    font-family: "Figtree", sans-serif;
     appearance: none;
     background-color: var(--theme-alt-1);
     border: none;
