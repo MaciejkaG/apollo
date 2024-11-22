@@ -12,7 +12,7 @@ import {
     BuiltinKeyword,
 } from "@picovoice/porcupine-node";
 import Record from './wakeword.js';
-import { transcribeStream, synthesize } from './speech.js';
+import { transcribeStream, synthesise } from './speech.js';
 import settings from './settings/settings.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -392,9 +392,9 @@ export function setup(mainWindow) {
         );
     });
 
-    ipcMain.handle('speech-synthesize', async (event, text) => {
+    ipcMain.handle('speech-synthesise', async (event, text) => {
         const voice = store.get('settings.speech.voice', 'alloy');
-        synthesize(text, voice);
+        synthesise(text, voice);
     });
 
     ipcMain.handle('setting-set', async (event, key, value) => 

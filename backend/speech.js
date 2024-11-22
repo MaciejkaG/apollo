@@ -90,7 +90,7 @@ export function transcribeStream(onTranscript, onFinalResult) {
     }, 300);
 }
 
-export async function synthesize(text, voiceName = 'alloy') {
+export async function synthesise(text, voiceName = 'alloy') {
     // Kill any currently playing audio
     if (currentPlayer) {
         currentPlayer.kill();
@@ -153,4 +153,4 @@ export async function synthesize(text, voiceName = 'alloy') {
 //     console.log(`\n${new Date()} Speech end. Final result: ${transcript}`)
 // });
 
-// synthesize('This is a test of the TTS service.', 'nova');
+// synthesise('This is a test of the TTS service.', 'nova');

@@ -241,8 +241,9 @@ class ApolloUI {
             // Clear the previous transcript
             this.updateTranscript('');
 
-            // Synthesize the full response
-            window.backend.speech.synthesize(currentResponse);
+            // Synthesise the full response
+            if (await window.backend.settings.get('speech.enabled'))
+                window.backend.speech.synthesise(currentResponse);
         } catch (error) {
             console.error('Error getting response:', error);
             document.getElementById('typingIndicator').classList.add('hidden');

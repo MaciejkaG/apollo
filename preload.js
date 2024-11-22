@@ -120,8 +120,8 @@ const SpotifyService = {
 const SpeechService = {
     transcribeStream: () => 
         ipcRenderer.invoke('speech-transcribe-stream'),
-    synthesize: (text) =>
-        ipcRenderer.invoke('speech-synthesize', text),
+    synthesise: (text) =>
+        ipcRenderer.invoke('speech-synthesise', text),
 };
 
 const settings = {

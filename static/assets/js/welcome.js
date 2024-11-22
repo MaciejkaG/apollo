@@ -13,7 +13,6 @@ window.addEventListener('load', async () => {
 async function refreshDarkMode() {
     // Activate dark theme if it's enabled in the config.
     const darkModeActive = await window.backend.settings.get('ui.darkMode');
-    console.log(darkModeActive)
 
     if (darkModeActive) {
         $(document.documentElement).addClass('dark-mode');
