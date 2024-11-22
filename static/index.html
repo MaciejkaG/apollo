@@ -31,266 +31,314 @@
         <span class="shortdate"></span>
     </div>
 
-    <div class="apps" id="apps">
-        <div class="apolloOverlay">
-            <span class="prompt-intro">Słucham...</span>
-            <p class="transcript"></p>
-            <div class="listening-processing-indicator">
-                <div class="circle"></div>
-                <div class="circle"></div>
-                <div class="circle"></div>
-            </div>
-        </div>
-        <span class="material-symbols-outlined" id="closeAppButton">close</span>
-        <div class="app" id="timeApp">
-            <h1 class="fulltime"></h1>
-            <h3 class="fulldate"></h3>
-        </div>
-        <div class="app" id="weatherApp">
-            <div class="flex">
-                <div class="child">
-                    <h2>Poznań</h2>
-                    <h1 class="currentTemperature"></h1>
-                    <h3 class="currentState"></h3>
-                    <div class="forecast">
-                        <div>
-                            <span>Pt.</span>
-                            <span class="material-symbols-outlined fill">cloudy</span>
-                            <span>3°- 8°</span>
-                        </div>
-                        <div>
-                            <span>Sob.</span>
-                            <span class="material-symbols-outlined fill">cloudy_snowing</span>
-                            <span>3° - 8°</span>
-                        </div>
-                        <div>
-                            <span>Niedz.</span>
-                            <span class="material-symbols-outlined fill">clear_day</span>
-                            <span>3°- 8°</span>
-                        </div>
-                        <div>
-                            <span>Pon.</span>
-                            <span class="material-symbols-outlined fill">rainy</span>
-                            <span>3°- 8°</span>
-                        </div>
-                        <div>
-                            <span>Wt.</span>
-                            <span class="material-symbols-outlined fill">clear_day</span>
-                            <span>3°- 8°</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="child">
-                    <h3><span class="material-symbols-outlined fill">auto_awesome</span> Podsumowanie Apollo</h3>
-                    <p id="weatherSummary"></p>
-                </div>
-            </div>
-        </div>
-        <div class="app" id="settings">
-            <div class="categories">
-                <span class="category" data-category-id="uiSettings"><span class="material-symbols-outlined fill">brush</span>Wygląd</span>
-                <span class="category" data-category-id="speechSettings"><span class="material-symbols-outlined fill">mic</span>Mowa</span>
-                <span class="category" data-category-id="wifiSettings"><span class="material-symbols-outlined fill">wifi</span>Wi-Fi</span>
-                <span class="category" data-category-id="spotifySettings"><span class="material-symbols-outlined fill">music_note</span>Spotify</span>
-            </div>
-            <div class="content">
-                <div class="category" id="uiSettings">
-                    <div class="setting-row">
-                        <div class="setting-text">
-                            <h3 class="setting-title">Tryb ciemny</h3>
-                            <p class="setting-description">Oszczędź oczu używając wygodniejszej alternatywy do domyślnego motywu.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" onclick="setting(this);refreshDarkMode()" id="darkModeSetting" class="setting" data-setting-key="ui.darkMode">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="category" id="speechSettings">
-                    <div class="setting-row">
-                        <div class="setting-text">
-                            <h3 class="setting-title">Włącz mowę</h3>
-                            <p class="setting-description">Sprawia, że Apollo będzie wypowiadać swoje odpowiedzi na głos przy użyciu głosu AI.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" onclick="setting(this)" class="setting" data-setting-key="speech.enabled">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-row">
-                        <div class="setting-text">
-                            <h3 class="setting-title">Głos Apollo</h3>
-                            <p class="setting-description">Możesz zmienić jakiego głosu będzie używać asystent.</p>
-                        </div>
-                        <div class="select-wrapper">
-                            <select class="select setting" onchange="setting(this)" data-setting-key="speech.voice">
-                                <option value="alloy">Alloy</option>
-                                <option value="echo">Echo</option>
-                                <option value="fable">Fable</option>
-                                <option value="onyx">Onyx</option>
-                                <option value="nova">Nova</option>
-                                <option value="shimmer">Shimmer</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="category" id="wifiSettings">
-                    <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
-                </div>
-                <div class="category" id="spotifySettings">
-                    <div class="spotifyLoginAlert active">
-                        <div class="qrBlur" id="spotifyQrBlur">
-                            <span>Kontynuuj logowanie na telefonie</span>
-                            <button onclick="$(this).parent().removeClass('active')">Pokaż kod QR</button>
-                        </div>
-                        <p>Aby korzystać z integracji Spotify, musisz podłączyć swoje konto Spotify. W tym celu zeskanuj poniższy kod QR telefonem.</p>
-                        <img src="" id="spotifyLoginQRCode">
-                    </div>
-                    <div class="spotifyDeviceAlert active">
-                        <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
-                    </div>
-
-                    <p>Jeśli to widzisz to znaczy, że pomyślnie udało ci się połączyć konto Spotify!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" id="uiContainer">
-        <div class="col">
-            <div class="widget sm" id="time" onclick="openApp('timeApp', this)">
-                <span class="hour shorttime"></span>
-                <span class="date shortdate"></span>
-            </div>
-            <div class="widget control">
-                <button onclick="toggleDarkMode(this)" id="darkModeButton"">
-                    <span class="material-symbols-outlined">
-                        dark_mode
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')" oncontextmenu="openApp('settings', $(this).parent().get(0));animateContentChange('wifiSettings')">
-                    <span class="material-symbols-outlined">
-                        wifi
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        bluetooth
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        files
-                    </span>
-                </button>
-                <button onclick="$(this).toggleClass('active')">
-                    <span class="material-symbols-outlined">
-                        settings
-                    </span>
-                </button>
-                <button onclick="openApp('settings', $(this).parent().get(0))">
-                    <span class="material-symbols-outlined">
-                        settings
-                    </span>
-                </button>
-            </div>
-            <div class="widget lg" id="weather" onclick="openApp('weatherApp', this)">
-                <h2>Poznań</h2>
-                <h1></h1>
-                <div class="forecast">
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span></span>
-                        <span class="material-symbols-outlined fill"></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="widget sm" id="spotify">
-                <div class="spotifyLoginAlert active" onclick="openApp('settings', $(this).parent().get(0));animateContentChange('spotifySettings')">
-                    <p>Kliknij aby aktywować integrację ze Spotify w ustawieniach.</p>
-                </div>
-                <div class="spotifyDeviceAlert active">
-                    <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
-                </div>
-  
-                <img src="https://placehold.co/512x512" alt="">
-                <div class="meta">
-                    <span class="title"><span class="text"></span></span>
-                    <span class="author"><span class="text"></span></spanb>
-                </div>
-                <div class="controls">
-                    <button><span class="material-symbols-outlined fill">skip_previous</span></button>
-                    <button><span class="material-symbols-outlined fill">play_arrow</span></button>
-                    <button><span class="material-symbols-outlined fill">skip_next</span></button>
-                </div>
-            </div>
-        </div>
-        <div class="col" id="apolloScreen">
-            <!-- Idle Screen -->
-            <div class="screen idleScreen active">
-                <span class="prompt-intro">Powiedz</span>
-                <span id="examplePrompt" class="example-prompt"></span>
-            </div>
-        
-            <!-- Combined Listening and Processing Screen -->
-            <div class="screen listeningProcessingScreen">
+    <div class="bodyWrapper">
+        <div class="apps" id="apps">
+            <div class="apolloOverlay">
                 <span class="prompt-intro">Słucham...</span>
-                <p id="transcript" class="transcript"></p>
+                <p class="transcript"></p>
                 <div class="listening-processing-indicator">
                     <div class="circle"></div>
                     <div class="circle"></div>
                     <div class="circle"></div>
                 </div>
             </div>
-        
-            <!-- Chat Screen -->
-            <div class="screen chatScreen">
-                <div id="chatContainer" class="chat-container">
-                    <div id="messagesContainer" class="messages-container">
-                        <!-- Messages will be inserted here -->
+            <span class="material-symbols-outlined" id="closeAppButton">close</span>
+            <div class="app" id="timeApp">
+                <h1 class="fulltime"></h1>
+                <h3 class="fulldate"></h3>
+            </div>
+            <div class="app" id="weatherApp">
+                <div class="flex">
+                    <div class="child">
+                        <h2>Poznań</h2>
+                        <h1 class="currentTemperature"></h1>
+                        <h3 class="currentState"></h3>
+                        <div class="forecast">
+                            <div>
+                                <span>Pt.</span>
+                                <span class="material-symbols-outlined fill">cloudy</span>
+                                <span>3°- 8°</span>
+                            </div>
+                            <div>
+                                <span>Sob.</span>
+                                <span class="material-symbols-outlined fill">cloudy_snowing</span>
+                                <span>3° - 8°</span>
+                            </div>
+                            <div>
+                                <span>Niedz.</span>
+                                <span class="material-symbols-outlined fill">clear_day</span>
+                                <span>3°- 8°</span>
+                            </div>
+                            <div>
+                                <span>Pon.</span>
+                                <span class="material-symbols-outlined fill">rainy</span>
+                                <span>3°- 8°</span>
+                            </div>
+                            <div>
+                                <span>Wt.</span>
+                                <span class="material-symbols-outlined fill">clear_day</span>
+                                <span>3°- 8°</span>
+                            </div>
+                        </div>
                     </div>
-                    <div id="typingIndicator" class="typing-indicator hidden">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
+                    <div class="child">
+                        <h3><span class="material-symbols-outlined fill">auto_awesome</span> Podsumowanie Apollo</h3>
+                        <p id="weatherSummary"></p>
                     </div>
                 </div>
             </div>
+            <div class="app" id="settings">
+                <div class="categories">
+                    <span class="category" data-category-id="uiSettings"><span
+                            class="material-symbols-outlined fill">brush</span>Wygląd</span>
+                    <span class="category" data-category-id="speechSettings"><span
+                            class="material-symbols-outlined fill">mic</span>Mowa</span>
+                    <span class="category" data-category-id="wifiSettings"><span
+                            class="material-symbols-outlined fill">wifi</span>Wi-Fi</span>
+                    <span class="category" data-category-id="spotifySettings"><span
+                            class="material-symbols-outlined fill">music_note</span>Spotify</span>
+                </div>
+                <div class="content">
+                    <div class="category" id="uiSettings">
+                        <div class="setting-row">
+                            <div class="setting-text">
+                                <h3 class="setting-title">Tryb ciemny</h3>
+                                <p class="setting-description">Oszczędź oczu używając wygodniejszej alternatywy do domyślnego
+                                    motywu.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onclick="setting(this);refreshDarkMode()" id="darkModeSetting"
+                                    class="setting" data-setting-key="ui.darkMode">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="category" id="speechSettings">
+                        <div class="setting-row">
+                            <div class="setting-text">
+                                <h3 class="setting-title">Włącz mowę</h3>
+                                <p class="setting-description">Sprawia, że Apollo będzie wypowiadać swoje odpowiedzi na głos
+                                    przy użyciu głosu AI.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onclick="setting(this)" class="setting"
+                                    data-setting-key="speech.enabled">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-text">
+                                <h3 class="setting-title">Głos Apollo</h3>
+                                <p class="setting-description">Możesz zmienić jakiego głosu będzie używać asystent.</p>
+                            </div>
+                            <div class="select-wrapper">
+                                <select class="select setting" onchange="setting(this)" data-setting-key="speech.voice">
+                                    <option value="alloy">Alloy</option>
+                                    <option value="echo">Echo</option>
+                                    <option value="fable">Fable</option>
+                                    <option value="onyx">Onyx</option>
+                                    <option value="nova">Nova</option>
+                                    <option value="shimmer">Shimmer</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category" id="wifiSettings">
+                        <p>Musisz włączyć Wi-Fi aby uzyskać dostęp do większości usług Apollo.</p>
+                    </div>
+                    <div class="category" id="spotifySettings">
+                        <div class="spotifyLoginAlert active">
+                            <div class="qrBlur" id="spotifyQrBlur">
+                                <span>Kontynuuj logowanie na telefonie</span>
+                                <button onclick="$(this).parent().removeClass('active')">Pokaż kod QR</button>
+                            </div>
+                            <p>Aby korzystać z integracji Spotify, musisz podłączyć swoje konto Spotify. W tym celu zeskanuj
+                                poniższy kod QR telefonem.</p>
+                            <img src="" id="spotifyLoginQRCode">
+                        </div>
+                        <div class="spotifyDeviceAlert active">
+                            <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
+                        </div>
+        
+                        <p>Jeśli to widzisz to znaczy, że pomyślnie udało ci się połączyć konto Spotify!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container" id="uiContainer">
+            <div class="col">
+                <div class="widget sm" id="time" onclick="openApp('timeApp', this)">
+                    <span class="hour shorttime"></span>
+                    <span class="date shortdate"></span>
+                </div>
+                <div class="widget control">
+                    <button onclick="toggleDarkMode(this)" id="darkModeButton"">
+                            <span class=" material-symbols-outlined">
+                        dark_mode
+                        </span>
+                    </button>
+                    <button onclick="$(this).toggleClass('active')"
+                        oncontextmenu="openApp('settings', $(this).parent().get(0));animateContentChange('wifiSettings')">
+                        <span class="material-symbols-outlined">
+                            wifi
+                        </span>
+                    </button>
+                    <button onclick="$(this).toggleClass('active')">
+                        <span class="material-symbols-outlined">
+                            bluetooth
+                        </span>
+                    </button>
+                    <button onclick="$(this).toggleClass('active')">
+                        <span class="material-symbols-outlined">
+                            files
+                        </span>
+                    </button>
+                    <button onclick="$(this).toggleClass('active')">
+                        <span class="material-symbols-outlined">
+                            settings
+                        </span>
+                    </button>
+                    <button onclick="openApp('settings', $(this).parent().get(0))">
+                        <span class="material-symbols-outlined">
+                            settings
+                        </span>
+                    </button>
+                </div>
+                <div class="widget lg" id="weather" onclick="openApp('weatherApp', this)">
+                    <h2>Poznań</h2>
+                    <h1></h1>
+                    <div class="forecast">
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span></span>
+                            <span class="material-symbols-outlined fill"></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget sm" id="spotify">
+                    <div class="spotifyLoginAlert active"
+                        onclick="openApp('settings', $(this).parent().get(0));animateContentChange('spotifySettings')">
+                        <p>Kliknij aby aktywować integrację ze Spotify w ustawieniach.</p>
+                    </div>
+                    <div class="spotifyDeviceAlert active">
+                        <p>Aby sterować odtwarzaniem Spotify, musisz uruchomić odtwarzanie na jakimś urządzeniu.</p>
+                    </div>
+        
+                    <img src="https://placehold.co/512x512" alt="">
+                    <div class="meta">
+                        <span class="title"><span class="text"></span></span>
+                        <span class="author"><span class="text"></span></spanb>
+                    </div>
+                    <div class="controls">
+                        <button><span class="material-symbols-outlined fill">skip_previous</span></button>
+                        <button><span class="material-symbols-outlined fill">play_arrow</span></button>
+                        <button><span class="material-symbols-outlined fill">skip_next</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col" id="apolloScreen">
+                <!-- Idle Screen -->
+                <div class="screen idleScreen active">
+                    <span class="prompt-intro">Powiedz</span>
+                    <span id="examplePrompt" class="example-prompt"></span>
+                </div>
+        
+                <!-- Combined Listening and Processing Screen -->
+                <div class="screen listeningProcessingScreen">
+                    <span class="prompt-intro">Słucham...</span>
+                    <p id="transcript" class="transcript"></p>
+                    <div class="listening-processing-indicator">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </div>
+        
+                <!-- Chat Screen -->
+                <div class="screen chatScreen">
+                    <div id="chatContainer" class="chat-container">
+                        <div id="messagesContainer" class="messages-container">
+                            <!-- Messages will be inserted here -->
+                        </div>
+                        <div id="typingIndicator" class="typing-indicator hidden">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="keyboard">
+        <div class="row">
+            <span class="key">Q</span>
+            <span class="key">W</span>
+            <span class="key">E</span>
+            <span class="key">R</span>
+            <span class="key">T</span>
+            <span class="key">Y</span>
+            <span class="key">U</span>
+            <span class="key">I</span>
+            <span class="key">O</span>
+            <span class="key">P</span>
+        </div>
+        <div class="row">
+            <span class="key">A</span>
+            <span class="key">S</span>
+            <span class="key">D</span>
+            <span class="key">F</span>
+            <span class="key">G</span>
+            <span class="key">H</span>
+            <span class="key">J</span>
+            <span class="key">K</span>
+            <span class="key">L</span>
+        </div>
+        <div class="row">
+            <span class="key">Z</span>
+            <span class="key">X</span>
+            <span class="key">C</span>
+            <span class="key">V</span>
+            <span class="key">B</span>
+            <span class="key">N</span>
+            <span class="key">M</span>
         </div>
     </div>
 
