@@ -124,6 +124,13 @@ const SpeechService = {
         ipcRenderer.invoke('speech-synthesize', text),
 };
 
+const settings = {
+    set: (key, value) =>
+        ipcRenderer.invoke('setting-set', key, value),
+    get: (key) =>
+        ipcRenderer.invoke('setting-get', key),
+}
+
 const misc = {
     setDarkTheme: (darkTheme) => 
         ipcRenderer.invoke('misc-set-dark-theme', darkTheme),
@@ -136,5 +143,5 @@ contextBridge.exposeInMainWorld('backend', {
     weather: WeatherService,
     spotify: SpotifyService,
     speech: SpeechService,
-    misc,
+    settings,
 });

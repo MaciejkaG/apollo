@@ -82,15 +82,13 @@
                 </div>
                 <div class="child">
                     <h3><span class="material-symbols-outlined fill">auto_awesome</span> Podsumowanie Apollo</h3>
-                    <p id="weatherSummary">Obecnie w Poznaniu panuje mgła, a temperatura wynosi około cztery stopnie Celsjusza. Na najbliższe dni prognozowane są
-                    głównie pochmurne niebo i niskie temperatury, z maksymalnie siedmioma stopniami w ciągu dnia. W nocy spodziewane są
-                    przymrozki, a odczuwalna temperatura może spadać poniżej zera. Warto przygotować się na chłodne warunki.</p>
+                    <p id="weatherSummary"></p>
                 </div>
             </div>
         </div>
         <div class="app" id="settings">
             <div class="categories">
-                <span class="category" data-category-id="uiSettings"><span class="material-symbols-outlined fill">brush</span>Interfejs</span>
+                <span class="category" data-category-id="uiSettings"><span class="material-symbols-outlined fill">brush</span>Wygląd</span>
                 <span class="category" data-category-id="speechSettings"><span class="material-symbols-outlined fill">mic</span>Mowa</span>
                 <span class="category" data-category-id="wifiSettings"><span class="material-symbols-outlined fill">wifi</span>Wi-Fi</span>
                 <span class="category" data-category-id="spotifySettings"><span class="material-symbols-outlined fill">music_note</span>Spotify</span>
@@ -103,7 +101,7 @@
                             <p class="setting-description">Oszczędź oczu używając wygodniejszej alternatywy do domyślnego motywu.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" onclick="setting(this);refreshDarkMode()" id="darkModeSetting" class="setting" data-setting-key="ui.darkMode">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -115,7 +113,7 @@
                             <p class="setting-description">Sprawia, że Apollo będzie wypowiadać swoje odpowiedzi na głos przy użyciu głosu AI.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" onclick="setting(this)" class="setting" data-setting-key="speech.enabled">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -125,13 +123,13 @@
                             <p class="setting-description">Możesz zmienić jakiego głosu będzie używać asystent.</p>
                         </div>
                         <div class="select-wrapper">
-                            <select class="select">
-                                <option>Alloy</option>
-                                <option>Echo</option>
-                                <option>Fable</option>
-                                <option>Onyx</option>
-                                <option>Nova</option>
-                                <option>Shimmer</option>
+                            <select class="select setting" onchange="setting(this)" data-setting-key="speech.voice">
+                                <option value="alloy">Alloy</option>
+                                <option value="echo">Echo</option>
+                                <option value="fable">Fable</option>
+                                <option value="onyx">Onyx</option>
+                                <option value="nova">Nova</option>
+                                <option value="shimmer">Shimmer</option>
                             </select>
                         </div>
                     </div>

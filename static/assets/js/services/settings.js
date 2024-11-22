@@ -41,4 +41,24 @@ $('#settings .categories .category').on('click', function (e) {
 
 $(window).on('load', function() {
     $('#settings .categories .category:first-child').click();
+
+    $('#settings .setting').each(async function (i, el) {
+        if (el.tagName === 'INPUT' && $(el).attr('type') === 'checkbox') {
+            // Is a checkbox
+            el.checked = await window.backend.settings.get($(el).data('setting-key'));
+        } else if (el.tagName = 'select') {
+            // Is a select menu
+            el.value = await window.backend.settings.get($(el).data('setting-key'));
+        }
+    });
 });
+
+function setting(el) {
+    if (el.tagName === 'INPUT' && $(el).attr('type') === 'checkbox') {
+        // Is a checkbox
+        window.backend.settings.set($(el).data('setting-key'), el.checked);
+    } else if (el.tagName = 'select') {
+        // Is a select menu
+        window.backend.settings.set($(el).data('setting-key'), el.value);
+    }
+}
