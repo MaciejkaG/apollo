@@ -59,6 +59,8 @@ body {
     font-optical-sizing: auto;
     user-select: none;
     transition: background-color 0.3s;
+
+    overflow: hidden;
 }
 
 span.material-symbols-outlined {
