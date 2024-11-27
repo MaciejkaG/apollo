@@ -89,13 +89,14 @@ span.material-symbols-outlined {
 
 .keyboard {
     position: absolute;
-    height: 14rem;
+    height: 15rem;
     width: 100%;
     left: 0;
     bottom: 0;
     background-color: var(--theme-transparent);
     backdrop-filter: blur(10px);
     padding: .8rem 0;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
@@ -115,7 +116,7 @@ span.material-symbols-outlined {
     gap: .5rem;
 }
 
-.keyboard .row span {
+.keyboard .key {
     background-color: var(--theme-bg-2);
     color: var(--theme-fg-2);
     height: 3rem;
@@ -128,6 +129,23 @@ span.material-symbols-outlined {
     align-items: center;
 
     font-size: 1.6rem;
+}
+
+.keyboard .placeholder {
+    height: 3rem;
+    width: 3.5rem;
+}
+
+.keyboard .l {
+    width: 5rem;
+}
+
+.keyboard .xl {
+    width: 8rem;
+}
+
+.keyboard .xxl {
+    width: 20rem;
 }
 
 #welcome, #screensaver {
