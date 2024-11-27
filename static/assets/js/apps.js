@@ -65,8 +65,8 @@ function closeApp() {
         targets: '.apps',
         scale: [1, 0.6],
         opacity: [1, 0],
-        easing: 'easeOutCubic',
-        duration: 300,
+        easing: 'easeOutQuad',
+        duration: 350,
         complete: () => {
             $('.apps .app').removeClass('active');
             $('.apps').attr('style', '');

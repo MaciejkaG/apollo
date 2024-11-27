@@ -16,5 +16,9 @@ $('.keyboard .key').on('mousedown', e => {
     focusedElement.value += e.target.textContent;
     // This doesn't work (and I don't know why).
     const valueLength = focusedElement.value.length;
+    // Move the cursor to the end of the inserted text
     focusedElement.setSelectionRange(valueLength, valueLength);
+
+    // Force the input field to scroll to the cursor position
+    focusedElement.scrollLeft = focusedElement.scrollWidth;
 });
