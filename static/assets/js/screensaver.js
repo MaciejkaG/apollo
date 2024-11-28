@@ -66,6 +66,8 @@ function resetIdleTimer() {
 
 // Function to start fading (blur, scale down, fade out) effect
 function startFade() {
+    closeKeyboard();
+
     screensaverActive = true;
     anime({
         targets: [container, appsContainer],

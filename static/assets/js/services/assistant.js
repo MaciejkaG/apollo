@@ -35,6 +35,7 @@ class ApolloUI {
             const { event } = e.detail;
             if (event === 'wake' && !this.isStreamingResponse) {
                 resetIdleTimer();
+                closeKeyboard();
                 this.startListening();
             }
         });

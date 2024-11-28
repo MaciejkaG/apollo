@@ -519,6 +519,7 @@ span.material-symbols-outlined {
     transform: translateX(-50%) translateY(50%);
     padding-bottom: 3rem;
     box-sizing: border-box;
+    z-index: 100;
 
     display: flex;
     flex-direction: column;
