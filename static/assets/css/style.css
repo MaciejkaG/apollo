@@ -207,6 +207,11 @@ span.material-symbols-outlined {
     font-weight: 400;
 }
 
+#uiContainer.shaded {
+    transform: scale(0.8);
+    filter: blur(10px);
+}
+
 .container {
     position: absolute;
     top: 0;
@@ -217,6 +222,9 @@ span.material-symbols-outlined {
     display: flex;
     box-sizing: border-box;
     gap: 0.5rem;
+
+    transition: filter 0.5s, transform 0.5s;
+    will-change: filter, transform;
 }
 
 .container .col {
@@ -302,6 +310,16 @@ span.material-symbols-outlined {
     overflow: hidden;
 }
 
+@keyframes slideIn {
+    from { transform: translateY(3rem) }
+    to { transform: translateY(0) }
+}
+
+@keyframes slideOut {
+    from { transform: translateY(0) }
+    to { transform: translateY(-3rem) }
+}
+
 .screen {
     position: absolute;
     width: 100%;
@@ -314,6 +332,7 @@ span.material-symbols-outlined {
     align-items: center;
     opacity: 0;
     visibility: hidden;
+    animation: slideOut 0.3s 1 ease-out;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     padding: 1rem;
     box-sizing: border-box;
@@ -321,6 +340,7 @@ span.material-symbols-outlined {
 
 .screen.active {
     opacity: 1;
+    animation: slideIn 0.3s 1 ease-out;
     visibility: visible;
 }
 
@@ -443,7 +463,9 @@ span.material-symbols-outlined {
     border-radius: 0.75rem;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.2s cubic-bezier(0.5, 1, 0.89, 1);
+    transition: all 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+
+    will-change:  width, height, top, left, opacity;
 
     z-index: 400;
 }

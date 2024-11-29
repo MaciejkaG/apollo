@@ -19,29 +19,29 @@ function openApp(appId, widget) {
 
     document.body.appendChild(expandDiv);
 
+    $('#uiContainer').addClass('shaded');
+
     // Fade in and expand to full screen after a slight delay
     setTimeout(() => {
         expandDiv.classList.add('show');
+        expandDiv.classList.add('fullscreen');
+        expandDiv.style.width = null;
+        expandDiv.style.height = null;
+        expandDiv.style.top = null;
+        expandDiv.style.left = null;
         setTimeout(() => {
-            expandDiv.classList.add('fullscreen');
-            expandDiv.style.width = null;
-            expandDiv.style.height = null;
-            expandDiv.style.top = null;
-            expandDiv.style.left = null;
+            // Swap the temporary expanding div for the actual apps div.
+            $('.apps').show();
+            expandDiv.classList.remove('show');
+
+            // Set active app
+            setActiveApp(appId);
+
             setTimeout(() => {
-                // Swap the temporary expanding div for the actual apps div.
-                $('.apps').show();
-                expandDiv.classList.remove('show');
-
-                // Set active app
-                setActiveApp(appId);
-
-                setTimeout(() => {
-                    expandDiv.remove();
-                    openAnimationRunning = false;
-                }, 200);
-            }, 200);
-        }, 100); // delay for fade-in
+                expandDiv.remove();
+                openAnimationRunning = false;
+            }, 300);
+        }, 300);
     }, 10); // optional delay to trigger the transition
 }
 
@@ -61,6 +61,8 @@ function closeApp() {
     if (openAnimationRunning) return;
 
     openAnimationRunning = true;
+
+    $('#uiContainer').removeClass('shaded');
     anime({
         targets: '.apps',
         scale: [1, 0.6],

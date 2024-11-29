@@ -41,6 +41,7 @@ function resetIdleTimer() {
     anime.remove(container); // Cancel any ongoing animation
     anime.remove(appsContainer); // Cancel any ongoing animation
     resettingContainer = true;
+    container.style.transition = 'none';
     anime({
         targets: [container, appsContainer],
         scale: 1,
@@ -69,6 +70,7 @@ function startFade() {
     closeKeyboard();
 
     screensaverActive = true;
+    container.style.transition = 'none';
     anime({
         targets: [container, appsContainer],
         scale: MIN_SCALE,
@@ -82,6 +84,7 @@ function startFade() {
 // Function to activate the screensaver
 function activateScreensaver() {
     screensaverActive = true;
+    container.style.transition = '';
     screensaver.classList.add('active');
     window.apollo.resetConversation();
 }

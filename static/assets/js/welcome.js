@@ -1,13 +1,16 @@
 const loader = document.getElementById('welcome');
 const welcomeText = document.getElementById('welcomeText');
 
+welcomeText.style = 'display: none';
 window.addEventListener('load', async () => {
     refreshDarkMode();
 
+    welcomeText.style = '';
+    animaText(welcomeText);
     // Startup animation
     setTimeout(() => {
         loader.classList.add('hidden');
-    }, 500);
+    }, 800);
 });
 
 async function refreshDarkMode() {
