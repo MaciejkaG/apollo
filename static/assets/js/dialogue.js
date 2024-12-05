@@ -14,28 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
             destroyAllDialogues();
     });
 
-    const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
-    dial.setDialogButtons([
-        {
-            type: 'alternative',
-            value: 'Anuluj'
-        },
-        {
-            type: 'default',
-            value: 'Połącz'
-        }
-    ])
     setTimeout(() => {
-        dial.inTransition(() => {
-            dial.setTitle('Testowy nowy title');
-            dial.setDescription('To jest nowy opis');
-        });
+        const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
+        dial.setDialogButtons([
+            {
+                type: 'alternative',
+                value: 'Anuluj',
+                onclick: () => {
+                    dial.destroy();
+                }
+            },
+            {
+                type: 'default',
+                value: 'Połącz',
+                onclick: () => {
+                    dial.useTransition(() => {
+                        dial.setTitle('Łączenie...');
+                        dial.setDescription('Prosimy czekać');
+                        dial.setDialogButtons([]);
+                    });
+                }
+            }
+        ]);
     }, 3000);
 });
 
 const dialogues = [];
 class Dialogue {
-    constructor(title, description) {
+    constructor(title = '', description = '') {
         // Create the main container
         this.dialogue = document.createElement('div');
         this.dialogue.classList.add('dialogue');
@@ -77,7 +83,7 @@ class Dialogue {
 
     // This method allows for modifying the dialogue content in a form of a transition.
     // The callback is ran after the dialogue disappears. It appears back after the callback finishes.
-    inTransition(callback) {
+    useTransition(callback) {
         anime({
             targets: this.dialogue,
             translateX: [0, -50],
@@ -98,16 +104,17 @@ class Dialogue {
     }
 
     // Sets the title of the dialogue menu
-    setTitle(value) {
+    setTitle(value = '') {
         this.title.innerText = value;
     }
 
     // Sets the description of the dialogue menu
-    setDescription(value) {
+    setDescription(value = '') {
         this.description.innerText = value;
     }
 
-    setDialogButtons(buttons) {
+    setDialogButtons(buttons = []) {
+        this.footer.innerHTML = '';
         buttons.forEach(button => {
             const btn = document.createElement('button');
             switch (button.type) {
@@ -123,6 +130,8 @@ class Dialogue {
                     break;
             }
 
+            btn.onclick = button.onclick;
+
             btn.innerText = button.value;
             this.footer.appendChild(btn);
         });
@@ -135,7 +144,7 @@ class Dialogue {
             translateY: [0, -50],
             opacity: [1, 0],
             easing: 'easeOutSine',
-            duration: 250,
+            duration: 200,
             complete: () => {
                 this.dialogue.remove();
                 if (dialogueContainer.children.length === 0) {
