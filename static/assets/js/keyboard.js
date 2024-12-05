@@ -1,10 +1,16 @@
-$('input').on('focus', e => {
-    if (isTextBox(e.target)) $('.bodyWrapper').addClass('keyboardActive');
-});
+function updateKeyboardTargets() {
+    $('input').off('focus blur');
 
-$('input').on('blur', e => {
-    if (isTextBox(e.target)) $('.bodyWrapper').removeClass('keyboardActive');
-});
+    $('input').on('focus', e => {
+        if (isTextBox(e.target)) $('.bodyWrapper').addClass('keyboardActive');
+    });
+
+    $('input').on('blur', e => {
+        if (isTextBox(e.target)) $('.bodyWrapper').removeClass('keyboardActive');
+    });
+}
+setInterval(updateKeyboardTargets, 500);
+updateKeyboardTargets();
 
 $('.keyboard').on('mousedown', e => {
     e.preventDefault();

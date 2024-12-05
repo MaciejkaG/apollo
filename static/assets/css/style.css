@@ -63,6 +63,10 @@ body {
     overflow: hidden;
 }
 
+input, button {
+    font-family: "Figtree", sans-serif;
+}
+
 span.material-symbols-outlined {
     font-size: 1.6rem
 }

@@ -5,17 +5,22 @@
 
 let dialogueContainer;
 document.addEventListener('DOMContentLoaded', () => {
-    dialogueContainer = document.createElement('div');
-    dialogueContainer.classList.add('dialogueContainer');
-    document.body.appendChild(dialogueContainer);
+    dialogueContainer = document.querySelector('div.dialogueContainer');
+    if (!dialogueContainer) {
+        dialogueContainer = document.createElement('div');
+        dialogueContainer.classList.add('dialogueContainer');
+        document.body.appendChild(dialogueContainer);
+    }
 
     dialogueContainer.addEventListener('click', (e) => {
         if (e.target === dialogueContainer)
             destroyAllDialogues();
     });
 
+    // Example below: Opens a dialogue menu 3 seconds after loading, adds an input inside it, modifies the dialog buttons and applies onclick events to both buttons where clicking the second button will animate changes in the modal, making it look like it transitions into another page.
     setTimeout(() => {
         const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
+        dial.setContentHTML(`<h3>ZSL_GOSC</h3><input type='text' placeholder='Hasło'><p>Sieć używa zabezpieczeń WPA2</p>`);
         dial.setDialogButtons([
             {
                 type: 'alternative',
@@ -29,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 value: 'Połącz',
                 onclick: () => {
                     dial.useTransition(() => {
+                        dial.setContentHTML('');
                         dial.setTitle('Łączenie...');
                         dial.setDescription('Prosimy czekać');
                         dial.setDialogButtons([]);
@@ -111,6 +117,10 @@ class Dialogue {
     // Sets the description of the dialogue menu
     setDescription(value = '') {
         this.description.innerText = value;
+    }
+
+    setContentHTML(value = '') {
+        this.content.innerHTML = value;
     }
 
     setDialogButtons(buttons = []) {
