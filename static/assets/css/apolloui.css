@@ -159,7 +159,7 @@ input:checked+.toggle-slider:before {
 .scan-list .el.active {
     background-color: var(--active-bg-1);
     color: var(--active-fg-1);
-    animation: ActiveAnim .6s 1 ease-in-out;
+    animation: ActiveAnim .6s .2s 1 ease-in-out;
 }
 
 .scan-list span {
