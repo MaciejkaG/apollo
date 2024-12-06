@@ -144,11 +144,31 @@ input:checked+.toggle-slider:before {
     background-color: var(--theme-bg-3);
     border-radius: .6rem;
     padding: .8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+@keyframes ActiveAnim {
+    0% { transform: scale(1) }
+    50% { transform: scale(1.05) }
+    100% { transform: scale(1) }
+}
+
+.scan-list .el.active {
+    background-color: var(--active-bg-1);
+    color: var(--active-fg-1);
+    animation: ActiveAnim .6s 1 ease-in-out;
 }
 
 .scan-list span {
     font-size: 1rem;
     font-weight: 500;
+}
+
+.scan-list .el span.material-symbols-outlined {
+    font-size: 1.5rem;
 }
 
 .scan-list .footer {
