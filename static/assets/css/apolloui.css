@@ -127,3 +127,32 @@ input:checked+.toggle-slider:before {
     outline: 0;
     box-shadow: none;
 }
+
+.setting-row:has(.scan-list) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.scan-list {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+.scan-list .el {
+    background-color: var(--theme-bg-3);
+    border-radius: .6rem;
+    padding: .8rem 1rem;
+}
+
+.scan-list span {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.scan-list .footer {
+    text-align: center;
+    margin: .4rem 0;
+    margin-bottom: 0;
+}

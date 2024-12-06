@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             destroyAllDialogues();
     });
 
-    // Example below: Opens a dialogue menu 3 seconds after loading, adds an input inside it, modifies the dialog buttons and applies onclick events to both buttons where clicking the second button will animate changes in the modal, making it look like it transitions into another page.
+    // Example below
     setTimeout(() => {
         const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
         dial.setContentHTML(`<h3>ZSL_GOSC</h3><input type='text' placeholder='Hasło'><p>Sieć używa zabezpieczeń WPA2</p>`);
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         ]);
-    }, 3000);
+    }, 1500);
 });
 
 const dialogues = [];

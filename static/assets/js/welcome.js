@@ -27,3 +27,10 @@ async function refreshDarkMode() {
         document.getElementById('darkModeSetting').checked = false;
     }
 }
+
+let ellipsisCount = 0;
+setInterval(() => {
+    ellipsisCount++;
+    if (ellipsisCount > 3) ellipsisCount = 0;
+    $('.animated-ellipsis').html('.'.repeat(ellipsisCount))
+}, 500);
