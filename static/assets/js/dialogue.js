@@ -18,31 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Example below
-    setTimeout(() => {
-        const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
-        dial.setContentHTML(`<h3>ZSL_GOSC</h3><input type='text' placeholder='Hasło'><p>Sieć używa zabezpieczeń WPA2</p>`);
-        dial.setDialogButtons([
-            {
-                type: 'alternative',
-                value: 'Anuluj',
-                onclick: () => {
-                    dial.destroy();
-                }
-            },
-            {
-                type: 'default',
-                value: 'Połącz',
-                onclick: () => {
-                    dial.useTransition(() => {
-                        dial.setContentHTML('');
-                        dial.setTitle('Łączenie...');
-                        dial.setDescription('Prosimy czekać');
-                        dial.setDialogButtons([]);
-                    });
-                }
-            }
-        ]);
-    }, 1500);
+    // setTimeout(() => {
+    //     const dial = new Dialogue("Wymagana autoryzacja", "Musisz podać hasło, aby Apollo mógł przyłączyć się do sieci Wi-Fi.");
+    //     dial.setContentHTML(`<h3>ZSL_GOSC</h3><input type='text' placeholder='Hasło'><p>Sieć używa zabezpieczeń WPA2</p>`);
+    //     dial.setDialogButtons([
+    //         {
+    //             type: 'alternative',
+    //             value: 'Anuluj',
+    //             onclick: () => {
+    //                 dial.destroy();
+    //             }
+    //         },
+    //         {
+    //             type: 'default',
+    //             value: 'Połącz',
+    //             onclick: () => {
+    //                 dial.useTransition(() => {
+    //                     dial.setContentHTML('');
+    //                     dial.setTitle('Łączenie...');
+    //                     dial.setDescription('Prosimy czekać');
+    //                     dial.setDialogButtons([]);
+    //                 });
+    //             }
+    //         }
+    //     ]);
+    // }, 1500);
 });
 
 const dialogues = [];

@@ -64,10 +64,12 @@
             </div>
             <span class="material-symbols-outlined" id="closeAppButton">close</span>
             <div class="app" id="timeApp">
+                <span class="appTitle">Czas</span>
                 <h1 class="fulltime"></h1>
                 <h3 class="fulldate"></h3>
             </div>
             <div class="app" id="weatherApp">
+                <span class="appTitle">Pogoda</span>
                 <div class="flex">
                     <div class="child">
                         <h2>Poznań</h2>
@@ -108,6 +110,7 @@
                 </div>
             </div>
             <div class="app" id="settings">
+                <span class="appTitle">Ustawienia</span>
                 <div class="categories">
                     <span class="category" data-category-id="uiSettings"><span
                             class="material-symbols-outlined fill">brush</span>Wygląd</span>
@@ -203,6 +206,20 @@
                     </div>
                 </div>
             </div>
+            <div class="app" id="notes">
+                <span class="appTitle">Notatki</span>
+                <div class="noteView">
+                    <div class="noteList">
+                        <div class="el">
+                            <span>Tygrysy również są kotami</span>
+                        </div>
+                    </div>
+                    
+                    <div class="noteViewer">
+
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="container" id="uiContainer">
@@ -228,9 +245,9 @@
                             bluetooth
                         </span>
                     </button>
-                    <button onclick="$(this).toggleClass('active')">
+                    <button onclick="openApp('notes', $(this).parent().get(0))">
                         <span class="material-symbols-outlined">
-                            files
+                            text_snippet
                         </span>
                     </button>
                     <button onclick="$(this).toggleClass('active')">

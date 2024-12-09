@@ -1,3 +1,5 @@
+/* Time app */
+
 #timeApp {
     flex-direction: column;
     justify-content: center;
@@ -26,6 +28,8 @@
     font-weight: 300;
     font-size: 1.25rem;
 }
+
+/* Weather app */
 
 #weatherApp {
     background-image: var(--active-weather-background);
@@ -112,6 +116,8 @@
 #weatherApp .forecast div span:last-child {
     font-weight: 300;
 }
+
+/* Settings app */
 
 #settings {
     background-color: var(--theme-bg-1);
@@ -250,4 +256,51 @@
 
     border: none;
     padding: 0.5rem .8rem;
+}
+
+/* Notes app */
+
+#notes {
+    background-color: var(--theme-bg-2);
+}
+
+#notes .noteView {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+}
+
+#notes .noteList {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+#notes .noteList .el {
+    background-color: var(--theme-bg-3);
+    padding: .8rem;
+    border-radius: 1rem;
+}
+
+#notes .noteList .el:first-child {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+#notes .noteViewer {
+    background-color: var(--theme-bg-1);
+    width: 0;
+
+    transition: border-radius .6s cubic-bezier(0.87, 0, 0.13, 1), width .6s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+#notes .noteViewer.active {
+    /* border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem; */
+    width: 25rem;
 }
