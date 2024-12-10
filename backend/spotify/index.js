@@ -2,7 +2,7 @@ import axios from 'axios';
 import EventEmitter from 'events';
 import QRCode from 'qrcode';
 import 'dotenv/config';
-import EventSource from 'eventsource';
+import { EventSource } from 'eventsource';
 import Store from 'electron-store'
 
 const store = new Store();

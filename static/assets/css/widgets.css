@@ -31,6 +31,27 @@
     --thunderstorm:
         radial-gradient(circle at bottom left, rgba(0, 44, 177, 0.6), transparent 60%),
         radial-gradient(circle at top right, rgba(110, 113, 50, 0.6), transparent 60%);
+    --foggy:
+        radial-gradient(circle at top right, rgba(173, 173, 173, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(130, 130, 130, 0.6), transparent 60%);
+    --dusty:
+        radial-gradient(circle at top right, rgba(179, 150, 100, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(202, 172, 137, 0.6), transparent 60%);
+    --ash:
+        radial-gradient(circle at top right, rgba(97, 97, 97, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(50, 50, 50, 0.6), transparent 60%);
+    --windy:
+        radial-gradient(circle at top left, rgba(150, 177, 255, 0.6), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(125, 150, 220, 0.6), transparent 60%);
+    --icy:
+        radial-gradient(circle at top right, rgba(180, 220, 255, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(140, 190, 255, 0.6), transparent 60%);
+    --snowy:
+        radial-gradient(circle at top right, rgba(240, 250, 255, 0.6), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(210, 230, 255, 0.6), transparent 60%);
+    --stormy:
+        radial-gradient(circle at bottom left, rgba(0, 30, 120, 0.6), transparent 60%),
+        radial-gradient(circle at top right, rgba(100, 100, 50, 0.6), transparent 60%);
     --active-weather-background: var(--sunny);
 }
 

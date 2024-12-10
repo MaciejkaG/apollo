@@ -9,42 +9,139 @@ weatherApp.addEventListener('appopen', () => {
 
 async function updateWeather() {
     const translations = {
-        "clear sky": "czyste niebo",
-        "rain": "deszcz",
-        "light rain": "mżawka",
-        "moderate rain": "umiarkowany deszcz",
-        "light intensity shower rain": "lekki, przelotny deszcz",
-        "heavy intensity rain": "intensywny deszcz",
-        "snow": "śnieg",
-        "shower snow": "opady śniegu",
-        "light shower snow": "lekkie opady śniegu",
-        "light snow": "trochę śniegu",
+        /* Thunderstorm */
+        "thunderstorm with light rain": "burza z lekkim deszczem",
+        "thunderstorm with rain": "burza z deszczem",
+        "thunderstorm with heavy rain": "burza z intensywnym deszczem",
+        "light thunderstorm": "lekka burza",
         "thunderstorm": "burza",
-        "overcast clouds": "zachmurzenie",
-        "broken clouds": "pochmurnie",
+        "heavy thunderstorm": "silna burza",
+        "ragged thunderstorm": "nieregularna burza",
+        "thunderstorm with light drizzle": "burza z lekką mżawką",
+        "thunderstorm with drizzle": "burza z mżawką",
+        "thunderstorm with heavy drizzle": "burza z intensywną mżawką",
+
+        /* Drizzle */
+        "light intensity drizzle": "lekka mżawka",
+        "drizzle": "mżawka",
+        "heavy intensity drizzle": "intensywna mżawka",
+        "light intensity drizzle rain": "lekka mżawka z deszczem",
+        "drizzle rain": "mżawka z deszczem",
+        "heavy intensity drizzle rain": "intensywna mżawka z deszczem",
+        "shower rain and drizzle": "przelotny deszcz z mżawką",
+        "heavy shower rain and drizzle": "intensywny deszcz z mżawką",
+        "shower drizzle": "przelotna mżawka",
+
+        /* Rain */
+        "light rain": "lekki deszcz",
+        "moderate rain": "umiarkowany deszcz",
+        "heavy intensity rain": "intensywny deszcz",
+        "very heavy rain": "bardzo intensywny deszcz",
+        "extreme rain": "ekstremalny deszcz",
+        "freezing rain": "deszcz lodowy",
+        "light intensity shower rain": "lekki przelotny deszcz",
+        "shower rain": "przelotny deszcz",
+        "heavy intensity shower rain": "intensywny przelotny deszcz",
+        "ragged shower rain": "nieregularny przelotny deszcz",
+
+        /* Snow */
+        "light snow": "lekki śnieg",
+        "snow": "śnieg",
+        "heavy snow": "dużo śniegu",
+        "sleet": "deszcz ze śniegiem",
+        "light shower sleet": "lekkie opady deszczu ze śniegiem",
+        "shower sleet": "przelotne opady deszczu ze śniegiem",
+        "light rain and snow": "lekki deszcz ze śniegiem",
+        "rain and snow": "deszcz i śnieg",
+        "light shower snow": "lekkie przelotne opady śniegu",
+        "shower snow": "przelotne opady śniegu",
+        "heavy shower snow": "intensywne przelotne opady śniegu",
+
+        /* Atmosphere */
+        "smoke": "smog",
+        "haze": "zamglenie",
+        "sand/dust whirls": "wirujący piasek/pył",
+        "fog": "mgła",
+        "sand": "piasek",
+        "dust": "pył",
+        "volcanic ash": "popiół wulkaniczny",
+        "squalls": "porywy wiatru",
+        "tornado": "tornado",
+
+        /* Clouds */
+        "clear sky": "czyste niebo",
+        "few clouds": "trochę chmur",
         "scattered clouds": "rozproszone chmury",
-        "few clouds": "troche chmur",
-        "partly cloudy": "częściowe zachmurzenie",
-        "mist": "mgła",
+        "broken clouds": "pochmurnie",
+        "overcast clouds": "zachmurzenie"
     };
 
     const backgrounds = {
-        "clear sky": "var(--sunny)",
-        "rain": "var(--rainy)",
+        /* Thunderstorm */
+        "thunderstorm with light rain": "var(--stormy)",
+        "thunderstorm with rain": "var(--stormy)",
+        "thunderstorm with heavy rain": "var(--stormy)",
+        "light thunderstorm": "var(--stormy)",
+        "thunderstorm": "var(--thunderstorm)",
+        "heavy thunderstorm": "var(--thunderstorm)",
+        "ragged thunderstorm": "var(--stormy)",
+        "thunderstorm with light drizzle": "var(--stormy)",
+        "thunderstorm with drizzle": "var(--stormy)",
+        "thunderstorm with heavy drizzle": "var(--stormy)",
+
+        /* Drizzle */
+        "light intensity drizzle": "var(--rainy)",
+        "drizzle": "var(--rainy)",
+        "heavy intensity drizzle": "var(--rainy)",
+        "light intensity drizzle rain": "var(--rainy)",
+        "drizzle rain": "var(--rainy)",
+        "heavy intensity drizzle rain": "var(--rainy)",
+        "shower rain and drizzle": "var(--rainy)",
+        "heavy shower rain and drizzle": "var(--rainy)",
+        "shower drizzle": "var(--rainy)",
+
+        /* Rain */
         "light rain": "var(--rainy)",
         "moderate rain": "var(--rainy)",
-        "light intensity shower rain": "var(--rainy)",
         "heavy intensity rain": "var(--rainy)",
-        "snow": "var(--rainy)",
-        "shower snow": "var(--rainy)",
-        "light shower snow": "var(--rainy)",
-        "thunderstorm": "var(--thunderstorm)",
-        "overcast clouds": "var(--cloudy)",
-        "broken clouds": "var(--cloudy)",
+        "very heavy rain": "var(--rainy)",
+        "extreme rain": "var(--rainy)",
+        "freezing rain": "var(--icy)",
+        "light intensity shower rain": "var(--rainy)",
+        "shower rain": "var(--rainy)",
+        "heavy intensity shower rain": "var(--rainy)",
+        "ragged shower rain": "var(--rainy)",
+
+        /* Snow */
+        "light snow": "var(--snowy)",
+        "snow": "var(--snowy)",
+        "heavy snow": "var(--snowy)",
+        "sleet": "var(--snowy)",
+        "light shower sleet": "var(--snowy)",
+        "shower sleet": "var(--snowy)",
+        "light rain and snow": "var(--snowy)",
+        "rain and snow": "var(--snowy)",
+        "light shower snow": "var(--snowy)",
+        "shower snow": "var(--snowy)",
+        "heavy shower snow": "var(--snowy)",
+
+        /* Atmosphere */
+        "smoke": "var(--foggy)",
+        "haze": "var(--foggy)",
+        "sand/dust whirls": "var(--dusty)",
+        "fog": "var(--foggy)",
+        "sand": "var(--dusty)",
+        "dust": "var(--dusty)",
+        "volcanic ash": "var(--ash)",
+        "squalls": "var(--windy)",
+        "tornado": "var(--stormy)",
+
+        /* Clouds */
+        "clear sky": "var(--sunny)",
+        "few clouds": "var(--cloudy)",
         "scattered clouds": "var(--cloudy)",
-        "few clouds": "var(--sunny)",
-        "partly cloudy": "var(--cloudy)",
-        "mist": "var(--cloudy)",
+        "broken clouds": "var(--cloudy)",
+        "overcast clouds": "var(--cloudy)"
     };
 
     try {
