@@ -129,7 +129,18 @@ const settings = {
         ipcRenderer.invoke('setting-set', key, value),
     get: (key) =>
         ipcRenderer.invoke('setting-get', key),
-}
+};
+
+const memos = {
+    create: (title, value) =>
+        ipcRenderer.invoke('memo-create', title, value),
+    setTitle: (noteIndex, value) =>
+        ipcRenderer.invoke('memo-title-set', noteIndex, value),
+    setContent: (noteIndex, value) =>
+        ipcRenderer.invoke('memo-content-set', noteIndex, value),
+    get: () =>
+        ipcRenderer.invoke('memos-get'),
+};
 
 const misc = {
     setDarkTheme: (darkTheme) => 
@@ -144,4 +155,5 @@ contextBridge.exposeInMainWorld('backend', {
     spotify: SpotifyService,
     speech: SpeechService,
     settings,
+    memos
 });

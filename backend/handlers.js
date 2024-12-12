@@ -14,6 +14,7 @@ import {
 import Record from './wakeword.js';
 import { transcribeStream, synthesise } from './speech.js';
 import settings from './settings/settings.js';
+import memos from './memos/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -402,4 +403,16 @@ export function setup(mainWindow) {
 
     ipcMain.handle('setting-get', async (event, key) =>
         settings.get(key));
+
+    ipcMain.handle('memo-create', async (event, title, value) =>
+        memos.createNote(title, value));
+
+    ipcMain.handle('memo-title-set', async (event, noteIndex, value) =>
+        memos.setNoteTitle(noteIndex, value));
+
+    ipcMain.handle('memo-content-set', async (event, noteIndex, value) =>
+        memos.setNoteContent(noteIndex, value));
+
+    ipcMain.handle('memos-get', async (event) =>
+        memos.getNotes());
 }
