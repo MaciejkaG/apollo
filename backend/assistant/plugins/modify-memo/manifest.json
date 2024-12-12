@@ -1,0 +1,24 @@
+{
+    "name": "modifyMemo",
+    "description": "Modifies a memo's title and/or contents by it's index on the list.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "memoIndex": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "The index of the memo on the list of memos"
+            },
+            "title": {
+                "type": "string",
+                "default": null,
+                "description": "The title of the memo to change to. Leaving it undefined will leave the value as it is."
+            },
+            "contents": {
+                "type": "string",
+                "default": null,
+                "description": "Contents of the memo to change to. Leaving it undefined will leave the value as it is."
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+{
+    "name": "getMemos",
+    "description": "Returns a list of all saved memos, their titles and contents."
+}

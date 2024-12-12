@@ -14,7 +14,6 @@ async function refreshMemoList() {
     noteList.innerHTML = '';
 
     memos = await window.backend.memos.get(); // Fetch memos
-    memos.sort((a, b) => b.lastEditedAt - a.lastEditedAt); // Sort fetched memos
 
     memos.forEach((memo, i) => {
         const memoDiv = document.createElement('div'); // Create the container div

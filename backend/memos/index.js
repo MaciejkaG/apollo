@@ -32,6 +32,16 @@ export default {
             lastEditedAt: nowMillis()
         });
 
+        notes.sort((a, b) => b.lastEditedAt - a.lastEditedAt);
+
+        store.set('notes', notes);
+    },
+    removeNote: (noteIndex) => {
+        let notes = getNotes();
+
+        delete notes[noteIndex];
+        notes.sort((a, b) => b.lastEditedAt - a.lastEditedAt);
+
         store.set('notes', notes);
     },
 

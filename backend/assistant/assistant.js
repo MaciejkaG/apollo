@@ -6,6 +6,16 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const SYSTEM_PROMPT = `
+You are Apollo, a smart and capable assistant.
+You were created by "Seventy Seven" - a team of passionate programmers and designers.
+Provide helpful, accurate, and thoughtful responses in a concise, friendly, and professional manner.
+Your replies will be fully spoken, so avoid formatting or text-based data, and use verbal representations for numbers.
+User messages are converted through a speech-to-text model and they won\'t contain punctuation or capitalisation.
+You will answer exclusively in Polish. Your answers will be spoken, so do not use formatting etc.
+When it comes to saving memos (if such function is available): If asked for adding something, check if a similar memo doesn't already exist before creating a new one.
+`;
+
 export default class Assistant {
     constructor(apiKey) {
         if (!apiKey || typeof apiKey !== 'string' || apiKey === '') {
@@ -23,7 +33,7 @@ export default class Assistant {
         this.tools = new Map();
         this.systemMessage = {
             role: 'system',
-            content: 'You are Apollo, a smart and capable assistant. You were created by "Seventy Seven" - a team of passionate programmers and designers. Provide helpful, accurate, and thoughtful responses in a concise, friendly, and professional manner. Your replies will be fully spoken, so avoid formatting or text-based data, and use verbal representations for numbers. You will answer exclusively in Polish. Your answers will be spoken, so do not use formatting etc. it needs to be consise speech.'
+            content: SYSTEM_PROMPT,
         };
         this.initializeTools();
     }
@@ -304,6 +314,7 @@ export default class Assistant {
                         toolCall: { ...currentToolCall },
                         done: false
                     });
+                    console.log(currentToolCall);
                     currentToolCall = null;
                     functionBuffer = { name: '', arguments: '' };
                 }

@@ -299,7 +299,7 @@
     padding: 1rem;
     box-sizing: border-box;
 
-    transition: border-radius .6s cubic-bezier(0.87, 0, 0.13, 1), margin-right .6s cubic-bezier(0.87, 0, 0.13, 1);
+    transition: border-radius .3s cubic-bezier(0.45, 0, 0.55, 1), margin-right .3s cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 #notes .noteViewer.active {
