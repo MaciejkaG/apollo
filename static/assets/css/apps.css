@@ -294,13 +294,27 @@
 
 #notes .noteViewer {
     background-color: var(--theme-bg-1);
-    width: 0;
+    width: 20rem;
+    margin-right: -20rem;
+    padding: 1rem;
+    box-sizing: border-box;
 
-    transition: border-radius .6s cubic-bezier(0.87, 0, 0.13, 1), width .6s cubic-bezier(0.87, 0, 0.13, 1);
+    transition: border-radius .6s cubic-bezier(0.87, 0, 0.13, 1), margin-right .6s cubic-bezier(0.87, 0, 0.13, 1);
 }
 
 #notes .noteViewer.active {
     /* border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem; */
-    width: 25rem;
+    margin-right: initial;
+}
+
+#notes .noteViewer span {
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+#notes .noteViewer p {
+    font-weight: 400;
+    font-size: 1.2rem;
 }

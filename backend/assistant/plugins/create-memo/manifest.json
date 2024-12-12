@@ -1,0 +1,17 @@
+{
+    "name": "createMemo",
+    "description": "Creates a new memo",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string",
+                "description": "The main title of the note"
+            },
+            "contents": {
+                "type": "string",
+                "description": "Contents of the note. Only plain text and line breaks are allowed."
+            }
+        }
+    }
+}

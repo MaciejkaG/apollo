@@ -1,13 +1,24 @@
 const noteList = document.querySelector('#notes .noteList');
 
+let memos;
+
 window.addEventListener('DOMContentLoaded', async () => {
-    noteList.innerHTML = ''; // Clear the list
+    refreshMemoList();
+});
 
-    const memos = await window.backend.memos.get();
-    memos.sort((a, b) => b.lastEditedAt - a.lastEditedAt);
+setInterval(refreshMemoList, 3000);
 
-    memos.forEach(memo => {
+async function refreshMemoList() {
+    // Clear the list
+    $('#notes .noteList .el').off('click');
+    noteList.innerHTML = '';
+
+    memos = await window.backend.memos.get(); // Fetch memos
+    memos.sort((a, b) => b.lastEditedAt - a.lastEditedAt); // Sort fetched memos
+
+    memos.forEach((memo, i) => {
         const memoDiv = document.createElement('div'); // Create the container div
+        memoDiv.setAttribute('data-memo-index', i);
         memoDiv.classList.add('el'); // Add a class to the div
 
         const memoSpan = document.createElement('span'); // Create the span for the title
@@ -16,4 +27,17 @@ window.addEventListener('DOMContentLoaded', async () => {
         memoDiv.appendChild(memoSpan); // Append the span to the div
         noteList.appendChild(memoDiv); // Append the div to the note list
     });
-});
+
+    $('#notes .noteList .el').on('click', (e) => {
+        const $el = $(e.target).closest('.el'); // Ensure we get the `.el` element
+        const memoIndex = $el.data('memo-index'); // Read the `data-memo-index` from the `.el`
+        const memo = memos[memoIndex];
+
+        console.log(memo, memoIndex);
+
+        $('#noteTitle').text(memo.title);
+        $('#noteContents').html(memo.content.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+
+        $('#notes .noteViewer').addClass('active');
+    });
+}

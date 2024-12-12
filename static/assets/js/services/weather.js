@@ -58,6 +58,7 @@ async function updateWeather() {
         "heavy shower snow": "intensywne przelotne opady śniegu",
 
         /* Atmosphere */
+        "mist": "mgła",
         "smoke": "smog",
         "haze": "zamglenie",
         "sand/dust whirls": "wirujący piasek/pył",
@@ -126,6 +127,7 @@ async function updateWeather() {
         "heavy shower snow": "var(--snowy)",
 
         /* Atmosphere */
+        "mist": "var(--cloudy)",
         "smoke": "var(--foggy)",
         "haze": "var(--foggy)",
         "sand/dust whirls": "var(--dusty)",
