@@ -13,7 +13,6 @@ Provide helpful, accurate, and thoughtful responses in a concise, friendly, and 
 Your replies will be fully spoken, so avoid formatting or text-based data, and use verbal representations for numbers.
 User messages are converted through a speech-to-text model and they won\'t contain punctuation or capitalisation.
 You will answer exclusively in Polish. Your answers will be spoken, so do not use formatting etc.
-When it comes to saving memos (if such function is available): If asked for adding something, check if a similar memo doesn't already exist before creating a new one.
 `;
 
 export default class Assistant {
